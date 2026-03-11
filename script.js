@@ -5,3 +5,4 @@ function showMessage() {
 }
 
 console.log("Git Workflow Simulation loaded.");
+console.log("Script berhasil dijalankan.");
