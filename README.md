@@ -25,3 +25,8 @@ Project ini terdiri dari:
 
 Repository ini tidak berfokus pada pengembangan aplikasi.
 Fokus utama adalah praktik penggunaan Git secara profesional.
+
+## Project by
+
+Rafi Zhevirgi Alwafa - 245150600111031
+Angga Maulana Izzamahdy - 245150600111035
