@@ -16,11 +16,22 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
+
             return redirect()->intended('/dashboard');
         }
 
         return back()->withErrors([
-            'email' => 'Email atau password yang Anda masukkan salah.',
-        ]);
+            'email' => 'Kredensial yang diberikan tidak cocok dengan data kami.',
+        ])->onlyInput('email');
+    }
+
+    public function logout(Request $request)
+    {
+        Auth::logout();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect('/');
     }
 }
