@@ -41,8 +41,18 @@
             </div>
 
             <!-- Login Form -->
-            <form method="POST" action="#" class="space-y-5">
+            <form method="POST" action="{{ url('/login') }}" class="space-y-5">
                 @csrf
+
+                @if($errors->any())
+                    <div class="p-3 bg-red-50 text-red-600 text-sm rounded-lg">
+                        <ul class="list-disc list-inside">
+                            @foreach($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
                 
                 <!-- Email Field -->
                 <div>
