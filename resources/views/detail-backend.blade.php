@@ -168,7 +168,7 @@
 
                 <!-- Right: Mockup Image inside rounded frame with shadow/glow -->
                 <div class="w-full lg:w-[380px] h-60 sm:h-72 rounded-2xl overflow-hidden shadow-2xl border-4 border-white/10 group relative cursor-pointer order-1 lg:order-2 flex-shrink-0 z-10">
-                    <img src="https://images.unsplash.com/photo-1586717791821-3f44a563fa4c?w=600&auto=format&fit=crop&q=80" alt="Path Wireframe Mockup" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                    <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=600&auto=format&fit=crop&q=80" alt="Path Wireframe Mockup" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
                     <div class="absolute inset-0 bg-gradient-to-t from-indigo-950/40 to-transparent"></div>
                 </div>
 

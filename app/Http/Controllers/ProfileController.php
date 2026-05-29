@@ -30,16 +30,21 @@ class ProfileController extends Controller
             'Project Manager' => $pmProgress,
         ];
 
-        // Determine dominant title
-        $dominantTitle = '';
-        $maxProgress = 0;
-        
-        // Find highest progress path
-        foreach ($progresses as $title => $progress) {
-            if ($progress > $maxProgress) {
-                $maxProgress = $progress;
-                $dominantTitle = $title;
-            }
+        // Count completed paths
+        $completedPathsCount = 0;
+        if ($user->frontend_current_step >= 7) $completedPathsCount++;
+        if ($user->backend_current_step >= 8) $completedPathsCount++;
+        if ($user->uiux_current_step >= 10) $completedPathsCount++;
+        if ($user->fullstack_current_step >= 10) $completedPathsCount++;
+        if ($user->pm_current_step >= 10) $completedPathsCount++;
+
+        // Determine title based on completed paths
+        if ($completedPathsCount == 5) {
+            $dominantTitle = 'Expert';
+        } elseif ($completedPathsCount >= 3) {
+            $dominantTitle = 'Pro';
+        } else {
+            $dominantTitle = 'Beginner';
         }
 
         // Paths detailed structure for view

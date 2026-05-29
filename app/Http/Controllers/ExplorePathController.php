@@ -33,7 +33,7 @@ class ExplorePathController extends Controller
                 'slug'        => 'project-manager',
                 'icon'        => 'pm',
                 'image'       => 'https://images.unsplash.com/photo-1531403009284-440f080d1e12?w=600&auto=format&fit=crop&q=80',
-                'description' => 'Learn to define vision, prioritize roadmaps, and lead cross-functional teams to deliver impactful products.',
+                'description' => 'Profesional yang bertanggung jawab penuh merencanakan, mengelola, mengeksekusi, serta mengawasi sebuah proyek dari awal hingga selesai.',
                 'theme'       => 'yellow',
             ],
             [

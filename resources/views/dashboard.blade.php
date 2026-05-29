@@ -103,20 +103,19 @@
 
             <!-- Main Layout Grid -->
             <div>
-                @if(isset($progressCount) && $progressCount > 0 && $activePath)
-                    <!-- State: Progress Exists (Redesigned matching User Image 2) -->
-                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    
+                    <!-- Left Column (Span 2) -->
+                    <div class="lg:col-span-2 space-y-10">
                         
-                        <!-- Left Column (Span 2) -->
-                        <div class="lg:col-span-2 space-y-10">
+                        <!-- Continue Learning Section -->
+                        <section class="animate-fade-in-up" style="animation-delay: 100ms;">
+                            <h2 class="text-xl font-bold text-slate-900 mb-5 title-font flex items-center gap-2">
+                                <span class="w-1.5 h-6 bg-blue-600 rounded-full inline-block"></span>
+                                Continue Learning
+                            </h2>
                             
-                            <!-- Continue Learning Section -->
-                            <section class="animate-fade-in-up" style="animation-delay: 100ms;">
-                                <h2 class="text-xl font-bold text-slate-900 mb-5 title-font flex items-center gap-2">
-                                    <span class="w-1.5 h-6 bg-blue-600 rounded-full inline-block"></span>
-                                    Continue Learning
-                                </h2>
-                                
+                            @if(isset($progressCount) && $progressCount > 0 && $activePath)
                                 <div class="bg-white border border-slate-200/80 rounded-2xl p-6 sm:p-8 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.04)] flex flex-col sm:flex-row gap-6 relative group hover:border-blue-200 hover:shadow-[0_12px_32px_-8px_rgba(59,130,246,0.12)] transition-all duration-300">
                                     <!-- Progress Badge in Top Right -->
                                     <div class="absolute top-6 right-6">
@@ -164,57 +163,75 @@
                                         </div>
                                     </div>
                                 </div>
-                            </section>
-
-                            <!-- Quick Access Section -->
-                            <section class="animate-fade-in-up" style="animation-delay: 200ms;">
-                                <h2 class="text-xl font-bold text-slate-900 mb-5 title-font flex items-center gap-2">
-                                    <span class="w-1.5 h-6 bg-blue-600 rounded-full inline-block"></span>
-                                    Quick Access
-                                </h2>
-                                
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                                    <!-- Library Card -->
-                                    <a href="{{ url('/explore') }}" class="group bg-white border border-slate-200/80 rounded-2xl p-5 flex items-center gap-4 hover:border-blue-400 hover:shadow-[0_8px_24px_-4px_rgba(59,130,246,0.08)] transition-all duration-300 hover:-translate-y-0.5 cursor-pointer">
-                                        <div class="w-12 h-12 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600 flex-shrink-0 group-hover:scale-110 transition-transform duration-300">
-                                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                                            </svg>
-                                        </div>
-                                        <div>
-                                            <h4 class="text-base font-extrabold text-slate-900 group-hover:text-blue-600 transition-colors duration-300">Library</h4>
-                                            <p class="text-xs sm:text-sm text-slate-500 mt-0.5">Lihat semua modul yang tersedia</p>
-                                        </div>
-                                    </a>
-
-                                    <!-- Activity Card -->
-                                    <div class="group bg-white border border-slate-200/80 rounded-2xl p-5 flex items-center gap-4 hover:border-blue-400 hover:shadow-[0_8px_24px_-4px_rgba(59,130,246,0.08)] transition-all duration-300 hover:-translate-y-0.5 cursor-pointer">
-                                        <div class="w-12 h-12 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600 flex-shrink-0 group-hover:scale-110 transition-transform duration-300">
-                                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10a2 2 0 01-2 2h-2a2 2 0 01-2-2zm9-4h2a2 2 0 002-2V9a2 2 0 00-2-2h-2a2 2 0 00-2 2v6a2 2 0 002 2zm-4 4h4a2 2 0 002-2v-6a2 2 0 00-2-2h-4a2 2 0 00-2 2v6a2 2 0 002 2z" />
-                                            </svg>
-                                        </div>
-                                        <div>
-                                            <h4 class="text-base font-extrabold text-slate-900 group-hover:text-blue-600 transition-colors duration-300">Activity</h4>
-                                            <p class="text-xs sm:text-sm text-slate-500 mt-0.5">Lacak riwayat pembelajaran Anda</p>
-                                        </div>
+                            @else
+                                <div class="bg-white border border-slate-200/80 rounded-2xl p-6 sm:p-8 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.04)] hover:shadow-md transition-all duration-300">
+                                    <div class="border border-slate-200/60 bg-slate-50/10 rounded-2xl py-8 px-4 text-center mb-6">
+                                        <p class="text-sm font-semibold text-slate-400">
+                                            kamu belum ada progres apa pun, yuk mulai dari sekarang!
+                                        </p>
+                                    </div>
+                                    <div class="flex items-center justify-between">
+                                        <a href="{{ url('/explore') }}" class="inline-flex items-center justify-center px-6 py-2.5 text-sm font-bold rounded-xl bg-blue-600 text-white hover:bg-blue-700 shadow-md shadow-blue-500/10 hover:shadow-lg hover:shadow-blue-500/20 transition-all duration-300 hover:scale-[1.03]">
+                                            Eksplor &rarr;
+                                        </a>
+                                        <span class="text-xs font-semibold text-slate-400/60 cursor-default">
+                                            Reset Path
+                                        </span>
                                     </div>
                                 </div>
-                            </section>
+                            @endif
+                        </section>
 
-                        </div>
-
-                        <!-- Right Column -->
-                        <div class="space-y-6 lg:pt-0">
+                        <!-- Quick Access Section -->
+                        <section class="animate-fade-in-up" style="animation-delay: 200ms;">
+                            <h2 class="text-xl font-bold text-slate-900 mb-5 title-font flex items-center gap-2">
+                                <span class="w-1.5 h-6 bg-blue-600 rounded-full inline-block"></span>
+                                Quick Access
+                            </h2>
                             
-                            <!-- Your Progress Card -->
-                            <div class="bg-white border border-slate-200/80 rounded-2xl p-6 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.04)] hover:shadow-md transition-all duration-300 animate-fade-in-up" style="animation-delay: 250ms;">
-                                <h3 class="text-lg font-extrabold text-slate-900 mb-6 title-font flex items-center gap-2">
-                                    <span class="w-1 h-5 bg-blue-600 rounded-full inline-block"></span>
-                                    Your Progress
-                                </h3>
-                                
-                                <div class="space-y-5">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                                <!-- Library Card -->
+                                <a href="{{ url('/explore') }}" class="group bg-white border border-slate-200/80 rounded-2xl p-5 flex items-center gap-4 hover:border-blue-400 hover:shadow-[0_8px_24px_-4px_rgba(59,130,246,0.08)] transition-all duration-300 hover:-translate-y-0.5 cursor-pointer">
+                                    <div class="w-12 h-12 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600 flex-shrink-0 group-hover:scale-110 transition-transform duration-300">
+                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-base font-extrabold text-slate-900 group-hover:text-blue-600 transition-colors duration-300">Library</h4>
+                                        <p class="text-xs sm:text-sm text-slate-500 mt-0.5">Lihat semua modul yang tersedia</p>
+                                    </div>
+                                </a>
+
+                                <!-- Activity Card -->
+                                <div class="group bg-white border border-slate-200/80 rounded-2xl p-5 flex items-center gap-4 hover:border-blue-400 hover:shadow-[0_8px_24px_-4px_rgba(59,130,246,0.08)] transition-all duration-300 hover:-translate-y-0.5 cursor-pointer">
+                                    <div class="w-12 h-12 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600 flex-shrink-0 group-hover:scale-110 transition-transform duration-300">
+                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10a2 2 0 01-2 2h-2a2 2 0 01-2-2zm9-4h2a2 2 0 002-2V9a2 2 0 00-2-2h-2a2 2 0 00-2 2v6a2 2 0 002 2zm-4 4h4a2 2 0 002-2v-6a2 2 0 00-2-2h-4a2 2 0 00-2 2v6a2 2 0 002 2z" />
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-base font-extrabold text-slate-900 group-hover:text-blue-600 transition-colors duration-300">Activity</h4>
+                                        <p class="text-xs sm:text-sm text-slate-500 mt-0.5">Lacak riwayat pembelajaran Anda</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                    </div>
+
+                    <!-- Right Column -->
+                    <div class="space-y-6 lg:pt-0">
+                        
+                        <!-- Your Progress Card -->
+                        <div class="bg-white border border-slate-200/80 rounded-2xl p-6 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.04)] hover:shadow-md transition-all duration-300 animate-fade-in-up" style="animation-delay: 250ms;">
+                            <h3 class="text-lg font-extrabold text-slate-900 mb-6 title-font flex items-center gap-2">
+                                <span class="w-1.5 h-6 bg-blue-600 rounded-full inline-block"></span>
+                                YOUR PROGRESS
+                            </h3>
+                            
+                            <div class="space-y-5">
+                                @if(isset($progressCount) && $progressCount > 0 && $activePath)
                                     <div class="flex justify-between items-center pb-3 border-b border-slate-100">
                                         <span class="text-sm font-medium text-slate-500">Completed Lessons</span>
                                         <span class="text-sm font-extrabold text-slate-800 bg-slate-50 px-2.5 py-1 rounded-lg border border-slate-100">{{ $activePath['lessons'] }}</span>
@@ -223,56 +240,41 @@
                                         <span class="text-sm font-medium text-slate-500">Quiz Average</span>
                                         <span class="text-sm font-extrabold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-lg border border-emerald-100">{{ $activePath['quiz'] }}</span>
                                     </div>
+                                @else
+                                    <div class="border border-slate-200 bg-slate-50/10 rounded-2xl py-6 px-4 text-center">
+                                        <span class="text-sm font-semibold text-slate-400">belum ada progres</span>
+                                    </div>
+                                    <div class="flex justify-between items-center pt-3 border-t border-slate-100">
+                                        <span class="text-sm font-medium text-slate-500">Quiz Average</span>
+                                        <span class="text-xs font-extrabold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-lg border border-emerald-100">0%</span>
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+
+                        <!-- Upcoming Event Card -->
+                        <div class="bg-white border border-slate-200/80 rounded-2xl p-6 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.04)] hover:shadow-md transition-all duration-300 animate-fade-in-up" style="animation-delay: 300ms;">
+                            <h3 class="text-lg font-extrabold text-slate-900 title-font flex items-center gap-2">
+                                <span class="w-1.5 h-6 bg-blue-600 rounded-full inline-block"></span>
+                                UPCOMING EVENT
+                            </h3>
+                            <p class="text-xs font-semibold text-slate-400 mt-1 uppercase tracking-wider mb-6">COMPLETED LESSONS</p>
+                            
+                            <div class="flex items-center gap-4 p-3 bg-blue-50/40 border border-blue-100/50 rounded-xl hover:bg-blue-50 transition-colors duration-300">
+                                <div class="w-12 h-12 rounded-xl bg-blue-600 flex items-center justify-center text-white flex-shrink-0 shadow-md shadow-blue-600/20">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h4 class="text-sm font-extrabold text-slate-900">Live Coding</h4>
+                                    <p class="text-xs text-slate-500 mt-0.5">14:00 PM &bull; Zoom Meeting</p>
                                 </div>
                             </div>
-
-                            <!-- Upcoming Event Card -->
-                            <div class="bg-white border border-slate-200/80 rounded-2xl p-6 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.04)] hover:shadow-md transition-all duration-300 animate-fade-in-up" style="animation-delay: 300ms;">
-                                <h3 class="text-lg font-extrabold text-slate-900 title-font flex items-center gap-2">
-                                    <span class="w-1 h-5 bg-blue-600 rounded-full inline-block"></span>
-                                    Upcoming Event
-                                </h3>
-                                <p class="text-xs font-semibold text-slate-400 mt-1 uppercase tracking-wider mb-6">Completed Lessons</p>
-                                
-                                <div class="flex items-center gap-4 p-3 bg-blue-50/40 border border-blue-100/50 rounded-xl hover:bg-blue-50 transition-colors duration-300">
-                                    <div class="w-12 h-12 rounded-xl bg-blue-600 flex items-center justify-center text-white flex-shrink-0 shadow-md shadow-blue-600/20">
-                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                        </svg>
-                                    </div>
-                                    <div>
-                                        <h4 class="text-sm font-extrabold text-slate-900">Live Coding</h4>
-                                        <p class="text-xs text-slate-500 mt-0.5">14:00 PM &bull; Zoom Meeting</p>
-                                    </div>
-                                </div>
-                            </div>
-
                         </div>
-                    </div>
 
-                @else
-                    <!-- State: Blank State (Elevated with Blue Accents & Animations) -->
-                    <div class="max-w-3xl mx-auto animate-fade-in-up" style="animation-delay: 150ms;">
-                        <div class="group text-center py-16 px-8 bg-white/85 backdrop-blur-md rounded-3xl border-2 border-dashed border-blue-200 hover:border-blue-500/50 shadow-[0_8px_30px_rgb(0,0,0,0.02)] hover:shadow-[0_16px_40px_rgba(59,130,246,0.1)] transition-all duration-500 flex flex-col items-center justify-center">
-                            
-                            <!-- Bouncing Glowing Tech Icon -->
-                            <div class="mb-6 w-20 h-20 bg-blue-50 rounded-full flex items-center justify-center border border-blue-100 text-blue-600 shadow-inner group-hover:scale-110 transition-transform duration-500 relative">
-                                <span class="absolute inset-0 rounded-full bg-blue-500/10 animate-ping" style="animation-duration: 2s;"></span>
-                                <svg class="w-10 h-10 relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                                </svg>
-                            </div>
-
-                            <p class="text-base sm:text-lg text-slate-500 font-medium italic max-w-lg mb-6 leading-relaxed">
-                                "Yah, kamu belum mengerjakan apa-apa, ayo mulai pilih bidangmu dan seberapa mahir kamu"
-                            </p>
-                            
-                            <a href="{{ url('/explore') }}" class="inline-flex justify-center items-center px-8 py-3.5 border border-transparent text-sm sm:text-base font-bold rounded-xl text-white bg-blue-600 hover:bg-blue-700 shadow-lg shadow-blue-500/20 hover:shadow-xl hover:shadow-blue-500/30 transition-all duration-300 hover:scale-[1.03]">
-                                Mulai Eksplorasi
-                            </a>
-                        </div>
                     </div>
-                @endif
+                </div>
             </div>
 
         </main>

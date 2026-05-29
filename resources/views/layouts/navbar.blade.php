@@ -4,7 +4,7 @@
         <div id="navbar-inner" class="flex justify-between items-center h-16 px-6 transition-all duration-500 ease-out">
             <!-- Left: Logo with Hover Animation -->
             <div class="shrink-0 flex items-center">
-                <a href="{{ url('/') }}" class="group text-xl sm:text-2xl font-bold tracking-tight bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent flex items-center gap-2 transition-transform duration-300 hover:scale-105">
+                <a href="{{ auth()->check() ? route('dashboard') : url('/') }}" class="group text-xl sm:text-2xl font-bold tracking-tight bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent flex items-center gap-2 transition-transform duration-300 hover:scale-105">
                     <svg class="h-6 w-6 text-blue-600 group-hover:rotate-12 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M14 10l-2 1m0 0l-2-1m2 1v2.5M20 7l-8-4-8 4v10l8 4 8-4V7z" />
                     </svg>
@@ -14,9 +14,9 @@
             
             <!-- Middle: Nav Links (Hidden on mobile) with Sliding Hover Underline -->
             <div class="hidden md:flex space-x-8 h-full items-center">
-                <a href="{{ url('/dashboard') }}" class="relative font-semibold text-sm transition-colors py-2 group {{ Request::is('dashboard') ? 'text-blue-600' : 'text-slate-600 hover:text-blue-600' }}">
+                <a href="{{ auth()->check() ? route('dashboard') : url('/') }}" class="relative font-semibold text-sm transition-colors py-2 group {{ Request::is('dashboard') || (Request::is('/') && !auth()->check()) ? 'text-blue-600' : 'text-slate-600 hover:text-blue-600' }}">
                     Dashboard
-                    <span class="absolute bottom-0 left-0 h-0.5 bg-blue-600 transition-all duration-300 {{ Request::is('dashboard') ? 'w-full' : 'w-0 group-hover:w-full' }}"></span>
+                    <span class="absolute bottom-0 left-0 h-0.5 bg-blue-600 transition-all duration-300 {{ Request::is('dashboard') || (Request::is('/') && !auth()->check()) ? 'w-full' : 'w-0 group-hover:w-full' }}"></span>
                 </a>
                 <a href="{{ route('explore.path') }}" class="relative font-semibold text-sm transition-colors py-2 group {{ Request::is('explore') || Request::is('explore/*') ? 'text-blue-600' : 'text-slate-600 hover:text-blue-600' }}">
                     Explore path
