@@ -16,17 +16,20 @@ class DashboardController extends Controller
             $backendStep = $user->backend_current_step;
             $fullstackStep = $user->fullstack_current_step;
             $pmStep = $user->pm_current_step;
+            $uiuxStep = $user->uiux_current_step;
             // Sync to session
             session(['active_path_id' => $activePathId]);
             session(['frontend_current_step' => $frontendStep]);
             session(['backend_current_step' => $backendStep]);
             session(['fullstack_current_step' => $fullstackStep]);
             session(['pm_current_step' => $pmStep]);
+            session(['uiux_current_step' => $uiuxStep]);
         } else {
             $frontendStep = session('frontend_current_step', 0);
             $backendStep = session('backend_current_step', 0);
             $fullstackStep = session('fullstack_current_step', 0);
             $pmStep = session('pm_current_step', 0);
+            $uiuxStep = session('uiux_current_step', 0);
         }
         
         $userName = auth()->user()->name ?? 'Student';
@@ -93,6 +96,23 @@ class DashboardController extends Controller
         $pmModule = $pmModulesList[$pmStep] ?? 'Kurikulum Selesai! 🎉';
         $pmProgress = min(100, round(($pmStep / 10) * 100));
         $pmLessons = $pmStep . '/10';
+
+        $uiuxModulesList = [
+            0 => 'Modul 1 : Dasar desain visual',
+            1 => 'Modul 2 : Typography, warna, layout',
+            2 => 'Modul 3 : Design thinking',
+            3 => 'Modul 4 : User research',
+            4 => 'Modul 5 : Wireframe & user flow',
+            5 => 'Modul 6 : Figma / design tools',
+            6 => 'Modul 7 : Prototyping',
+            7 => 'Modul 8 : Design system',
+            8 => 'Modul 9 : Usability testing',
+            9 => 'Modul 10 : QUIZ',
+            10 => 'Kurikulum Selesai! 🎉'
+        ];
+        $uiuxModule = $uiuxModulesList[$uiuxStep] ?? 'Kurikulum Selesai! 🎉';
+        $uiuxProgress = min(100, round(($uiuxStep / 10) * 100));
+        $uiuxLessons = $uiuxStep . '/10';
  
         $paths = [
             1 => [
@@ -115,11 +135,12 @@ class DashboardController extends Controller
             ],
             3 => [
                 'title' => 'UI/UX Designer',
-                'module' => 'Modul 1 : Pengantar Figma & Wireframe',
-                'progress' => 20,
-                'lessons' => '8/35',
+                'module' => $uiuxModule,
+                'progress' => $uiuxProgress,
+                'lessons' => $uiuxLessons,
                 'quiz' => '95%',
                 'image' => 'https://images.unsplash.com/photo-1586717791821-3f44a563fa4c?w=600&auto=format&fit=crop&q=80',
+                'url' => route('path.detail.uiux'),
             ],
             4 => [
                 'title' => 'Full Stack Developer',
@@ -154,6 +175,7 @@ class DashboardController extends Controller
         session()->forget('backend_current_step');
         session()->forget('fullstack_current_step');
         session()->forget('pm_current_step');
+        session()->forget('uiux_current_step');
         
         if (auth()->check()) {
             $user = auth()->user();
@@ -162,6 +184,7 @@ class DashboardController extends Controller
             $user->backend_current_step = 0;
             $user->fullstack_current_step = 0;
             $user->pm_current_step = 0;
+            $user->uiux_current_step = 0;
             $user->save();
         }
         return redirect()->route('dashboard')->with('success', 'Progress berhasil di-reset.');

@@ -275,4 +275,55 @@ class ExplorePathController extends Controller
         }
         return redirect()->route('path.detail.pm')->with('success', 'Progres belajar berhasil direset dari awal.');
     }
+
+    public function uiuxDetail()
+    {
+        $userName = auth()->check() ? (auth()->user()->name ?? 'Student') : 'Guest';
+        if (auth()->check()) {
+            $user = auth()->user();
+            $currentStep = $user->uiux_current_step;
+            session(['uiux_current_step' => $currentStep]);
+        } else {
+            if (!session()->has('uiux_current_step')) {
+                session(['uiux_current_step' => 0]);
+            }
+            $currentStep = session('uiux_current_step', 0);
+        }
+        return view('detail-uiux', compact('userName', 'currentStep'));
+    }
+
+    public function completeUiuxStep(\Illuminate\Http\Request $request)
+    {
+        session(['active_path_id' => 3]); // Auto enroll in UI/UX Designer path
+        if (auth()->check()) {
+            $user = auth()->user();
+            $user->active_path_id = 3;
+            if ($user->uiux_current_step < 10) {
+                $user->uiux_current_step++;
+                $user->save();
+            }
+            $currentStep = $user->uiux_current_step;
+            session(['uiux_current_step' => $currentStep]);
+        } else {
+            $currentStep = session('uiux_current_step', 0);
+            if ($currentStep < 10) {
+                $currentStep++;
+                session(['uiux_current_step' => $currentStep]);
+            }
+        }
+        return redirect()->route('path.detail.uiux')->with('success', 'Selamat! Modul berhasil diselesaikan.');
+    }
+
+    public function resetUiuxDetailProgress()
+    {
+        if (auth()->check()) {
+            $user = auth()->user();
+            $user->uiux_current_step = 0;
+            $user->save();
+            session(['uiux_current_step' => 0]);
+        } else {
+            session(['uiux_current_step' => 0]);
+        }
+        return redirect()->route('path.detail.uiux')->with('success', 'Progres belajar berhasil direset dari awal.');
+    }
 }

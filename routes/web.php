@@ -41,6 +41,10 @@ Route::get('/path/detail/project-manager', [ExplorePathController::class, 'pmDet
 Route::post('/path/detail/project-manager/complete', [ExplorePathController::class, 'completePmStep'])->name('path.pm.complete');
 Route::post('/path/detail/project-manager/reset', [ExplorePathController::class, 'resetPmDetailProgress'])->name('path.pm.reset');
 
+Route::get('/path/detail/uiux', [ExplorePathController::class, 'uiuxDetail'])->name('path.detail.uiux');
+Route::post('/path/detail/uiux/complete', [ExplorePathController::class, 'completeUiuxStep'])->name('path.uiux.complete');
+Route::post('/path/detail/uiux/reset', [ExplorePathController::class, 'resetUiuxDetailProgress'])->name('path.uiux.reset');
+
 Route::get('/explore/enroll/{id}', [ExplorePathController::class, 'enroll'])->name('explore.enroll')->middleware('auth');
 
 // Protected Routes
