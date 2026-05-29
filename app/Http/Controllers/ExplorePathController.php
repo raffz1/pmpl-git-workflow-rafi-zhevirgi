@@ -56,8 +56,14 @@ class ExplorePathController extends Controller
             ],
         ];
 
-        $userName = auth()->check() ? (auth()->user()->nama ?? auth()->user()->name ?? 'Student') : 'Guest';
+        $userName = auth()->check() ? (auth()->user()->name ?? 'Student') : 'Guest';
 
         return view('explore-path', compact('paths', 'userName'));
+    }
+
+    public function enroll($id)
+    {
+        session(['active_path_id' => $id]);
+        return redirect()->route('dashboard')->with('success', 'Berhasil memilih jalur pembelajaran!');
     }
 }

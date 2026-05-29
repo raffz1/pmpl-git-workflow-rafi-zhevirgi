@@ -1,53 +1,53 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<robot generator="Robot 7.4.2 (Python 3.13.13 on win32)" generated="2026-05-29T15:12:03.887334" rpa="false" schemaversion="5">
+<robot generator="Robot 7.4.2 (Python 3.13.13 on win32)" generated="2026-05-29T15:28:23.311677" rpa="false" schemaversion="5">
 <suite id="s1" name="Landing Page" source="C:\laragon\www\path-deck\tests\robot\landing_page.robot">
 <test id="s1-t1" name="Validasi Elemen Navbar Landing Page" line="10">
 <kw name="Open Browser" owner="SeleniumLibrary">
-<msg time="2026-05-29T15:12:13.703957" level="INFO">Opening browser 'chrome' to base url 'http://127.0.0.1:8000'.</msg>
+<msg time="2026-05-29T15:28:23.661686" level="INFO">Opening browser 'chrome' to base url 'http://127.0.0.1:8000'.</msg>
 <arg>${URL}</arg>
 <arg>${BROWSER}</arg>
 <doc>Opens a new browser instance to the optional ``url``.</doc>
-<status status="PASS" start="2026-05-29T15:12:13.702145" elapsed="3.135298"/>
+<status status="PASS" start="2026-05-29T15:28:23.661121" elapsed="2.814812"/>
 </kw>
 <kw name="Maximize Browser Window" owner="SeleniumLibrary">
 <doc>Maximizes current browser window.</doc>
-<status status="PASS" start="2026-05-29T15:12:16.838647" elapsed="0.065636"/>
+<status status="PASS" start="2026-05-29T15:28:26.477247" elapsed="0.453477"/>
 </kw>
 <kw name="Page Should Contain" owner="SeleniumLibrary">
-<msg time="2026-05-29T15:12:16.954850" level="INFO">Current page contains text 'Path Deck'.</msg>
+<msg time="2026-05-29T15:28:27.002694" level="INFO">Current page contains text 'Path Deck'.</msg>
 <arg>Path Deck</arg>
 <doc>Verifies that current page contains ``text``.</doc>
-<status status="PASS" start="2026-05-29T15:12:16.904951" elapsed="0.050097"/>
+<status status="PASS" start="2026-05-29T15:28:26.931123" elapsed="0.071768"/>
 </kw>
 <kw name="Page Should Contain" owner="SeleniumLibrary">
-<msg time="2026-05-29T15:12:16.984895" level="INFO">Current page contains text 'Dashboard'.</msg>
+<msg time="2026-05-29T15:28:27.056493" level="INFO">Current page contains text 'Dashboard'.</msg>
 <arg>Dashboard</arg>
 <doc>Verifies that current page contains ``text``.</doc>
-<status status="PASS" start="2026-05-29T15:12:16.955441" elapsed="0.029607"/>
+<status status="PASS" start="2026-05-29T15:28:27.003182" elapsed="0.053543"/>
 </kw>
 <kw name="Page Should Contain" owner="SeleniumLibrary">
-<msg time="2026-05-29T15:12:17.013594" level="INFO">Current page contains text 'Explore path'.</msg>
+<msg time="2026-05-29T15:28:27.101058" level="INFO">Current page contains text 'Explore path'.</msg>
 <arg>Explore path</arg>
 <doc>Verifies that current page contains ``text``.</doc>
-<status status="PASS" start="2026-05-29T15:12:16.985321" elapsed="0.028480"/>
+<status status="PASS" start="2026-05-29T15:28:27.057044" elapsed="0.044544"/>
 </kw>
 <kw name="Page Should Contain" owner="SeleniumLibrary">
-<msg time="2026-05-29T15:12:17.038614" level="INFO">Current page contains text 'Login'.</msg>
+<msg time="2026-05-29T15:28:27.143446" level="INFO">Current page contains text 'Login'.</msg>
 <arg>Login</arg>
 <doc>Verifies that current page contains ``text``.</doc>
-<status status="PASS" start="2026-05-29T15:12:17.014168" elapsed="0.024632"/>
+<status status="PASS" start="2026-05-29T15:28:27.102107" elapsed="0.041489"/>
 </kw>
 <kw name="Page Should Contain Link" owner="SeleniumLibrary">
-<msg time="2026-05-29T15:12:17.122583" level="INFO">Current page contains link 'xpath=//a[contains(text(), 'Register')]'.</msg>
+<msg time="2026-05-29T15:28:27.222121" level="INFO">Current page contains link 'xpath=//a[contains(text(), 'Register')]'.</msg>
 <arg>xpath=//a[contains(text(), 'Register')]</arg>
 <doc>Verifies link identified by ``locator`` is found from current page.</doc>
-<status status="PASS" start="2026-05-29T15:12:17.039102" elapsed="0.083633"/>
+<status status="PASS" start="2026-05-29T15:28:27.143830" elapsed="0.078463"/>
 </kw>
 <doc>Memastikan komponen navigasi utama muncul dan sesuai desain</doc>
-<status status="PASS" start="2026-05-29T15:12:13.698069" elapsed="3.424937"/>
+<status status="PASS" start="2026-05-29T15:28:23.660101" elapsed="3.562491"/>
 </test>
 <doc>Skenario Pengujian Landing Page Aplikasi Path Deck</doc>
-<status status="PASS" start="2026-05-29T15:12:03.898763" elapsed="13.229121"/>
+<status status="PASS" start="2026-05-29T15:28:23.314509" elapsed="3.909485"/>
 </suite>
 <statistics>
 <total>

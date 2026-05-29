@@ -31,17 +31,27 @@
                     <div class="max-w-xl">
                         <p class="text-xs sm:text-sm font-bold tracking-widest text-blue-600 uppercase mb-4">Start Your Career</p>
                         <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 leading-tight mb-6 tracking-tight">
-                            Path Deck
+                            @auth
+                                Welcome, {{ auth()->user()->name }}!
+                            @else
+                                Path Deck
+                            @endauth
                         </h1>
                         <p class="text-base sm:text-lg text-slate-600 mb-8 leading-relaxed">
                             Temukan dan kembangkan minat Anda di bidang teknologi melalui jalur pembelajaran terstruktur. Kuasai alat-alat yang sesuai standar industri dan bangun portofolio profesional.
                         </p>
                         <div class="flex flex-wrap gap-4">
-                            <a href="{{ url('/register') }}" class="inline-flex justify-center items-center px-6 py-3 border border-transparent text-sm sm:text-base font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 shadow-md hover:shadow-lg transition-all">
-                                Register Now
-                            </a>
-                            <a href="{{ url('/login') }}" class="inline-flex justify-center items-center px-6 py-3 border border-slate-300 text-sm sm:text-base font-medium rounded-lg text-blue-600 bg-white hover:bg-slate-50 shadow-sm transition-all">
-                                Login &rarr;
+                            @auth
+                                <a href="{{ url('/dashboard') }}" class="inline-flex justify-center items-center px-6 py-3 border border-transparent text-sm sm:text-base font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 shadow-md hover:shadow-lg transition-all">
+                                    Go to Dashboard
+                                </a>
+                            @else
+                                <a href="{{ url('/register') }}" class="inline-flex justify-center items-center px-6 py-3 border border-transparent text-sm sm:text-base font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 shadow-md hover:shadow-lg transition-all">
+                                    Register Now
+                                </a>
+                            @endauth
+                            <a href="{{ route('explore.path') }}" class="inline-flex justify-center items-center px-6 py-3 border border-slate-300 text-sm sm:text-base font-medium rounded-lg text-blue-600 bg-white hover:bg-slate-50 shadow-sm transition-all">
+                                View Paths &rarr;
                             </a>
                         </div>
                     </div>

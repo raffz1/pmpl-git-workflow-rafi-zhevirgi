@@ -118,15 +118,25 @@
                 <div class="max-w-xl reveal active">
                     <p class="text-xs sm:text-sm font-bold tracking-widest text-blue-600 uppercase mb-4 title-font">Start Your Career</p>
                     <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 leading-tight mb-6 tracking-tight title-font">
-                        Path Deck
+                        @auth
+                            Welcome, {{ auth()->user()->name }}!
+                        @else
+                            Path Deck
+                        @endauth
                     </h1>
                     <p class="text-base sm:text-lg text-slate-600 mb-8 leading-relaxed">
                         Temukan dan kembangkan minat Anda di bidang teknologi melalui jalur pembelajaran terstruktur. Kuasai alat-alat yang sesuai standar industri dan bangun portofolio profesional.
                     </p>
                     <div class="flex flex-wrap gap-4">
-                        <a href="{{ url('/register') }}" class="inline-flex justify-center items-center px-6 py-3.5 border border-transparent text-sm sm:text-base font-bold rounded-xl text-white bg-blue-600 hover:bg-blue-700 shadow-lg shadow-blue-500/20 hover:shadow-xl hover:shadow-blue-500/30 transition-all duration-300 hover:scale-[1.03]">
-                            Register Now
-                        </a>
+                        @auth
+                            <a href="{{ url('/dashboard') }}" class="inline-flex justify-center items-center px-6 py-3.5 border border-transparent text-sm sm:text-base font-bold rounded-xl text-white bg-blue-600 hover:bg-blue-700 shadow-lg shadow-blue-500/20 hover:shadow-xl hover:shadow-blue-500/30 transition-all duration-300 hover:scale-[1.03]">
+                                Go to Dashboard
+                            </a>
+                        @else
+                            <a href="{{ url('/register') }}" class="inline-flex justify-center items-center px-6 py-3.5 border border-transparent text-sm sm:text-base font-bold rounded-xl text-white bg-blue-600 hover:bg-blue-700 shadow-lg shadow-blue-500/20 hover:shadow-xl hover:shadow-blue-500/30 transition-all duration-300 hover:scale-[1.03]">
+                                Register Now
+                            </a>
+                        @endauth
                         <a href="{{ route('explore.path') }}" class="inline-flex justify-center items-center px-6 py-3.5 border border-slate-200 text-sm sm:text-base font-bold rounded-xl text-blue-600 bg-white hover:bg-slate-50 shadow-sm transition-all duration-300 hover:scale-[1.03]">
                             View Paths &rarr;
                         </a>

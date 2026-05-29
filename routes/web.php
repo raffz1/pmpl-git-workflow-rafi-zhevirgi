@@ -25,8 +25,10 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // Explore Path (public access)
 Route::get('/explore', [ExplorePathController::class, 'index'])->name('explore.path');
+Route::get('/explore/enroll/{id}', [ExplorePathController::class, 'enroll'])->name('explore.enroll')->middleware('auth');
 
 // Protected Routes
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::post('/dashboard/reset', [DashboardController::class, 'resetProgress'])->name('dashboard.reset');
 });
