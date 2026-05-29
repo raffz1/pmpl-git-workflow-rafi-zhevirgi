@@ -163,7 +163,7 @@ class DashboardController extends Controller
         ];
         
         $activePath = isset($paths[$activePathId]) ? $paths[$activePathId] : null;
-        $progressCount = $activePath ? 1 : 0;
+        $progressCount = ($activePath && $activePath['progress'] > 0) ? 1 : 0;
   
         return view('dashboard', compact('progressCount', 'activePath', 'userName'));
     }
