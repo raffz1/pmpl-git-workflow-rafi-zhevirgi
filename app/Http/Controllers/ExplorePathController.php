@@ -70,6 +70,27 @@ class ExplorePathController extends Controller
     public function frontendDetail()
     {
         $userName = auth()->check() ? (auth()->user()->name ?? 'Student') : 'Guest';
-        return view('detail-frontend', compact('userName'));
+        if (!session()->has('frontend_current_step')) {
+            session(['frontend_current_step' => 0]);
+        }
+        $currentStep = session('frontend_current_step', 0);
+        return view('detail-frontend', compact('userName', 'currentStep'));
+    }
+
+    public function completeStep(\Illuminate\Http\Request $request)
+    {
+        session(['active_path_id' => 1]); // Auto enroll in Front End path
+        $currentStep = session('frontend_current_step', 0);
+        if ($currentStep < 7) {
+            $currentStep++;
+            session(['frontend_current_step' => $currentStep]);
+        }
+        return redirect()->route('path.detail.frontend')->with('success', 'Selamat! Modul berhasil diselesaikan.');
+    }
+
+    public function resetDetailProgress()
+    {
+        session(['frontend_current_step' => 0]);
+        return redirect()->route('path.detail.frontend')->with('success', 'Progres belajar berhasil direset dari awal.');
     }
 }

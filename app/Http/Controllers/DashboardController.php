@@ -11,12 +11,27 @@ class DashboardController extends Controller
         $activePathId = session('active_path_id');
         $userName = auth()->user()->name ?? 'Student';
         
+        $currentStep = session('frontend_current_step', 0);
+        $modulesList = [
+            0 => 'Modul 1 : Pendahuluan',
+            1 => 'Modul 2 : Pengenalan HTML',
+            2 => 'Modul 3 : Pendalaman HTML',
+            3 => 'Modul 4 : Pengenalan CSS',
+            4 => 'Modul 5 : Pendalaman CSS',
+            5 => 'Modul 6 : Layout Responsive',
+            6 => 'Modul 7 : Quiz',
+            7 => 'Kurikulum Selesai! 🎉'
+        ];
+        $frontendModule = $modulesList[$currentStep] ?? 'Kurikulum Selesai! 🎉';
+        $frontendProgress = min(100, round(($currentStep / 7) * 100));
+        $frontendLessons = $currentStep . '/7';
+
         $paths = [
             1 => [
                 'title' => 'Front End Developer',
-                'module' => 'Modul 1 : Dasar-dasar HTML',
-                'progress' => 30,
-                'lessons' => '12/45',
+                'module' => $frontendModule,
+                'progress' => $frontendProgress,
+                'lessons' => $frontendLessons,
                 'quiz' => '92%',
                 'image' => 'https://images.unsplash.com/photo-1547082299-de196ea013d6?w=600&auto=format&fit=crop&q=80',
             ],
@@ -56,13 +71,14 @@ class DashboardController extends Controller
         
         $activePath = isset($paths[$activePathId]) ? $paths[$activePathId] : null;
         $progressCount = $activePath ? 1 : 0;
-
+ 
         return view('dashboard', compact('progressCount', 'activePath', 'userName'));
     }
-
+ 
     public function resetProgress()
     {
         session()->forget('active_path_id');
+        session()->forget('frontend_current_step');
         return redirect()->route('dashboard')->with('success', 'Progress berhasil di-reset.');
     }
 }

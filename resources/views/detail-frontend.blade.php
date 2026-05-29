@@ -18,7 +18,7 @@
             font-family: 'Space Grotesk', sans-serif;
         }
 
-        /* 3D Tilt/Wobble Effect for Curriculum Cards */
+        /* 3D Tilt/Wobble Effect for Unlocked/Active Curriculum Cards */
         .wobble-card {
             transform-style: preserve-3d;
             perspective: 1000px;
@@ -34,6 +34,15 @@
         }
         .wobble-card:hover .inner-lift {
             transform: translateZ(30px);
+        }
+
+        /* Subtle pulsing border for active step */
+        .card-active-glow {
+            animation: pulse-border 2s infinite alternate;
+        }
+        @keyframes pulse-border {
+            0% { border-color: rgba(59, 130, 246, 0.4); box-shadow: 0 4px 20px -4px rgba(59, 130, 246, 0.1); }
+            100% { border-color: rgba(59, 130, 246, 0.8); box-shadow: 0 4px 24px -2px rgba(59, 130, 246, 0.3); }
         }
 
         /* Ambient Background Blobs Animation */
@@ -96,38 +105,49 @@
     <!-- Main Content Area -->
     <main class="grow relative z-10 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-10">
         
-        <!-- Career Path Header Card (Redesigned matching image mockup) -->
+        @if(session('success'))
+            <div class="mb-6 px-4 py-3 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-700 text-sm font-bold flex items-center gap-3 animate-fade-in-up">
+                <span>🎉</span>
+                <span>{{ session('success') }}</span>
+            </div>
+        @endif
+
+        <!-- Career Path Header Card (Redesigned with Premium Blue Gradient & Grid Pattern) -->
         <section class="mb-14 animate-fade-in-up" style="animation-delay: 50ms;">
-            <div class="bg-gradient-to-br from-white via-blue-50/5 to-white border border-slate-200/60 rounded-3xl p-8 sm:p-10 shadow-[0_8px_30px_rgb(0,0,0,0.02)] flex flex-col lg:flex-row items-center gap-10">
+            <div class="bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-900 rounded-3xl p-8 sm:p-10 shadow-[0_12px_40px_-6px_rgba(37,99,235,0.25)] flex flex-col lg:flex-row items-center gap-10 text-white relative overflow-hidden border-none">
                 
+                <!-- Graphic overlay grid -->
+                <div class="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:3rem_3rem] pointer-events-none"></div>
+                <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-blue-400/20 via-transparent to-transparent opacity-70 pointer-events-none"></div>
+
                 <!-- Left: Text Information -->
-                <div class="flex-grow max-w-2xl order-2 lg:order-1">
-                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-blue-50 border border-blue-100 text-blue-600 mb-4 tracking-wide uppercase">
-                        <svg class="w-3.5 h-3.5 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
+                <div class="flex-grow max-w-2xl order-2 lg:order-1 relative z-10">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-white/15 border border-white/20 text-white mb-4 tracking-wide uppercase">
+                        <svg class="w-3.5 h-3.5 text-blue-200 animate-pulse" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
                         </svg>
                         Career Path
                     </div>
-                    <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 tracking-tight title-font mb-4">
+                    <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight title-font mb-4 drop-shadow-sm">
                         FRONT-END DEVELOPER
                     </h1>
-                    <p class="text-sm sm:text-base text-slate-600 leading-relaxed mb-6 font-medium">
+                    <p class="text-sm sm:text-base text-blue-50/90 leading-relaxed mb-6 font-medium">
                         Front End Developer adalah profesi yang bertugas membuat tampilan dan antarmuka website atau aplikasi agar menarik, interaktif, dan mudah digunakan pengguna. Pekerjaan ini menggunakan teknologi seperti HTML, CSS, dan JavaScript serta bekerja sama dengan UI/UX Designer dan Back End Developer untuk menciptakan pengalaman pengguna yang optimal.
                     </p>
                     
                     <!-- Information Trigger Button -->
-                    <button class="inline-flex items-center gap-2 px-4 py-2 border border-slate-200 hover:border-blue-400 rounded-xl text-xs font-bold text-slate-700 bg-white hover:bg-blue-50/30 transition-all duration-300 shadow-sm cursor-pointer hover:scale-[1.03]" onclick="alert('Jalur pembelajaran Front End Developer dirancang agar siswa memahami HTML, CSS, JavaScript, hingga modern framework untuk menciptakan website premium.')">
+                    <button class="inline-flex items-center gap-2 px-4 py-2 border border-white/20 hover:border-white/40 rounded-xl text-xs font-bold text-white bg-white/10 hover:bg-white/20 transition-all duration-300 shadow-sm cursor-pointer hover:scale-[1.03]" onclick="alert('Jalur pembelajaran Front End Developer dirancang agar siswa memahami HTML, CSS, JavaScript, hingga modern framework untuk menciptakan website premium.')">
                         Informasi Umum
-                        <svg class="w-4 h-4 text-slate-400" fill="currentColor" viewBox="0 0 20 20">
+                        <svg class="w-4 h-4 text-blue-200" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
                         </svg>
                     </button>
                 </div>
 
                 <!-- Right: Mockup Image inside rounded frame with shadow/glow -->
-                <div class="w-full lg:w-[380px] h-60 sm:h-72 rounded-2xl overflow-hidden shadow-2xl border-4 border-blue-500/20 group relative cursor-pointer order-1 lg:order-2 flex-shrink-0">
+                <div class="w-full lg:w-[380px] h-60 sm:h-72 rounded-2xl overflow-hidden shadow-2xl border-4 border-white/10 group relative cursor-pointer order-1 lg:order-2 flex-shrink-0 z-10">
                     <img src="https://images.unsplash.com/photo-1586717791821-3f44a563fa4c?w=600&auto=format&fit=crop&q=80" alt="Path Wireframe Mockup" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
-                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950/20 to-transparent"></div>
+                    <div class="absolute inset-0 bg-gradient-to-t from-indigo-950/40 to-transparent"></div>
                 </div>
 
             </div>
@@ -136,27 +156,47 @@
         <!-- Curriculum Section Header & Progress Bar -->
         <section class="mb-14 animate-fade-in-up" style="animation-delay: 100ms;">
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-200/60 pb-6 mb-10">
-                <div>
+                <div class="flex items-center gap-4">
                     <h2 class="text-2xl font-extrabold text-slate-900 tracking-tight title-font flex items-center gap-2">
                         <span class="w-1.5 h-6 bg-blue-600 rounded-full inline-block"></span>
                         Learning Curriculum
                     </h2>
+                    
+                    <!-- Reset Progress Form -->
+                    <form action="{{ route('path.frontend.reset') }}" method="POST" class="inline">
+                        @csrf
+                        <button type="submit" class="inline-flex items-center gap-1.5 px-3 py-1 border border-red-200 hover:border-red-400 rounded-xl text-xs font-bold text-red-600 bg-red-50/50 hover:bg-red-50 transition-all duration-300 shadow-sm cursor-pointer hover:scale-[1.03]" title="Reset Detail Progress">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 1121.21 7.89H18.21" />
+                            </svg>
+                            Mulai dari Awal
+                        </button>
+                    </form>
                 </div>
+                
+                @php
+                    $percentVal = min(100, round(($currentStep / 7) * 100));
+                @endphp
                 <!-- Progress display -->
                 <div class="flex items-center gap-3 w-full sm:w-auto">
                     <span class="text-xs font-bold text-slate-400 whitespace-nowrap">Your Progress</span>
-                    <div class="w-full sm:w-44 bg-slate-200/70 rounded-full h-2 overflow-hidden">
-                        <div class="bg-blue-600 h-2 rounded-full shadow-sm" style="width: 15%"></div>
+                    <div class="w-full sm:w-44 bg-slate-200/70 rounded-full h-2.5 overflow-hidden">
+                        <div class="bg-blue-600 h-2.5 rounded-full shadow-sm transition-all duration-1000" style="width: {{ $percentVal }}%"></div>
                     </div>
-                    <span class="text-xs font-extrabold text-blue-600 whitespace-nowrap bg-blue-50 border border-blue-100/50 px-2 py-0.5 rounded-lg">15%</span>
+                    <span class="text-xs font-extrabold text-blue-600 whitespace-nowrap bg-blue-50 border border-blue-100/50 px-2 py-0.5 rounded-lg">{{ $percentVal }}%</span>
                 </div>
             </div>
 
             <!-- Vertical Timeline Section -->
             <div class="relative max-w-5xl mx-auto px-2 py-4">
                 
-                <!-- Central vertical axis timeline line -->
-                <div class="absolute timeline-line top-0 bottom-0 left-1/2 w-0.5 bg-slate-200/80 -translate-x-1/2 z-0"></div>
+                <!-- Central vertical axis timeline line with animated running blue line path -->
+                <div class="absolute timeline-line top-0 bottom-0 left-1/2 w-1.5 bg-slate-200 -translate-x-1/2 z-0 rounded-full overflow-hidden">
+                    <div class="absolute top-0 w-full bg-gradient-to-b from-blue-400 via-blue-600 to-indigo-600 rounded-full shadow-[0_0_12px_rgba(59,130,246,0.8)]" style="height: {{ $percentVal }}%; transition: height 1.2s cubic-bezier(0.25, 1, 0.5, 1);">
+                        <!-- Pulsing running laser dot -->
+                        <div class="absolute bottom-0 left-0 right-0 h-4 bg-white animate-pulse rounded-full shadow-[0_0_15px_#fff]"></div>
+                    </div>
+                </div>
 
                 <!-- Curriculum Modules Grid Loop -->
                 <div class="space-y-12 relative z-10">
@@ -165,90 +205,85 @@
                         $curriculum = [
                             [
                                 'title' => 'Pendahuluan',
-                                'badge' => 'Completed',
                                 'desc' => 'mempelajari dasar pengembangan tampilan website.',
-                                'action_label' => 'Review',
                                 'side' => 'left',
-                                'icon' => 'HTML',
+                                'icon' => 'DOC',
                             ],
                             [
                                 'title' => 'Pengenalan HTML',
-                                'badge' => 'Active',
                                 'desc' => 'mempelajari struktur dasar dan elemen HTML.',
-                                'action_label' => 'Start Learning',
                                 'side' => 'right',
                                 'icon' => 'HTML',
                             ],
                             [
                                 'title' => 'Pendalaman HTML',
-                                'badge' => 'Unlocked',
                                 'desc' => 'mempelajari form, tabel, semantic, dan multimedia.',
-                                'action_label' => 'Start Learning',
                                 'side' => 'left',
                                 'icon' => 'HTML',
                             ],
                             [
                                 'title' => 'Pengenalan CSS',
-                                'badge' => 'Unlocked',
                                 'desc' => 'mempelajari styling dan tampilan website.',
-                                'action_label' => 'Start Learning',
                                 'side' => 'right',
-                                'icon' => 'HTML',
+                                'icon' => 'CSS',
                             ],
                             [
                                 'title' => 'Pendalaman CSS',
-                                'badge' => 'Unlocked',
                                 'desc' => 'mempelajari animasi, flexbox, dan grid layout.',
-                                'action_label' => 'Start Learning',
                                 'side' => 'left',
-                                'icon' => 'HTML',
+                                'icon' => 'CSS',
                             ],
                             [
                                 'title' => 'Layout Responsive',
-                                'badge' => 'Unlocked',
                                 'desc' => 'mempelajari tampilan website di berbagai perangkat.',
-                                'action_label' => 'Start Learning',
                                 'side' => 'right',
-                                'icon' => 'HTML',
+                                'icon' => 'WEB',
                             ],
                             [
                                 'title' => 'Quiz',
-                                'badge' => 'Unlocked',
                                 'desc' => 'Selesaikan kuis untuk lanjut ke card selanjutnya!',
-                                'action_label' => 'Start Learning',
                                 'side' => 'left',
-                                'icon' => 'HTML',
+                                'icon' => 'QUIZ',
                             ],
                         ];
                     @endphp
 
                     @foreach($curriculum as $index => $module)
                         @php
+                            // Determine dynamic state for each card index
+                            $status = '';
+                            if ($index < $currentStep) {
+                                $status = 'Completed';
+                            } elseif ($index == $currentStep) {
+                                $status = 'Active';
+                            } else {
+                                $status = 'Locked';
+                            }
+
                             // Set node statuses & styles
                             $nodeIcon = '';
                             $nodeColor = 'bg-white border-slate-300 text-slate-400 shadow-sm';
                             
-                            if ($module['badge'] === 'Completed') {
+                            if ($status === 'Completed') {
                                 $nodeColor = 'bg-blue-600 border-blue-600 text-white shadow-md shadow-blue-500/20';
-                            } elseif ($module['badge'] === 'Active') {
-                                $nodeColor = 'bg-white border-blue-500 border-4 text-blue-600 shadow-md shadow-blue-500/10';
+                            } elseif ($status === 'Active') {
+                                $nodeColor = 'bg-white border-blue-500 border-4 text-blue-600 shadow-md shadow-blue-500/10 animate-bounce';
                             } else {
-                                // Locked status: render a lock icon inside the timeline node
                                 $nodeIcon = 'locked';
-                                $nodeColor = 'bg-slate-50 border-slate-200 text-slate-300';
+                                $nodeColor = 'bg-slate-100 border-slate-200 text-slate-300';
                             }
 
                             // Dynamic badge layout Classes
                             $badgeClass = '';
-                            switch($module['badge']) {
+                            switch($status) {
                                 case 'Completed':
                                     $badgeClass = 'bg-emerald-50 border border-emerald-100 text-emerald-600';
                                     break;
                                 case 'Active':
-                                    $badgeClass = 'bg-blue-50 border border-blue-100 text-blue-600';
+                                    $badgeClass = 'bg-blue-50 border border-blue-100 text-blue-600 animate-pulse';
                                     break;
                                 default:
-                                    $badgeClass = 'bg-slate-100 border border-slate-200/60 text-slate-400';
+                                    $badgeClass = 'bg-slate-200/50 border border-slate-200/40 text-slate-400';
                                     break;
                             }
                         @endphp
@@ -259,34 +294,70 @@
                             <div class="w-full md:w-[44%] {{ $module['side'] === 'left' ? 'order-1' : 'order-3 opacity-0 pointer-events-none md:block hidden' }}">
                                 @if($module['side'] === 'left')
                                     <!-- Curriculum Card Component -->
-                                    <div class="group wobble-card bg-white border border-slate-200/80 rounded-2xl p-6 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.03)] hover:bg-blue-600 hover:border-blue-600 hover:shadow-[0_16px_36px_-8px_rgba(37,99,235,0.22)] cursor-pointer">
-                                        <div class="inner-lift flex items-start gap-4">
-                                            <!-- Module Brand badge -->
-                                            <div class="w-12 h-12 rounded-xl bg-blue-50 border border-blue-100/50 flex items-center justify-center font-extrabold text-xs text-blue-600 flex-shrink-0 group-hover:bg-white/20 group-hover:border-white/30 group-hover:text-white transition-colors duration-300">
-                                                {{ $module['icon'] }}
-                                            </div>
-                                            <!-- Module Body Info -->
-                                            <div class="flex-grow">
-                                                <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
-                                                    <h3 class="text-base sm:text-lg font-extrabold text-slate-900 group-hover:text-white transition-colors duration-300">
-                                                        {{ $module['title'] }}
-                                                    </h3>
-                                                    <span class="inline-block px-2.5 py-0.5 rounded-lg text-xs font-bold {{ $badgeClass }} group-hover:bg-white/25 group-hover:border-transparent group-hover:text-white transition-colors duration-300 font-mono">
-                                                        {{ $module['badge'] }}
-                                                    </span>
+                                    @if($status !== 'Locked')
+                                        <!-- Active or Completed card: can tilt/wobble and transition to blue on hover -->
+                                        <div class="group wobble-card bg-white border border-slate-200/80 rounded-2xl p-6 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.03)] hover:bg-blue-600 hover:border-blue-600 hover:shadow-[0_16px_36px_-8px_rgba(37,99,235,0.22)] cursor-pointer transition-all duration-300 {{ $status === 'Active' ? 'card-active-glow' : '' }}">
+                                            <div class="inner-lift flex items-start gap-4">
+                                                <div class="w-12 h-12 rounded-xl bg-blue-50 border border-blue-100/50 flex items-center justify-center font-extrabold text-xs text-blue-600 flex-shrink-0 group-hover:bg-white/20 group-hover:border-white/30 group-hover:text-white transition-colors duration-300">
+                                                    {{ $module['icon'] }}
                                                 </div>
-                                                <p class="text-xs sm:text-sm text-slate-500 group-hover:text-blue-50 transition-colors duration-300 mb-5 leading-relaxed">
-                                                    {{ $module['desc'] }}
-                                                </p>
-                                                <!-- Action Link -->
-                                                <div>
-                                                    <a href="{{ auth()->check() ? route('explore.enroll', 1) : url('/login') }}" class="inline-flex items-center justify-center px-4 py-2 text-xs font-extrabold rounded-xl bg-slate-50 text-slate-600 border border-slate-200/60 hover:bg-blue-50 hover:text-blue-600 group-hover:bg-white group-hover:text-blue-600 group-hover:border-white transition-all duration-300 shadow-sm cursor-pointer hover:no-underline">
-                                                        {{ $module['action_label'] }}
-                                                    </a>
+                                                <div class="flex-grow">
+                                                    <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                                                        <h3 class="text-base sm:text-lg font-extrabold text-slate-900 group-hover:text-white transition-colors duration-300">
+                                                            {{ $module['title'] }}
+                                                        </h3>
+                                                        <span class="inline-block px-2.5 py-0.5 rounded-lg text-xs font-bold {{ $badgeClass }} group-hover:bg-white/25 group-hover:border-transparent group-hover:text-white transition-colors duration-300 font-mono">
+                                                            {{ $status }}
+                                                        </span>
+                                                    </div>
+                                                    <p class="text-xs sm:text-sm text-slate-500 group-hover:text-blue-50 transition-colors duration-300 mb-5 leading-relaxed">
+                                                        {{ $module['desc'] }}
+                                                    </p>
+                                                    <div>
+                                                        @if($status === 'Active')
+                                                            <form action="{{ route('path.frontend.complete') }}" method="POST" class="inline">
+                                                                @csrf
+                                                                <button type="submit" class="inline-flex items-center justify-center px-4 py-2 text-xs font-extrabold rounded-xl bg-slate-50 text-slate-600 border border-slate-200/60 hover:bg-blue-50 hover:text-blue-600 group-hover:bg-white group-hover:text-blue-600 group-hover:border-white transition-all duration-300 shadow-sm cursor-pointer hover:no-underline">
+                                                                    Start Learning
+                                                                </button>
+                                                            </form>
+                                                        @else
+                                                            <span class="inline-flex items-center justify-center px-4 py-2 text-xs font-extrabold rounded-xl bg-emerald-50 text-emerald-600 border border-emerald-200 group-hover:bg-white/20 group-hover:text-white group-hover:border-white/30 transition-all duration-300 shadow-sm cursor-default">
+                                                                Review
+                                                            </span>
+                                                        @endif
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    @else
+                                        <!-- Locked card: Stays gray, no wobble/tilt, hover does nothing -->
+                                        <div class="bg-slate-100/70 border border-slate-200/60 rounded-2xl p-6 opacity-60 cursor-not-allowed select-none transition-none">
+                                            <div class="flex items-start gap-4">
+                                                <div class="w-12 h-12 rounded-xl bg-slate-200/80 border border-slate-300/40 flex items-center justify-center font-extrabold text-xs text-slate-400 flex-shrink-0">
+                                                    🔒
+                                                </div>
+                                                <div class="flex-grow">
+                                                    <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                                                        <h3 class="text-base sm:text-lg font-extrabold text-slate-400">
+                                                            {{ $module['title'] }}
+                                                        </h3>
+                                                        <span class="inline-block px-2.5 py-0.5 rounded-lg text-xs font-bold {{ $badgeClass }} font-mono">
+                                                            Locked
+                                                        </span>
+                                                    </div>
+                                                    <p class="text-xs sm:text-sm text-slate-400 mb-5 leading-relaxed">
+                                                        {{ $module['desc'] }}
+                                                    </p>
+                                                    <div>
+                                                        <span class="inline-flex items-center justify-center px-4 py-2 text-xs font-bold rounded-xl bg-slate-200/50 text-slate-400 border border-slate-300/30 cursor-not-allowed">
+                                                            Locked 🔒
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endif
                                 @endif
                             </div>
 
@@ -305,34 +376,70 @@
                             <div class="w-full md:w-[44%] {{ $module['side'] === 'right' ? 'order-3' : 'order-1 opacity-0 pointer-events-none md:block hidden' }}">
                                 @if($module['side'] === 'right')
                                     <!-- Curriculum Card Component -->
-                                    <div class="group wobble-card bg-white border border-slate-200/80 rounded-2xl p-6 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.03)] hover:bg-blue-600 hover:border-blue-600 hover:shadow-[0_16px_36px_-8px_rgba(37,99,235,0.22)] cursor-pointer">
-                                        <div class="inner-lift flex items-start gap-4">
-                                            <!-- Module Brand badge -->
-                                            <div class="w-12 h-12 rounded-xl bg-blue-50 border border-blue-100/50 flex items-center justify-center font-extrabold text-xs text-blue-600 flex-shrink-0 group-hover:bg-white/20 group-hover:border-white/30 group-hover:text-white transition-colors duration-300">
-                                                {{ $module['icon'] }}
-                                            </div>
-                                            <!-- Module Body Info -->
-                                            <div class="flex-grow">
-                                                <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
-                                                    <h3 class="text-base sm:text-lg font-extrabold text-slate-900 group-hover:text-white transition-colors duration-300">
-                                                        {{ $module['title'] }}
-                                                    </h3>
-                                                    <span class="inline-block px-2.5 py-0.5 rounded-lg text-xs font-bold {{ $badgeClass }} group-hover:bg-white/25 group-hover:border-transparent group-hover:text-white transition-colors duration-300 font-mono">
-                                                        {{ $module['badge'] }}
-                                                    </span>
+                                    @if($status !== 'Locked')
+                                        <!-- Active or Completed card: can tilt/wobble and transition to blue on hover -->
+                                        <div class="group wobble-card bg-white border border-slate-200/80 rounded-2xl p-6 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.03)] hover:bg-blue-600 hover:border-blue-600 hover:shadow-[0_16px_36px_-8px_rgba(37,99,235,0.22)] cursor-pointer transition-all duration-300 {{ $status === 'Active' ? 'card-active-glow' : '' }}">
+                                            <div class="inner-lift flex items-start gap-4">
+                                                <div class="w-12 h-12 rounded-xl bg-blue-50 border border-blue-100/50 flex items-center justify-center font-extrabold text-xs text-blue-600 flex-shrink-0 group-hover:bg-white/20 group-hover:border-white/30 group-hover:text-white transition-colors duration-300">
+                                                    {{ $module['icon'] }}
                                                 </div>
-                                                <p class="text-xs sm:text-sm text-slate-500 group-hover:text-blue-50 transition-colors duration-300 mb-5 leading-relaxed">
-                                                    {{ $module['desc'] }}
-                                                </p>
-                                                <!-- Action Link -->
-                                                <div>
-                                                    <a href="{{ auth()->check() ? route('explore.enroll', 1) : url('/login') }}" class="inline-flex items-center justify-center px-4 py-2 text-xs font-extrabold rounded-xl bg-slate-50 text-slate-600 border border-slate-200/60 hover:bg-blue-50 hover:text-blue-600 group-hover:bg-white group-hover:text-blue-600 group-hover:border-white transition-all duration-300 shadow-sm cursor-pointer hover:no-underline">
-                                                        {{ $module['action_label'] }}
-                                                    </a>
+                                                <div class="flex-grow">
+                                                    <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                                                        <h3 class="text-base sm:text-lg font-extrabold text-slate-900 group-hover:text-white transition-colors duration-300">
+                                                            {{ $module['title'] }}
+                                                        </h3>
+                                                        <span class="inline-block px-2.5 py-0.5 rounded-lg text-xs font-bold {{ $badgeClass }} group-hover:bg-white/25 group-hover:border-transparent group-hover:text-white transition-colors duration-300 font-mono">
+                                                            {{ $status }}
+                                                        </span>
+                                                    </div>
+                                                    <p class="text-xs sm:text-sm text-slate-500 group-hover:text-blue-50 transition-colors duration-300 mb-5 leading-relaxed">
+                                                        {{ $module['desc'] }}
+                                                    </p>
+                                                    <div>
+                                                        @if($status === 'Active')
+                                                            <form action="{{ route('path.frontend.complete') }}" method="POST" class="inline">
+                                                                @csrf
+                                                                <button type="submit" class="inline-flex items-center justify-center px-4 py-2 text-xs font-extrabold rounded-xl bg-slate-50 text-slate-600 border border-slate-200/60 hover:bg-blue-50 hover:text-blue-600 group-hover:bg-white group-hover:text-blue-600 group-hover:border-white transition-all duration-300 shadow-sm cursor-pointer hover:no-underline">
+                                                                    Start Learning
+                                                                </button>
+                                                            </form>
+                                                        @else
+                                                            <span class="inline-flex items-center justify-center px-4 py-2 text-xs font-extrabold rounded-xl bg-emerald-50 text-emerald-600 border border-emerald-200 group-hover:bg-white/20 group-hover:text-white group-hover:border-white/30 transition-all duration-300 shadow-sm cursor-default">
+                                                                Review
+                                                            </span>
+                                                        @endif
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    @else
+                                        <!-- Locked card: Stays gray, no wobble/tilt, hover does nothing -->
+                                        <div class="bg-slate-100/70 border border-slate-200/60 rounded-2xl p-6 opacity-60 cursor-not-allowed select-none transition-none">
+                                            <div class="flex items-start gap-4">
+                                                <div class="w-12 h-12 rounded-xl bg-slate-200/80 border border-slate-300/40 flex items-center justify-center font-extrabold text-xs text-slate-400 flex-shrink-0">
+                                                    🔒
+                                                </div>
+                                                <div class="flex-grow">
+                                                    <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                                                        <h3 class="text-base sm:text-lg font-extrabold text-slate-400">
+                                                            {{ $module['title'] }}
+                                                        </h3>
+                                                        <span class="inline-block px-2.5 py-0.5 rounded-lg text-xs font-bold {{ $badgeClass }} font-mono">
+                                                            Locked
+                                                        </span>
+                                                    </div>
+                                                    <p class="text-xs sm:text-sm text-slate-400 mb-5 leading-relaxed">
+                                                        {{ $module['desc'] }}
+                                                    </p>
+                                                    <div>
+                                                        <span class="inline-flex items-center justify-center px-4 py-2 text-xs font-bold rounded-xl bg-slate-200/50 text-slate-400 border border-slate-300/30 cursor-not-allowed">
+                                                            Locked 🔒
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endif
                                 @endif
                             </div>
 
@@ -356,7 +463,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             
-            // --- Interactive 3D Cursor-Wobble / Tilt Card Effect ---
+            // --- Interactive 3D Cursor-Wobble / Tilt Card Effect (Only applied to unlocked wobble cards) ---
             const cards = document.querySelectorAll('.wobble-card');
             
             cards.forEach(card => {
