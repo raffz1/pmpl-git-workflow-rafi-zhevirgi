@@ -173,4 +173,55 @@ class ExplorePathController extends Controller
         }
         return redirect()->route('path.detail.backend')->with('success', 'Progres belajar berhasil direset dari awal.');
     }
+
+    public function fullstackDetail()
+    {
+        $userName = auth()->check() ? (auth()->user()->name ?? 'Student') : 'Guest';
+        if (auth()->check()) {
+            $user = auth()->user();
+            $currentStep = $user->fullstack_current_step;
+            session(['fullstack_current_step' => $currentStep]);
+        } else {
+            if (!session()->has('fullstack_current_step')) {
+                session(['fullstack_current_step' => 0]);
+            }
+            $currentStep = session('fullstack_current_step', 0);
+        }
+        return view('detail-fullstack', compact('userName', 'currentStep'));
+    }
+
+    public function completeFullstackStep(\Illuminate\Http\Request $request)
+    {
+        session(['active_path_id' => 4]); // Auto enroll in Full Stack path
+        if (auth()->check()) {
+            $user = auth()->user();
+            $user->active_path_id = 4;
+            if ($user->fullstack_current_step < 10) {
+                $user->fullstack_current_step++;
+                $user->save();
+            }
+            $currentStep = $user->fullstack_current_step;
+            session(['fullstack_current_step' => $currentStep]);
+        } else {
+            $currentStep = session('fullstack_current_step', 0);
+            if ($currentStep < 10) {
+                $currentStep++;
+                session(['fullstack_current_step' => $currentStep]);
+            }
+        }
+        return redirect()->route('path.detail.fullstack')->with('success', 'Selamat! Modul berhasil diselesaikan.');
+    }
+
+    public function resetFullstackDetailProgress()
+    {
+        if (auth()->check()) {
+            $user = auth()->user();
+            $user->fullstack_current_step = 0;
+            $user->save();
+            session(['fullstack_current_step' => 0]);
+        } else {
+            session(['fullstack_current_step' => 0]);
+        }
+        return redirect()->route('path.detail.fullstack')->with('success', 'Progres belajar berhasil direset dari awal.');
+    }
 }

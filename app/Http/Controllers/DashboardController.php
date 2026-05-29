@@ -14,13 +14,16 @@ class DashboardController extends Controller
             $activePathId = $user->active_path_id ?? $activePathId;
             $frontendStep = $user->frontend_current_step;
             $backendStep = $user->backend_current_step;
+            $fullstackStep = $user->fullstack_current_step;
             // Sync to session
             session(['active_path_id' => $activePathId]);
             session(['frontend_current_step' => $frontendStep]);
             session(['backend_current_step' => $backendStep]);
+            session(['fullstack_current_step' => $fullstackStep]);
         } else {
             $frontendStep = session('frontend_current_step', 0);
             $backendStep = session('backend_current_step', 0);
+            $fullstackStep = session('fullstack_current_step', 0);
         }
         
         $userName = auth()->user()->name ?? 'Student';
@@ -53,6 +56,23 @@ class DashboardController extends Controller
         $backendModule = $backendModulesList[$backendStep] ?? 'Kurikulum Selesai! 🎉';
         $backendProgress = min(100, round(($backendStep / 8) * 100));
         $backendLessons = $backendStep . '/8';
+
+        $fullstackModulesList = [
+            0 => 'Modul 1 : HTML, CSS, JavaScript',
+            1 => 'Modul 2 : Responsive Web Design',
+            2 => 'Modul 3 : Git & GitHub',
+            3 => 'Modul 4 : Frontend Framework',
+            4 => 'Modul 5 : Backend Development',
+            5 => 'Modul 6 : Database',
+            6 => 'Modul 7 : API & Authentication',
+            7 => 'Modul 8 : Deployment & Hosting',
+            8 => 'Modul 9 : Testing dan optimization',
+            9 => 'Modul 10 : QUIZ',
+            10 => 'Kurikulum Selesai! 🎉'
+        ];
+        $fullstackModule = $fullstackModulesList[$fullstackStep] ?? 'Kurikulum Selesai! 🎉';
+        $fullstackProgress = min(100, round(($fullstackStep / 10) * 100));
+        $fullstackLessons = $fullstackStep . '/10';
  
         $paths = [
             1 => [
@@ -83,11 +103,12 @@ class DashboardController extends Controller
             ],
             4 => [
                 'title' => 'Full Stack Developer',
-                'module' => 'Modul 1 : Git & Alur Kerja Tim',
-                'progress' => 15,
-                'lessons' => '6/50',
+                'module' => $fullstackModule,
+                'progress' => $fullstackProgress,
+                'lessons' => $fullstackLessons,
                 'quiz' => '90%',
                 'image' => 'https://images.unsplash.com/photo-1605379399642-870262d3d051?w=600&auto=format&fit=crop&q=80',
+                'url' => route('path.detail.fullstack'),
             ],
             5 => [
                 'title' => 'Product Manager',
@@ -110,12 +131,14 @@ class DashboardController extends Controller
         session()->forget('active_path_id');
         session()->forget('frontend_current_step');
         session()->forget('backend_current_step');
+        session()->forget('fullstack_current_step');
         
         if (auth()->check()) {
             $user = auth()->user();
             $user->active_path_id = null;
             $user->frontend_current_step = 0;
             $user->backend_current_step = 0;
+            $user->fullstack_current_step = 0;
             $user->save();
         }
         return redirect()->route('dashboard')->with('success', 'Progress berhasil di-reset.');

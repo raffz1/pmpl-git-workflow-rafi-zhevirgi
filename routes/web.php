@@ -33,6 +33,10 @@ Route::get('/path/detail/backend', [ExplorePathController::class, 'backendDetail
 Route::post('/path/detail/backend/complete', [ExplorePathController::class, 'completeBackendStep'])->name('path.backend.complete');
 Route::post('/path/detail/backend/reset', [ExplorePathController::class, 'resetBackendDetailProgress'])->name('path.backend.reset');
 
+Route::get('/path/detail/fullstack', [ExplorePathController::class, 'fullstackDetail'])->name('path.detail.fullstack');
+Route::post('/path/detail/fullstack/complete', [ExplorePathController::class, 'completeFullstackStep'])->name('path.fullstack.complete');
+Route::post('/path/detail/fullstack/reset', [ExplorePathController::class, 'resetFullstackDetailProgress'])->name('path.fullstack.reset');
+
 Route::get('/explore/enroll/{id}', [ExplorePathController::class, 'enroll'])->name('explore.enroll')->middleware('auth');
 
 // Protected Routes
