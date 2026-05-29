@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ExplorePathController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -22,6 +23,9 @@ Route::get('/login', function () {
 
 Route::post('/login', [AuthController::class, 'loginProcess']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+// Explore Path (public access)
+Route::get('/explore', [ExplorePathController::class, 'index'])->name('explore.path');
 
 // Protected Routes
 Route::middleware('auth')->group(function () {

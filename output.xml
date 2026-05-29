@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 7.4.2 (Python 3.13.13 on win32)" generated="2026-05-17T22:39:08.471326" rpa="false" schemaversion="5">
+<suite id="s1" name="Landing Page" source="C:\laragon\www\path-deck\tests\robot\landing_page.robot">
+<test id="s1-t1" name="Validasi Elemen Navbar Landing Page" line="10">
+<kw name="Open Browser" owner="SeleniumLibrary">
+<msg time="2026-05-17T22:39:08.727644" level="INFO">Opening browser 'chrome' to base url 'http://127.0.0.1:8000'.</msg>
+<arg>${URL}</arg>
+<arg>${BROWSER}</arg>
+<doc>Opens a new browser instance to the optional ``url``.</doc>
+<status status="PASS" start="2026-05-17T22:39:08.727067" elapsed="7.841717"/>
+</kw>
+<kw name="Maximize Browser Window" owner="SeleniumLibrary">
+<doc>Maximizes current browser window.</doc>
+<status status="PASS" start="2026-05-17T22:39:16.572457" elapsed="0.073178"/>
+</kw>
+<kw name="Page Should Contain" owner="SeleniumLibrary">
+<msg time="2026-05-17T22:39:16.728578" level="INFO">Current page contains text 'Path Deck'.</msg>
+<arg>Path Deck</arg>
+<doc>Verifies that current page contains ``text``.</doc>
+<status status="PASS" start="2026-05-17T22:39:16.646135" elapsed="0.082595"/>
+</kw>
+<kw name="Page Should Contain" owner="SeleniumLibrary">
+<msg time="2026-05-17T22:39:16.776409" level="INFO">Current page contains text 'Dashboard'.</msg>
+<arg>Dashboard</arg>
+<doc>Verifies that current page contains ``text``.</doc>
+<status status="PASS" start="2026-05-17T22:39:16.729424" elapsed="0.047155"/>
+</kw>
+<kw name="Page Should Contain" owner="SeleniumLibrary">
+<msg time="2026-05-17T22:39:16.845946" level="INFO">Current page contains text 'Explore path'.</msg>
+<arg>Explore path</arg>
+<doc>Verifies that current page contains ``text``.</doc>
+<status status="PASS" start="2026-05-17T22:39:16.777235" elapsed="0.068869"/>
+</kw>
+<kw name="Page Should Contain" owner="SeleniumLibrary">
+<msg time="2026-05-17T22:39:16.869928" level="INFO">Current page contains text 'Login'.</msg>
+<arg>Login</arg>
+<doc>Verifies that current page contains ``text``.</doc>
+<status status="PASS" start="2026-05-17T22:39:16.846921" elapsed="0.023152"/>
+</kw>
+<kw name="Page Should Contain Link" owner="SeleniumLibrary">
+<msg time="2026-05-17T22:39:16.928347" level="INFO">Current page contains link 'xpath=//a[contains(text(), 'Register')]'.</msg>
+<arg>xpath=//a[contains(text(), 'Register')]</arg>
+<doc>Verifies link identified by ``locator`` is found from current page.</doc>
+<status status="PASS" start="2026-05-17T22:39:16.870498" elapsed="0.057985"/>
+</kw>
+<doc>Memastikan komponen navigasi utama muncul dan sesuai desain</doc>
+<status status="PASS" start="2026-05-17T22:39:08.725860" elapsed="8.203080"/>
+</test>
+<doc>Skenario Pengujian Landing Page Aplikasi Path Deck</doc>
+<status status="PASS" start="2026-05-17T22:39:08.473832" elapsed="8.456647"/>
+</suite>
+<statistics>
+<total>
+<stat pass="1" fail="0" skip="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat name="Landing Page" id="s1" pass="1" fail="0" skip="0">Landing Page</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>

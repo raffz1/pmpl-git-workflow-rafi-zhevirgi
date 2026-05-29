@@ -31,7 +31,7 @@
                     <!-- Middle: Nav Links (Hidden on mobile) -->
                     <div class="hidden md:flex space-x-8">
                         <a href="#" class="text-slate-900 inline-flex items-center px-1 pt-1 border-b-2 border-blue-600 font-medium text-sm transition-colors">Dashboard</a>
-                        <a href="#" class="text-slate-500 hover:text-slate-900 inline-flex items-center px-1 pt-1 border-b-2 border-transparent hover:border-slate-300 font-medium text-sm transition-colors">Explore path</a>
+                        <a href="{{ route('explore.path') }}" class="text-slate-500 hover:text-slate-900 inline-flex items-center px-1 pt-1 border-b-2 border-transparent hover:border-slate-300 font-medium text-sm transition-colors">Explore path</a>
                     </div>
 
                     <!-- Right: Actions -->
