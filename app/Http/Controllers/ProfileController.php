@@ -31,7 +31,7 @@ class ProfileController extends Controller
         ];
 
         // Determine dominant title
-        $dominantTitle = 'Student';
+        $dominantTitle = '';
         $maxProgress = 0;
         
         // Find highest progress path
@@ -40,19 +40,6 @@ class ProfileController extends Controller
                 $maxProgress = $progress;
                 $dominantTitle = $title;
             }
-        }
-
-        // If no progress at all, try to fall back to active path
-        if ($maxProgress == 0) {
-            $activePathId = $user->active_path_id;
-            $pathTitles = [
-                1 => 'Front End Developer',
-                2 => 'Back End Developer',
-                3 => 'UI/UX Designer',
-                4 => 'Full Stack Developer',
-                5 => 'Project Manager',
-            ];
-            $dominantTitle = $pathTitles[$activePathId] ?? 'Student';
         }
 
         // Paths detailed structure for view
@@ -114,8 +101,11 @@ class ProfileController extends Controller
             'username' => 'nullable|string|max:255|unique:users,username,' . $user->id,
             'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
             'password' => 'nullable|string|min:8|confirmed',
-            'profile_photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'cover_photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:4096',
+            'profile_photo' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp,svg|max:10240',
+            'cover_photo' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp,svg|max:10240',
+        ], [
+            'profile_photo.uploaded' => 'Foto profil gagal diunggah. Pastikan ukuran file tidak melebihi 10MB.',
+            'cover_photo.uploaded' => 'Foto cover gagal diunggah. Pastikan ukuran file tidak melebihi 10MB.',
         ]);
 
         $user->name = $request->name;
@@ -129,14 +119,22 @@ class ProfileController extends Controller
         if ($request->hasFile('profile_photo')) {
             $file = $request->file('profile_photo');
             $filename = time() . '_avatar_' . $user->id . '.' . $file->getClientOriginalExtension();
-            $file->move(public_path('uploads/profile'), $filename);
+            $dir = public_path('uploads/profile');
+            if (!is_dir($dir)) {
+                mkdir($dir, 0777, true);
+            }
+            $file->move($dir, $filename);
             $user->profile_photo = '/uploads/profile/' . $filename;
         }
 
         if ($request->hasFile('cover_photo')) {
             $file = $request->file('cover_photo');
             $filename = time() . '_cover_' . $user->id . '.' . $file->getClientOriginalExtension();
-            $file->move(public_path('uploads/cover'), $filename);
+            $dir = public_path('uploads/cover');
+            if (!is_dir($dir)) {
+                mkdir($dir, 0777, true);
+            }
+            $file->move($dir, $filename);
             $user->cover_photo = '/uploads/cover/' . $filename;
         }
 

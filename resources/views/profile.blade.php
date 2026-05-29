@@ -36,14 +36,14 @@
             transform: translateZ(25px);
         }
 
-        /* Background Blobs Animation */
+        /* Ambient Background Blobs Animation */
         @keyframes float-blob {
             0%, 100% { transform: translateY(0px) scale(1) rotate(0deg); }
             33% { transform: translateY(-20px) scale(1.05) rotate(2deg); }
             66% { transform: translateY(15px) scale(0.95) rotate(-2deg); }
         }
         .animate-float-blob {
-            animation: float-blob 10s ease-in-out infinite;
+            animation: float-blob 11s ease-in-out infinite;
         }
 
         /* Fade In Animation */
@@ -79,18 +79,15 @@
     <!-- Top Navigation Bar -->
     @include('layouts.navbar')
 
-    <!-- Interactive Background Effects -->
+    <!-- Ambient Glowing Background Decor (Matching other pages, clean & out of the way) -->
     <div class="absolute inset-0 z-0 overflow-hidden pointer-events-none">
         <!-- Faded Blue Grid Overlay -->
         <div class="absolute inset-0 bg-[linear-gradient(to_right,#3b82f610_1px,transparent_1px),linear-gradient(to_bottom,#3b82f610_1px,transparent_1px)] bg-[size:5rem_5rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_90%,transparent_100%)] opacity-100"></div>
         
         <!-- Glowing Blobs -->
-        <div class="absolute top-[15%] left-[-5%] w-[400px] h-[400px] rounded-full bg-blue-400/20 blur-3xl animate-float-blob" style="animation-duration: 8s;"></div>
-        <div class="absolute top-[40%] right-[-10%] w-[450px] h-[450px] rounded-full bg-indigo-400/15 blur-3xl animate-float-blob" style="animation-delay: -2s; animation-duration: 11s;"></div>
-        <div class="absolute bottom-[20%] left-[5%] w-[380px] h-[380px] rounded-full bg-cyan-300/18 blur-3xl animate-float-blob" style="animation-delay: -5s; animation-duration: 9s;"></div>
-
-        <!-- Drifting Particles Container -->
-        <div id="particle-container" class="absolute inset-0 z-0"></div>
+        <div class="absolute top-[8%] left-[-8%] w-[450px] h-[450px] rounded-full bg-blue-400/20 blur-3xl animate-float-blob" style="animation-duration: 9s;"></div>
+        <div class="absolute top-[35%] right-[-12%] w-[500px] h-[500px] rounded-full bg-indigo-400/15 blur-3xl animate-float-blob" style="animation-delay: -3s; animation-duration: 12s;"></div>
+        <div class="absolute bottom-[8%] left-[4%] w-[400px] h-[400px] rounded-full bg-cyan-300/18 blur-3xl animate-float-blob" style="animation-delay: -6s; animation-duration: 10s;"></div>
     </div>
 
     <!-- Main Content Area -->
@@ -121,49 +118,62 @@
                 <!-- 1. Cover Photo Area -->
                 <div class="h-48 sm:h-64 md:h-72 w-full relative overflow-hidden bg-slate-900 group">
                     @if($user->cover_photo)
-                        <img id="cover-photo-img" src="{{ $user->cover_photo }}" alt="Cover Background" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-102">
+                        <img id="cover-photo-img" src="{{ $user->cover_photo }}" alt="Cover Background" class="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-102">
                     @else
                         <!-- Default high-quality abstract cover background -->
-                        <img id="cover-photo-img" src="https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=1200&auto=format&fit=crop&q=80" alt="Default Cover" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-102">
+                        <img id="cover-photo-img" src="https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=1200&auto=format&fit=crop&q=80" alt="Default Cover" class="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-102">
                     @endif
                     <div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent"></div>
                 </div>
 
-                <!-- 2. Avatar, Meta & Action Layout (Overlapping Container) -->
-                <div class="px-6 sm:px-8 pb-8 pt-0 relative flex flex-col md:flex-row items-center md:items-end justify-between gap-6">
+                <!-- 2. Avatar, Meta & Action Layout (Strictly in the white box below the cover photo) -->
+                <div class="px-6 sm:px-8 pb-6 relative flex flex-col md:flex-row items-center md:items-start justify-between gap-6">
                     
-                    <!-- Left Section: Avatar + Identity -->
-                    <div class="flex flex-col md:flex-row items-center md:items-end gap-5 -mt-16 sm:-mt-20 md:-mt-24 relative z-10 w-full md:w-auto text-center md:text-left">
+                    <!-- Left Section: Avatar (overlapping cover) + Identity (strictly below cover) -->
+                    <div class="flex flex-col md:flex-row items-center md:items-start gap-6 w-full md:w-auto text-center md:text-left">
                         <!-- Profile Image Frame -->
-                        <div class="w-32 h-32 sm:w-36 sm:h-36 rounded-full overflow-hidden border-4 border-white bg-slate-100 shadow-xl shrink-0 group relative cursor-pointer">
+                        <div class="w-32 h-32 sm:w-36 sm:h-36 rounded-full overflow-hidden border-4 border-white bg-slate-100 shadow-xl shrink-0 -mt-16 sm:-mt-20 md:-mt-24 relative z-20 cursor-pointer">
                             @if($user->profile_photo)
                                 <img id="profile-avatar-img" src="{{ $user->profile_photo }}" alt="Avatar" class="w-full h-full object-cover">
                             @else
-                                <div id="profile-avatar-placeholder" class="w-full h-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-extrabold text-4xl">
+                                <div id="profile-avatar-placeholder" class="w-full h-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-extrabold text-4xl select-none">
                                     {{ strtoupper(substr($user->name, 0, 1)) }}
                                 </div>
                             @endif
                         </div>
 
-                        <!-- Name and Role Title Info -->
-                        <div class="md:mb-3">
+                        <!-- Name and Role Title Info (Strictly below the cover photo) -->
+                        <div class="pt-4 flex-grow">
                             <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 title-font tracking-tight">
                                 {{ $user->name }}
                             </h1>
-                            <div class="flex flex-wrap items-center justify-center md:justify-start gap-2.5 mt-1.5">
-                                <span class="text-sm font-semibold text-slate-400">
-                                    {{ $user->username ? '@' . $user->username : $user->email }}
+                            
+                            <div class="flex flex-wrap items-center justify-center md:justify-start gap-x-3 gap-y-1.5 mt-2">
+                                <span class="text-sm font-semibold text-slate-500 bg-slate-100/80 px-2.5 py-0.5 rounded-lg border border-slate-200/50">
+                                    {{ $user->username ? '@' . $user->username : '@' . Str::slug($user->name) }}
                                 </span>
-                                <span class="w-1 h-1 bg-slate-300 rounded-full"></span>
-                                <span class="inline-flex items-center px-3 py-0.5 rounded-full text-xs font-bold bg-blue-50 border border-blue-100 text-blue-600 shadow-sm font-mono tracking-wide uppercase">
-                                    {{ $dominantTitle }}
+                                
+                                <span class="text-sm font-medium text-slate-400">
+                                    {{ $user->email }}
                                 </span>
+                                
+                                <span class="w-1.5 h-1.5 bg-slate-300 rounded-full hidden md:inline-block"></span>
+                                
+                                @if($dominantTitle)
+                                    <span class="inline-flex items-center px-3 py-0.5 rounded-full text-xs font-bold bg-blue-50 border border-blue-100 text-blue-600 shadow-sm font-mono tracking-wide uppercase">
+                                        {{ $dominantTitle }}
+                                    </span>
+                                @else
+                                    <span class="inline-flex items-center px-3 py-0.5 rounded-full text-xs font-bold bg-slate-100 border border-slate-200 text-slate-400 font-mono tracking-wide">
+                                        Kamu belum memiliki title
+                                    </span>
+                                @endif
                             </div>
                         </div>
                     </div>
 
                     <!-- Right Section: Edit Profile Button -->
-                    <div class="md:mb-3 flex-shrink-0">
+                    <div class="pt-4 flex-shrink-0 mt-4 md:mt-0">
                         <button id="open-edit-btn" class="inline-flex items-center gap-2 px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold shadow-md shadow-blue-500/10 hover:shadow-lg hover:shadow-blue-500/20 transition-all duration-300 hover:scale-[1.03] cursor-pointer">
                             <svg class="w-4 h-4 text-blue-100" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
@@ -266,7 +276,7 @@
                 <h2 class="text-xl font-extrabold text-slate-900 tracking-tight title-font flex items-center gap-2">
                     Edit Profil Anda
                 </h2>
-                <p class="text-xs text-slate-400 mt-1 font-medium">Perbarui username, foto profil, email, dan password Anda.</p>
+                <p class="text-xs text-slate-400 mt-1 font-medium">Perbarui username, foto profil, email, dan password Anda secara real-time.</p>
             </div>
 
             <!-- Modal Form Content -->
@@ -274,12 +284,12 @@
                 @csrf
                 <div class="px-6 py-4 space-y-5 grow">
                     
-                    <!-- 1. Username Field -->
+                    <!-- 1. Username Field (Neatly Styled Input Group to prevent overlapping) -->
                     <div>
                         <label for="username" class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Username</label>
-                        <div class="relative">
-                            <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400 font-extrabold text-sm select-none">@</span>
-                            <input type="text" name="username" id="username" value="{{ old('username', $user->username) }}" class="block w-full pl-8 pr-4 py-2.5 text-sm rounded-xl border border-slate-200 focus:outline-none focus:border-blue-500 bg-slate-50/50 focus:bg-white transition-all font-semibold" placeholder="usernamebaru">
+                        <div class="flex rounded-xl overflow-hidden border border-slate-200 focus-within:border-blue-500 transition-all bg-slate-50/50 focus-within:bg-white">
+                            <span class="inline-flex items-center px-3.5 text-slate-400 font-extrabold text-sm select-none border-r border-slate-200/60 bg-slate-100/50">@</span>
+                            <input type="text" name="username" id="username" value="{{ old('username', $user->username) }}" class="block w-full px-4 py-2.5 text-sm focus:outline-none bg-transparent font-semibold" placeholder="usernamebaru">
                         </div>
                     </div>
 
@@ -360,77 +370,6 @@
                 card.addEventListener('mouseleave', () => {
                     card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)';
                 });
-            });
-
-            // --- Floating Background Emoji Elements ---
-            const particleContainer = document.getElementById('particle-container');
-            const icons = ['💻', '🎨', '🚀', '🧠', '⚙️', '📝', '📂', '💡', '✨', '🔥', '📊', '📈', '🔑', '🎯', '🏁'];
-            
-            for (let i = 0; i < 12; i++) {
-                const item = document.createElement('div');
-                item.className = 'absolute select-none cursor-pointer transition-all duration-500 hover:scale-150 hover:rotate-[360deg] text-xl opacity-[0.14] hover:opacity-80 filter drop-shadow-sm pointer-events-auto';
-                item.innerText = icons[Math.floor(Math.random() * icons.length)];
-                
-                item.style.left = `${Math.random() * 90 + 5}%`;
-                item.style.top = `${Math.random() * 80 + 10}%`;
-                
-                const animName = `float-profile-${i}`;
-                const keyframes = `
-                    @keyframes ${animName} {
-                        0%, 100% { transform: translateY(0px) rotate(0deg); }
-                        50% { transform: translateY(${Math.random() * -30 - 15}px) rotate(${Math.random() * 20 - 10}deg); }
-                    }
-                `;
-                
-                const styleSheet = document.createElement('style');
-                styleSheet.innerText = keyframes;
-                document.head.appendChild(styleSheet);
-                
-                item.style.animation = `${animName} ${Math.random() * 5 + 7}s ease-in-out infinite`;
-                particleContainer.appendChild(item);
-                
-                item.addEventListener('click', () => {
-                    item.style.transform = 'scale(2) rotate(360deg)';
-                    item.style.opacity = '0.9';
-                    setTimeout(() => {
-                        item.style.transform = '';
-                        item.style.opacity = '0.14';
-                    }, 800);
-                });
-            }
-
-            // --- Interactive IT/Code-Themed Cursor Trails ---
-            const body = document.body;
-            const trailSymbols = ['profile', 'user', 'path', 'curriculum', 'progress', 'achievement', 'frontend', 'backend', 'fullstack', 'pm', 'uiux', 'database', 'complete'];
-            
-            body.addEventListener('mousemove', (e) => {
-                if (Math.random() > 0.3) return;
-                
-                const element = document.createElement('div');
-                element.innerText = trailSymbols[Math.floor(Math.random() * trailSymbols.length)];
-                element.className = 'absolute font-mono font-black select-none pointer-events-none text-blue-600/70 drop-shadow-[0_0_4px_rgba(37,99,235,0.4)] z-[9999]';
-                
-                element.style.left = `${e.pageX}px`;
-                element.style.top = `${e.pageY}px`;
-                element.style.fontSize = `${Math.random() * 9 + 10}px`;
-                element.style.transition = 'transform 1s cubic-bezier(0.1, 0.8, 0.3, 1), opacity 1.3s ease-out';
-                
-                element.style.transform = 'translate(-50%, -50%) scale(0.5)';
-                element.style.opacity = '1';
-                
-                body.appendChild(element);
-                
-                setTimeout(() => {
-                    const diffX = (Math.random() - 0.5) * 100;
-                    const diffY = -60 - Math.random() * 40;
-                    const deg = Math.random() * 360 + 90;
-                    element.style.transform = `translate(calc(-50% + ${diffX}px), calc(-50% + ${diffY}px)) scale(0) rotate(${deg}deg)`;
-                    element.style.opacity = '0';
-                }, 30);
-                
-                setTimeout(() => {
-                    element.remove();
-                }, 1400);
             });
 
             // --- Edit Profile Modal Logic ---
