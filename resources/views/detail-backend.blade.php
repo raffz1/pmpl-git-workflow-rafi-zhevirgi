@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Front End Developer - Path Deck</title>
+    <title>Back End Developer - Path Deck</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -112,10 +112,10 @@
 
     <!-- Interactive Background & Effects -->
     <div class="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-        <!-- Faded Blue Grid Overlay (More Defined) -->
+        <!-- Faded Blue Grid Overlay -->
         <div class="absolute inset-0 bg-[linear-gradient(to_right,#3b82f612_1px,transparent_1px),linear-gradient(to_bottom,#3b82f612_1px,transparent_1px)] bg-[size:5rem_5rem] [mask-image:radial-gradient(ellipse_65%_55%_at_50%_0%,#000_90%,transparent_100%)] opacity-100"></div>
         
-        <!-- Ambient Glowing Blobs (More Prominent) -->
+        <!-- Ambient Glowing Blobs -->
         <div class="absolute top-[10%] left-[-5%] w-[450px] h-[450px] rounded-full bg-blue-400/22 blur-3xl animate-float-blob" style="animation-duration: 9s;"></div>
         <div class="absolute top-[45%] right-[-10%] w-[500px] h-[500px] rounded-full bg-indigo-400/18 blur-3xl animate-float-blob" style="animation-delay: -3s; animation-duration: 12s;"></div>
         <div class="absolute bottom-[15%] left-[10%] w-[400px] h-[400px] rounded-full bg-cyan-300/20 blur-3xl animate-float-blob" style="animation-delay: -6s; animation-duration: 10s;"></div>
@@ -134,7 +134,7 @@
             </div>
         @endif
 
-        <!-- Career Path Header Card (Redesigned with Premium Blue Gradient & Grid Pattern) -->
+        <!-- Career Path Header Card -->
         <section class="mb-14 animate-fade-in-up" style="animation-delay: 50ms;">
             <div class="bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-900 rounded-3xl p-8 sm:p-10 shadow-[0_12px_40px_-6px_rgba(37,99,235,0.25)] flex flex-col lg:flex-row items-center gap-10 text-white relative overflow-hidden border-none">
                 
@@ -151,10 +151,10 @@
                         Career Path
                     </div>
                     <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight title-font mb-4 drop-shadow-sm">
-                        FRONT-END DEVELOPER
+                        BACK-END DEVELOPER
                     </h1>
                     <p class="text-sm sm:text-base text-blue-50/90 leading-relaxed mb-6 font-medium">
-                        Front End Developer adalah profesi yang bertugas membuat tampilan dan antarmuka website atau aplikasi agar menarik, interaktif, dan mudah digunakan pengguna. Pekerjaan ini menggunakan teknologi seperti HTML, CSS, dan JavaScript serta bekerja sama dengan UI/UX Designer dan Back End Developer untuk menciptakan pengalaman pengguna yang optimal.
+                        Backend Developer bertugas mengembangkan sistem di balik layar aplikasi seperti server, database, dan API. Mereka memastikan data dapat diproses dengan baik dan aplikasi berjalan stabil. Karir ini banyak menggunakan logika pemrograman dan pengolahan data. Backend Developer juga berperan penting dalam keamanan dan performa sistem aplikasi.
                     </p>
                     
                     <!-- Information Trigger Button -->
@@ -185,7 +185,7 @@
                     </h2>
                     
                     <!-- Reset Progress Form -->
-                    <form action="{{ route('path.frontend.reset') }}" method="POST" class="inline">
+                    <form action="{{ route('path.backend.reset') }}" method="POST" class="inline">
                         @csrf
                         <button type="submit" class="inline-flex items-center gap-1.5 px-3 py-1 border border-red-200 hover:border-red-400 rounded-xl text-xs font-bold text-red-600 bg-red-50/50 hover:bg-red-50 transition-all duration-300 shadow-sm cursor-pointer hover:scale-[1.03]" title="Reset Detail Progress">
                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -197,7 +197,7 @@
                 </div>
                 
                 @php
-                    $percentVal = min(100, round(($currentStep / 7) * 100));
+                    $percentVal = min(100, round(($currentStep / 8) * 100));
                 @endphp
                 <!-- Progress display -->
                 <div class="flex items-center gap-3 w-full sm:w-auto">
@@ -226,46 +226,52 @@
                     @php
                         $curriculum = [
                             [
-                                'title' => 'Pendahuluan',
-                                'desc' => 'mempelajari dasar pengembangan tampilan website.',
+                                'title' => 'Dasar-dasar Pemrograman',
+                                'desc' => 'mempelajari logika dan sintaks bahasa pemrograman.',
                                 'side' => 'left',
-                                'icon' => 'DOC',
+                                'icon' => 'PHP',
                             ],
                             [
-                                'title' => 'Pengenalan HTML',
-                                'desc' => 'mempelajari struktur dasar dan elemen HTML.',
+                                'title' => 'Konsep Dasar Web Development',
+                                'desc' => 'Mempelajari konsep konsep dasar dari web development.',
                                 'side' => 'right',
-                                'icon' => 'HTML',
+                                'icon' => 'PHP',
                             ],
                             [
-                                'title' => 'Pendalaman HTML',
-                                'desc' => 'mempelajari form, tabel, semantic, dan multimedia.',
+                                'title' => 'Dasar-dasar Database',
+                                'desc' => 'mempelajari penyimpanan dan manajemen data.',
                                 'side' => 'left',
-                                'icon' => 'HTML',
+                                'icon' => 'PHP',
                             ],
                             [
-                                'title' => 'Pengenalan CSS',
-                                'desc' => 'mempelajari styling dan tampilan website.',
+                                'title' => 'Framework Backend',
+                                'desc' => 'mempelajari pembangunan server dan API.',
                                 'side' => 'right',
-                                'icon' => 'CSS',
+                                'icon' => 'PHP',
                             ],
                             [
-                                'title' => 'Pendalaman CSS',
-                                'desc' => 'mempelajari animasi, flexbox, dan grid layout.',
+                                'title' => 'Keamanan Dasar',
+                                'desc' => 'mempelajari login dan keamanan sistem.',
                                 'side' => 'left',
-                                'icon' => 'CSS',
+                                'icon' => 'PHP',
                             ],
                             [
-                                'title' => 'Layout Responsive',
-                                'desc' => 'mempelajari tampilan website di berbagai perangkat.',
+                                'title' => 'Menguasai Version Control System (Git)',
+                                'desc' => 'mempelajari version control project.',
                                 'side' => 'right',
-                                'icon' => 'WEB',
+                                'icon' => 'PHP',
                             ],
                             [
-                                'title' => 'Quiz',
+                                'title' => 'Deploy dan Cloud Computing',
+                                'desc' => 'mempelajari menjalankan server di internet.',
+                                'side' => 'left',
+                                'icon' => 'PHP',
+                            ],
+                            [
+                                'title' => 'QUIZ',
                                 'desc' => 'Selesaikan kuis untuk lanjut ke card selanjutnya!',
-                                'side' => 'left',
-                                'icon' => 'QUIZ',
+                                'side' => 'right',
+                                'icon' => 'PHP',
                             ],
                         ];
                     @endphp
@@ -317,7 +323,7 @@
                                 @if($module['side'] === 'left')
                                     <!-- Curriculum Card Component -->
                                     @if($status !== 'Locked')
-                                        <!-- Active or Completed card: can tilt/wobble and transition to blue on hover -->
+                                        <!-- Active or Completed card -->
                                         <div class="group wobble-card bg-white border border-slate-200/80 rounded-2xl p-6 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.03)] hover:bg-blue-600 hover:border-blue-600 hover:shadow-[0_16px_36px_-8px_rgba(37,99,235,0.22)] cursor-pointer transition-all duration-300 {{ $status === 'Active' ? 'card-active-glow' : '' }}">
                                             <div class="inner-lift flex items-start gap-4">
                                                 <div class="w-12 h-12 rounded-xl bg-blue-50 border border-blue-100/50 flex items-center justify-center font-extrabold text-xs text-blue-600 flex-shrink-0 group-hover:bg-white/20 group-hover:border-white/30 group-hover:text-white transition-colors duration-300">
@@ -337,7 +343,7 @@
                                                     </p>
                                                     <div>
                                                         @if($status === 'Active')
-                                                            <form action="{{ route('path.frontend.complete') }}" method="POST" class="inline">
+                                                            <form action="{{ route('path.backend.complete') }}" method="POST" class="inline">
                                                                 @csrf
                                                                 <button type="submit" class="inline-flex items-center justify-center px-4 py-2 text-xs font-extrabold rounded-xl bg-slate-50 text-slate-600 border border-slate-200/60 hover:bg-blue-50 hover:text-blue-600 group-hover:bg-white group-hover:text-blue-600 group-hover:border-white transition-all duration-300 shadow-sm cursor-pointer hover:no-underline">
                                                                     Start Learning
@@ -353,7 +359,7 @@
                                             </div>
                                         </div>
                                     @else
-                                        <!-- Locked card: Stays gray, no wobble/tilt, hover does nothing -->
+                                        <!-- Locked card -->
                                         <div class="bg-slate-100/70 border border-slate-200/60 rounded-2xl p-6 opacity-60 cursor-not-allowed select-none transition-none">
                                             <div class="flex items-start gap-4">
                                                 <div class="w-12 h-12 rounded-xl bg-slate-200/80 border border-slate-300/40 flex items-center justify-center font-extrabold text-xs text-slate-400 flex-shrink-0">
@@ -399,7 +405,7 @@
                                 @if($module['side'] === 'right')
                                     <!-- Curriculum Card Component -->
                                     @if($status !== 'Locked')
-                                        <!-- Active or Completed card: can tilt/wobble and transition to blue on hover -->
+                                        <!-- Active or Completed card -->
                                         <div class="group wobble-card bg-white border border-slate-200/80 rounded-2xl p-6 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.03)] hover:bg-blue-600 hover:border-blue-600 hover:shadow-[0_16px_36px_-8px_rgba(37,99,235,0.22)] cursor-pointer transition-all duration-300 {{ $status === 'Active' ? 'card-active-glow' : '' }}">
                                             <div class="inner-lift flex items-start gap-4">
                                                 <div class="w-12 h-12 rounded-xl bg-blue-50 border border-blue-100/50 flex items-center justify-center font-extrabold text-xs text-blue-600 flex-shrink-0 group-hover:bg-white/20 group-hover:border-white/30 group-hover:text-white transition-colors duration-300">
@@ -419,7 +425,7 @@
                                                     </p>
                                                     <div>
                                                         @if($status === 'Active')
-                                                            <form action="{{ route('path.frontend.complete') }}" method="POST" class="inline">
+                                                            <form action="{{ route('path.backend.complete') }}" method="POST" class="inline">
                                                                 @csrf
                                                                 <button type="submit" class="inline-flex items-center justify-center px-4 py-2 text-xs font-extrabold rounded-xl bg-slate-50 text-slate-600 border border-slate-200/60 hover:bg-blue-50 hover:text-blue-600 group-hover:bg-white group-hover:text-blue-600 group-hover:border-white transition-all duration-300 shadow-sm cursor-pointer hover:no-underline">
                                                                     Start Learning
@@ -435,7 +441,7 @@
                                             </div>
                                         </div>
                                     @else
-                                        <!-- Locked card: Stays gray, no wobble/tilt, hover does nothing -->
+                                        <!-- Locked card -->
                                         <div class="bg-slate-100/70 border border-slate-200/60 rounded-2xl p-6 opacity-60 cursor-not-allowed select-none transition-none">
                                             <div class="flex items-start gap-4">
                                                 <div class="w-12 h-12 rounded-xl bg-slate-200/80 border border-slate-300/40 flex items-center justify-center font-extrabold text-xs text-slate-400 flex-shrink-0">
@@ -499,14 +505,14 @@
                 <div class="absolute inset-0 bg-[linear-gradient(to_right,#3b82f605_1px,transparent_1px),linear-gradient(to_bottom,#3b82f605_1px,transparent_1px)] bg-[size:1.5rem_1.5rem] opacity-70"></div>
                 
                 <div class="relative z-10">
-                    <!-- HTML badge -->
+                    <!-- PHP badge -->
                     <div class="w-12 h-12 rounded-xl bg-blue-500 flex items-center justify-center font-extrabold text-xs text-white shadow-md shadow-blue-500/30 mb-6">
-                        HTML
+                        PHP
                     </div>
                     
                     <!-- Title -->
                     <h2 class="text-2xl font-black text-slate-900 leading-tight mb-4 title-font">
-                        Front-End<br>Developer
+                        Back-End<br>Developer
                     </h2>
                     
                     <!-- Tags -->
@@ -522,7 +528,7 @@
 
                 <!-- Bottom Image -->
                 <div class="w-full h-48 md:h-64 rounded-2xl overflow-hidden shadow-md mt-6 relative border border-white z-10">
-                    <img src="https://images.unsplash.com/photo-1547082299-de196ea013d6?w=600&auto=format&fit=crop&q=80" alt="Frontend Coding" class="w-full h-full object-cover">
+                    <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=600&auto=format&fit=crop&q=80" alt="Backend Coding" class="w-full h-full object-cover">
                     <div class="absolute inset-0 bg-gradient-to-t from-blue-950/20 to-transparent"></div>
                 </div>
             </div>
@@ -537,7 +543,7 @@
                     
                     <!-- Deskripsi Karir Body Text -->
                     <p class="text-xs sm:text-sm text-slate-600 leading-relaxed font-medium mb-6">
-                        Arsitektur Frontend adalah disiplin ilmu yang merancang dan memelihara integritas struktural aplikasi web yang kompleks. Anda tidak hanya menulis kode, Anda membangun fondasi antarmuka web yang terukur dan berkinerja tinggi. Peran ini melibatkan penetapan standar sistem desain, mengatur pola manajemen status, dan memastikan bahwa kinerja tetap optimal bahkan saat platform berkembang.
+                        Arsitektur Backend adalah disiplin ilmu yang merancang, membangun, dan memelihara logika sisi server, basis data, serta integrasi API aplikasi. Anda tidak hanya menulis kode server, Anda merancang performa, skalabilitas, dan keamanan sistem secara keseluruhan. Peran ini melibatkan perancangan skema database, pengelolaan sistem autentikasi dan enkripsi, optimalisasi beban server, serta integrasi arsitektur cloud.
                     </p>
 
                     <!-- Two columns -->
@@ -550,10 +556,10 @@
                             </span>
                             <div>
                                 <span class="text-sm sm:text-base font-black text-blue-600 block">
-                                    Rp 5.750.000 -
+                                    Rp 6.000.000 -
                                 </span>
                                 <span class="text-sm sm:text-base font-black text-blue-600 inline">
-                                    Rp 15.000.000
+                                    Rp 16.000.000
                                 </span>
                                 <span class="text-xs font-bold text-slate-500">
                                     / bulan
@@ -568,16 +574,16 @@
                             </span>
                             <div class="grid grid-cols-2 gap-2">
                                 <span class="inline-flex items-center gap-1 px-2 py-1 border border-slate-200 rounded-lg text-[9px] font-bold text-slate-700 bg-white">
-                                    <span class="text-blue-500 font-mono text-[9px] font-bold">&lt;&gt;</span> HTML
+                                    <span class="text-blue-500 font-mono text-[9px] font-bold">&lt;&gt;</span> PHP
                                 </span>
                                 <span class="inline-flex items-center gap-1 px-2 py-1 border border-slate-200 rounded-lg text-[9px] font-bold text-slate-700 bg-white">
-                                    <span class="text-blue-500 font-mono text-[9px] font-bold">&lt;&gt;</span> CSS
+                                    <span class="text-blue-500 font-mono text-[9px] font-bold">&lt;&gt;</span> Laravel
                                 </span>
                                 <span class="inline-flex items-center gap-1 px-2 py-1 border border-slate-200 rounded-lg text-[9px] font-bold text-slate-700 bg-white">
-                                    <span class="text-blue-500 font-mono text-[9px] font-bold">&lt;&gt;</span> JAVASCRIPT
+                                    <span class="text-blue-500 font-mono text-[9px] font-bold">&lt;&gt;</span> SQL / MySQL
                                 </span>
                                 <span class="inline-flex items-center gap-1 px-2 py-1 border border-slate-200 rounded-lg text-[9px] font-bold text-slate-700 bg-white">
-                                    <span class="text-blue-500 font-mono text-[9px] font-bold">&lt;&gt;</span> React
+                                    <span class="text-blue-500 font-mono text-[9px] font-bold">&lt;&gt;</span> API / REST
                                 </span>
                             </div>
                         </div>
@@ -594,19 +600,19 @@
                                 <svg class="w-4 h-4 text-blue-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
                                 </svg>
-                                <span>Anda menyukai detail yang sangat presisi hingga tingkat piksel dan pola desain yang sangat rapi.</span>
+                                <span>Anda menyukai pemecahan masalah dengan logika sistematis dan perancangan arsitektur data.</span>
                             </li>
                             <li class="flex items-start gap-2.5">
                                 <svg class="w-4 h-4 text-blue-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
                                 </svg>
-                                <span>Anda senang menjembatani kesenjangan antara desain dan teknik tingkat tinggi.</span>
+                                <span>Anda senang membangun API yang efisien dan mengoptimalkan performa kueri database.</span>
                             </li>
                             <li class="flex items-start gap-2.5">
                                 <svg class="w-4 h-4 text-blue-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
                                 </svg>
-                                <span>Anda ingin membangun sistem modular yang dapat diskalakan hingga jutaan pengguna.</span>
+                                <span>Anda ingin membangun fondasi sistem yang aman, kokoh, dan mampu menangani traffic tinggi.</span>
                             </li>
                         </ul>
                     </div>
@@ -644,9 +650,9 @@
                 });
             });
 
-            // --- Background Tech/Emoji Floating Particle Elements (Slightly more defined) ---
+            // --- Background Tech/Emoji Floating Particle Elements ---
             const particleContainer = document.getElementById('particle-container');
-            const icons = ['💻', '🚀', '⚡', '📐', '🧠', '✨', '🎓', '🎨', '🔥', '📚'];
+            const icons = ['💻', '🚀', '⚡', '📐', '🧠', '✨', '🎓', '🔥', '📚', '⚙️', '📂'];
             
             for (let i = 0; i < 15; i++) {
                 const item = document.createElement('div');
@@ -683,7 +689,7 @@
 
             // --- Interactive IT/Code-Themed Cursor Trails ---
             const body = document.body;
-            const trailSymbols = ['{}', '</>', '[]', '()', '=>', '10', 'js', 'html', 'css', 'react', 'ts', 'git'];
+            const trailSymbols = ['{}', '</>', '[]', '()', '=>', '10', 'php', 'sql', 'laravel', 'db', 'api', 'git'];
             
             body.addEventListener('mousemove', (e) => {
                 if (Math.random() > 0.25) return;

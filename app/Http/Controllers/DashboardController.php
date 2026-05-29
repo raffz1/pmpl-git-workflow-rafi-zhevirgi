@@ -9,10 +9,23 @@ class DashboardController extends Controller
     public function index()
     {
         $activePathId = session('active_path_id');
+        if (auth()->check()) {
+            $user = auth()->user();
+            $activePathId = $user->active_path_id ?? $activePathId;
+            $frontendStep = $user->frontend_current_step;
+            $backendStep = $user->backend_current_step;
+            // Sync to session
+            session(['active_path_id' => $activePathId]);
+            session(['frontend_current_step' => $frontendStep]);
+            session(['backend_current_step' => $backendStep]);
+        } else {
+            $frontendStep = session('frontend_current_step', 0);
+            $backendStep = session('backend_current_step', 0);
+        }
+        
         $userName = auth()->user()->name ?? 'Student';
         
-        $currentStep = session('frontend_current_step', 0);
-        $modulesList = [
+        $frontendModulesList = [
             0 => 'Modul 1 : Pendahuluan',
             1 => 'Modul 2 : Pengenalan HTML',
             2 => 'Modul 3 : Pendalaman HTML',
@@ -22,10 +35,25 @@ class DashboardController extends Controller
             6 => 'Modul 7 : Quiz',
             7 => 'Kurikulum Selesai! 🎉'
         ];
-        $frontendModule = $modulesList[$currentStep] ?? 'Kurikulum Selesai! 🎉';
-        $frontendProgress = min(100, round(($currentStep / 7) * 100));
-        $frontendLessons = $currentStep . '/7';
+        $frontendModule = $frontendModulesList[$frontendStep] ?? 'Kurikulum Selesai! 🎉';
+        $frontendProgress = min(100, round(($frontendStep / 7) * 100));
+        $frontendLessons = $frontendStep . '/7';
 
+        $backendModulesList = [
+            0 => 'Modul 1 : Dasar-dasar Pemrograman',
+            1 => 'Modul 2 : Konsep Dasar Web Development',
+            2 => 'Modul 3 : Dasar-dasar Database',
+            3 => 'Modul 4 : Framework Backend',
+            4 => 'Modul 5 : Keamanan Dasar',
+            5 => 'Modul 6 : Menguasai Version Control System (Git)',
+            6 => 'Modul 7 : Deploy dan Cloud Computing',
+            7 => 'Modul 8 : Quiz',
+            8 => 'Kurikulum Selesai! 🎉'
+        ];
+        $backendModule = $backendModulesList[$backendStep] ?? 'Kurikulum Selesai! 🎉';
+        $backendProgress = min(100, round(($backendStep / 8) * 100));
+        $backendLessons = $backendStep . '/8';
+ 
         $paths = [
             1 => [
                 'title' => 'Front End Developer',
@@ -34,14 +62,16 @@ class DashboardController extends Controller
                 'lessons' => $frontendLessons,
                 'quiz' => '92%',
                 'image' => 'https://images.unsplash.com/photo-1547082299-de196ea013d6?w=600&auto=format&fit=crop&q=80',
+                'url' => route('path.detail.frontend'),
             ],
             2 => [
                 'title' => 'Back End Developer',
-                'module' => 'Modul 1 : Dasar-dasar PHP',
-                'progress' => 45,
-                'lessons' => '18/40',
+                'module' => $backendModule,
+                'progress' => $backendProgress,
+                'lessons' => $backendLessons,
                 'quiz' => '88%',
                 'image' => 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=600&auto=format&fit=crop&q=80',
+                'url' => route('path.detail.backend'),
             ],
             3 => [
                 'title' => 'UI/UX Designer',
@@ -71,14 +101,23 @@ class DashboardController extends Controller
         
         $activePath = isset($paths[$activePathId]) ? $paths[$activePathId] : null;
         $progressCount = $activePath ? 1 : 0;
- 
+  
         return view('dashboard', compact('progressCount', 'activePath', 'userName'));
     }
- 
+  
     public function resetProgress()
     {
         session()->forget('active_path_id');
         session()->forget('frontend_current_step');
+        session()->forget('backend_current_step');
+        
+        if (auth()->check()) {
+            $user = auth()->user();
+            $user->active_path_id = null;
+            $user->frontend_current_step = 0;
+            $user->backend_current_step = 0;
+            $user->save();
+        }
         return redirect()->route('dashboard')->with('success', 'Progress berhasil di-reset.');
     }
 }

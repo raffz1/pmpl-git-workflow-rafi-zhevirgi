@@ -150,7 +150,7 @@
                                         </div>
                                         
                                         <div class="flex items-center justify-between">
-                                            <a href="{{ url('/explore') }}" class="inline-flex items-center justify-center px-5 py-2.5 text-sm font-bold rounded-xl bg-blue-600 text-white hover:bg-blue-700 shadow-md shadow-blue-600/10 hover:shadow-lg hover:shadow-blue-600/20 transition-all duration-300 hover:scale-[1.03]">
+                                            <a href="{{ $activePath['url'] ?? url('/explore') }}" class="inline-flex items-center justify-center px-5 py-2.5 text-sm font-bold rounded-xl bg-blue-600 text-white hover:bg-blue-700 shadow-md shadow-blue-600/10 hover:shadow-lg hover:shadow-blue-600/20 transition-all duration-300 hover:scale-[1.03]">
                                                 Continue &rarr;
                                             </a>
 

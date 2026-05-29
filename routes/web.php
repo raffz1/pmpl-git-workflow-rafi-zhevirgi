@@ -28,6 +28,11 @@ Route::get('/explore', [ExplorePathController::class, 'index'])->name('explore.p
 Route::get('/path/detail/frontend', [ExplorePathController::class, 'frontendDetail'])->name('path.detail.frontend');
 Route::post('/path/detail/frontend/complete', [ExplorePathController::class, 'completeStep'])->name('path.frontend.complete');
 Route::post('/path/detail/frontend/reset', [ExplorePathController::class, 'resetDetailProgress'])->name('path.frontend.reset');
+
+Route::get('/path/detail/backend', [ExplorePathController::class, 'backendDetail'])->name('path.detail.backend');
+Route::post('/path/detail/backend/complete', [ExplorePathController::class, 'completeBackendStep'])->name('path.backend.complete');
+Route::post('/path/detail/backend/reset', [ExplorePathController::class, 'resetBackendDetailProgress'])->name('path.backend.reset');
+
 Route::get('/explore/enroll/{id}', [ExplorePathController::class, 'enroll'])->name('explore.enroll')->middleware('auth');
 
 // Protected Routes
