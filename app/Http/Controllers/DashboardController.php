@@ -15,15 +15,18 @@ class DashboardController extends Controller
             $frontendStep = $user->frontend_current_step;
             $backendStep = $user->backend_current_step;
             $fullstackStep = $user->fullstack_current_step;
+            $pmStep = $user->pm_current_step;
             // Sync to session
             session(['active_path_id' => $activePathId]);
             session(['frontend_current_step' => $frontendStep]);
             session(['backend_current_step' => $backendStep]);
             session(['fullstack_current_step' => $fullstackStep]);
+            session(['pm_current_step' => $pmStep]);
         } else {
             $frontendStep = session('frontend_current_step', 0);
             $backendStep = session('backend_current_step', 0);
             $fullstackStep = session('fullstack_current_step', 0);
+            $pmStep = session('pm_current_step', 0);
         }
         
         $userName = auth()->user()->name ?? 'Student';
@@ -73,6 +76,23 @@ class DashboardController extends Controller
         $fullstackModule = $fullstackModulesList[$fullstackStep] ?? 'Kurikulum Selesai! 🎉';
         $fullstackProgress = min(100, round(($fullstackStep / 10) * 100));
         $fullstackLessons = $fullstackStep . '/10';
+
+        $pmModulesList = [
+            0 => 'Modul 1 : Dasar manajemen proyek',
+            1 => 'Modul 2 : Komunikasi & leadership',
+            2 => 'Modul 3 : Agile & Scrum',
+            3 => 'Modul 4 : Requirement gathering',
+            4 => 'Modul 5 : Timeline & task management',
+            5 => 'Modul 6 : Risk management',
+            6 => 'Modul 7 : Product & business understanding',
+            7 => 'Modul 8 : Tools PM',
+            8 => 'Modul 9 : Stakeholder management',
+            9 => 'Modul 10 : QUIZ',
+            10 => 'Kurikulum Selesai! 🎉'
+        ];
+        $pmModule = $pmModulesList[$pmStep] ?? 'Kurikulum Selesai! 🎉';
+        $pmProgress = min(100, round(($pmStep / 10) * 100));
+        $pmLessons = $pmStep . '/10';
  
         $paths = [
             1 => [
@@ -111,12 +131,13 @@ class DashboardController extends Controller
                 'url' => route('path.detail.fullstack'),
             ],
             5 => [
-                'title' => 'Product Manager',
-                'module' => 'Modul 1 : Product Lifecycle & Roadmap',
-                'progress' => 50,
-                'lessons' => '25/50',
+                'title' => 'Project Manager',
+                'module' => $pmModule,
+                'progress' => $pmProgress,
+                'lessons' => $pmLessons,
                 'quiz' => '94%',
                 'image' => 'https://images.unsplash.com/photo-1531403009284-440f080d1e12?w=600&auto=format&fit=crop&q=80',
+                'url' => route('path.detail.pm'),
             ]
         ];
         
@@ -132,6 +153,7 @@ class DashboardController extends Controller
         session()->forget('frontend_current_step');
         session()->forget('backend_current_step');
         session()->forget('fullstack_current_step');
+        session()->forget('pm_current_step');
         
         if (auth()->check()) {
             $user = auth()->user();
@@ -139,6 +161,7 @@ class DashboardController extends Controller
             $user->frontend_current_step = 0;
             $user->backend_current_step = 0;
             $user->fullstack_current_step = 0;
+            $user->pm_current_step = 0;
             $user->save();
         }
         return redirect()->route('dashboard')->with('success', 'Progress berhasil di-reset.');

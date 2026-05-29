@@ -29,8 +29,8 @@ class ExplorePathController extends Controller
             ],
             [
                 'id'          => 5,
-                'title'       => 'Product Manager',
-                'slug'        => 'product-manager',
+                'title'       => 'Project Manager',
+                'slug'        => 'project-manager',
                 'icon'        => 'pm',
                 'image'       => 'https://images.unsplash.com/photo-1531403009284-440f080d1e12?w=600&auto=format&fit=crop&q=80',
                 'description' => 'Learn to define vision, prioritize roadmaps, and lead cross-functional teams to deliver impactful products.',
@@ -223,5 +223,56 @@ class ExplorePathController extends Controller
             session(['fullstack_current_step' => 0]);
         }
         return redirect()->route('path.detail.fullstack')->with('success', 'Progres belajar berhasil direset dari awal.');
+    }
+
+    public function pmDetail()
+    {
+        $userName = auth()->check() ? (auth()->user()->name ?? 'Student') : 'Guest';
+        if (auth()->check()) {
+            $user = auth()->user();
+            $currentStep = $user->pm_current_step;
+            session(['pm_current_step' => $currentStep]);
+        } else {
+            if (!session()->has('pm_current_step')) {
+                session(['pm_current_step' => 0]);
+            }
+            $currentStep = session('pm_current_step', 0);
+        }
+        return view('detail-pm', compact('userName', 'currentStep'));
+    }
+
+    public function completePmStep(\Illuminate\Http\Request $request)
+    {
+        session(['active_path_id' => 5]); // Auto enroll in Project Manager path
+        if (auth()->check()) {
+            $user = auth()->user();
+            $user->active_path_id = 5;
+            if ($user->pm_current_step < 10) {
+                $user->pm_current_step++;
+                $user->save();
+            }
+            $currentStep = $user->pm_current_step;
+            session(['pm_current_step' => $currentStep]);
+        } else {
+            $currentStep = session('pm_current_step', 0);
+            if ($currentStep < 10) {
+                $currentStep++;
+                session(['pm_current_step' => $currentStep]);
+            }
+        }
+        return redirect()->route('path.detail.pm')->with('success', 'Selamat! Modul berhasil diselesaikan.');
+    }
+
+    public function resetPmDetailProgress()
+    {
+        if (auth()->check()) {
+            $user = auth()->user();
+            $user->pm_current_step = 0;
+            $user->save();
+            session(['pm_current_step' => 0]);
+        } else {
+            session(['pm_current_step' => 0]);
+        }
+        return redirect()->route('path.detail.pm')->with('success', 'Progres belajar berhasil direset dari awal.');
     }
 }

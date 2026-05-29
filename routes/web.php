@@ -37,6 +37,10 @@ Route::get('/path/detail/fullstack', [ExplorePathController::class, 'fullstackDe
 Route::post('/path/detail/fullstack/complete', [ExplorePathController::class, 'completeFullstackStep'])->name('path.fullstack.complete');
 Route::post('/path/detail/fullstack/reset', [ExplorePathController::class, 'resetFullstackDetailProgress'])->name('path.fullstack.reset');
 
+Route::get('/path/detail/project-manager', [ExplorePathController::class, 'pmDetail'])->name('path.detail.pm');
+Route::post('/path/detail/project-manager/complete', [ExplorePathController::class, 'completePmStep'])->name('path.pm.complete');
+Route::post('/path/detail/project-manager/reset', [ExplorePathController::class, 'resetPmDetailProgress'])->name('path.pm.reset');
+
 Route::get('/explore/enroll/{id}', [ExplorePathController::class, 'enroll'])->name('explore.enroll')->middleware('auth');
 
 // Protected Routes
