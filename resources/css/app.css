@@ -9,3 +9,12 @@
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
 }
+
+/* Custom Global Gradient Cursor matching user design */
+html, body {
+    cursor: url('/images/custom-cursor.svg') 3 3, auto !important;
+}
+
+a, button, [role="button"], select, input, textarea, label {
+    cursor: url('/images/custom-cursor.svg') 3 3, pointer !important;
+}

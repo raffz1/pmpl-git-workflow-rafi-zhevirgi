@@ -17,51 +17,7 @@
 <body class="min-h-screen flex flex-col antialiased text-slate-800 bg-white">
 
     <!-- Top Navigation Bar -->
-    <nav class="bg-white border-b border-slate-200">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16">
-                <!-- Left: Logo -->
-                <div class="flex items-center">
-                    <a href="{{ url('/') }}" class="text-xl font-bold text-blue-600 tracking-tight">
-                        Path Deck
-                    </a>
-                </div>
-                
-                <!-- Right: Nav Links & Icons -->
-                <div class="hidden sm:flex items-center space-x-8">
-                    <div class="flex space-x-8 h-full">
-                        <a href="{{ url('/dashboard') }}" class="inline-flex items-center px-1 pt-1 border-b-2 border-blue-600 text-sm font-medium text-slate-900">
-                            Dashboard
-                        </a>
-                        <a href="{{ route('explore.path') }}" class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium text-slate-500 hover:text-slate-700 hover:border-slate-300">
-                            Explore path
-                        </a>
-                    </div>
-                    
-                    <div class="flex items-center space-x-4">
-                        <div class="h-6 w-px bg-slate-300"></div>
-                        <button type="button" class="text-blue-600 hover:text-blue-700">
-                            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-                            </svg>
-                        </button>
-                        
-                        <!-- Logout / Profile Button -->
-                        <div class="relative">
-                            <form method="POST" action="{{ route('logout') }}" title="Logout">
-                                @csrf
-                                <button type="submit" class="text-blue-600 hover:text-white hover:bg-blue-600 flex items-center justify-center h-8 w-8 rounded-full border border-blue-600 bg-white transition-colors">
-                                    <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                                    </svg>
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </nav>
+    @include('layouts.navbar')
 
     <!-- Main Content Area -->
     <main class="flex-grow max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-10">

@@ -114,67 +114,20 @@
     <body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col overflow-x-hidden">
 
         <!-- Top Navigation Bar -->
-        <nav class="sticky top-0 z-50 bg-white border-b border-slate-200">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="flex justify-between h-16">
-                    <!-- Left: Logo -->
-                    <div class="flex items-center">
-                        <a href="{{ url('/') }}" class="text-xl font-bold text-blue-600 tracking-tight">
-                            Path Deck
-                        </a>
-                    </div>
-                    
-                    <!-- Right: Nav Links & Icons -->
-                    <div class="hidden sm:flex items-center space-x-8">
-                        <div class="flex space-x-8 h-full">
-                            <a href="{{ url('/dashboard') }}" class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium text-slate-500 hover:text-slate-700 hover:border-slate-300">
-                                Dashboard
-                            </a>
-                            <a href="{{ route('explore.path') }}" class="inline-flex items-center px-1 pt-1 border-b-2 border-blue-600 text-sm font-medium text-slate-900">
-                                Explore path
-                            </a>
-                        </div>
-                        
-                        <div class="flex items-center space-x-4">
-                            @auth
-                                <div class="h-6 w-px bg-slate-300"></div>
-                                <button type="button" class="text-blue-600 hover:text-blue-700">
-                                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-                                    </svg>
-                                </button>
-                                
-                                <!-- Logout / Profile Button -->
-                                <div class="relative">
-                                    <form method="POST" action="{{ route('logout') }}" title="Logout">
-                                        @csrf
-                                        <button type="submit" class="text-blue-600 hover:text-white hover:bg-blue-600 flex items-center justify-center h-8 w-8 rounded-full border border-blue-600 bg-white transition-colors">
-                                            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                                            </svg>
-                                        </button>
-                                    </form>
-                                </div>
-                            @else
-                                <div class="h-6 w-px bg-slate-300"></div>
-                                <a href="{{ url('/login') }}" class="text-sm font-medium text-slate-500 hover:text-slate-700">Login</a>
-                                <a href="{{ url('/register') }}" class="inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-lg shadow-sm text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 transition-colors">
-                                    Register
-                                </a>
-                            @endauth
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </nav>
+        @include('layouts.navbar')
 
         <!-- Main Wrapper with Soft Background & Floating Animations -->
-        <div class="relative flex-grow min-h-screen bg-slate-50 py-16 px-4 overflow-hidden">
-            
+        <div class="relative flex-grow min-h-screen bg-gradient-to-b from-white via-blue-50/20 to-white py-16 px-4 overflow-hidden">
+            <!-- Geometric Grid Pattern Overlay -->
+            <div class="absolute inset-0 bg-[linear-gradient(to_right,#3b82f60a_1px,transparent_1px),linear-gradient(to_bottom,#3b82f60a_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] pointer-events-none"></div>
+
             <!-- Soft Floating Ambient Blobs -->
-            <div class="absolute top-[20%] left-[-5%] w-96 h-96 rounded-full bg-cyan-200/10 blur-3xl pointer-events-none animate-float-blob"></div>
-            <div class="absolute top-[50%] right-[-5%] w-[450px] h-[450px] rounded-full bg-pink-200/10 blur-3xl pointer-events-none animate-float-blob" style="animation-delay: -3s; animation-duration: 12s;"></div>
-            <div class="absolute bottom-[10%] left-[10%] w-80 h-80 rounded-full bg-indigo-200/10 blur-3xl pointer-events-none animate-float-blob" style="animation-delay: -6s; animation-duration: 10s;"></div>
+            <div class="absolute top-[10%] left-[-5%] w-96 h-96 rounded-full bg-cyan-200/15 blur-3xl pointer-events-none animate-float-blob"></div>
+            <div class="absolute top-[40%] right-[-5%] w-[450px] h-[450px] rounded-full bg-pink-200/15 blur-3xl pointer-events-none animate-float-blob" style="animation-delay: -3s; animation-duration: 12s;"></div>
+            <div class="absolute bottom-[10%] left-[10%] w-80 h-80 rounded-full bg-indigo-200/15 blur-3xl pointer-events-none animate-float-blob" style="animation-delay: -6s; animation-duration: 10s;"></div>
+
+            <!-- Drifting Emojis and Symbols Container -->
+            <div id="particle-container" class="absolute inset-0 overflow-hidden pointer-events-none z-0"></div>
 
             <!-- Light Abstract Floating Geometric SVGs -->
             <div class="absolute top-24 left-[15%] pointer-events-none opacity-30 animate-pulse" style="animation-duration: 4s;">
@@ -211,35 +164,35 @@
                                 case 'cyan':
                                     $glowClass = 'glow-cyan';
                                     $accentBarColor = 'bg-cyan-500';
-                                    $gradientClasses = 'from-cyan-50/40 to-blue-50/60';
+                                    $gradientClasses = 'from-blue-400 to-blue-700'; // Front End: biru muda & biru tua
                                     break;
                                 case 'green':
                                     $glowClass = 'glow-green';
                                     $accentBarColor = 'bg-green-500';
-                                    $gradientClasses = 'from-green-50/40 to-emerald-50/60';
+                                    $gradientClasses = 'from-blue-600 to-emerald-600'; // Back End: biru & hijau
                                     break;
                                 case 'pink':
                                     $glowClass = 'glow-pink';
                                     $accentBarColor = 'bg-pink-500';
-                                    $gradientClasses = 'from-pink-50/40 to-rose-50/60';
+                                    $gradientClasses = 'from-blue-600 to-pink-500'; // UI/UX: biru & pink
                                     break;
                                 case 'orange':
                                     $glowClass = 'glow-orange';
                                     $accentBarColor = 'bg-orange-500';
-                                    $gradientClasses = 'from-orange-50/40 to-amber-50/60';
+                                    $gradientClasses = 'from-blue-600 to-orange-500'; // Full Stack: biru & orange
                                     break;
                                 case 'yellow':
                                     $glowClass = 'glow-yellow';
                                     $accentBarColor = 'bg-yellow-500';
-                                    $gradientClasses = 'from-yellow-50/40 to-amber-50/60';
+                                    $gradientClasses = 'from-blue-600 to-yellow-500'; // PM: biru & kuning
                                     break;
                             }
                         @endphp
 
                         <!-- Interactive Career Card (Wrapped in click link) -->
-                        <a href="{{ url('/path/detail/' . $path['id']) }}" class="group relative rounded-2xl border border-slate-200 bg-white overflow-hidden flex flex-col card-transition card-tilt shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] {{ $glowClass }} animate-fade-in-up cursor-pointer hover:no-underline z-0" style="animation-delay: {{ ($index + 1) * 100 }}ms;">
+                        <a href="{{ url('/path/detail/' . $path['id']) }}" class="group relative rounded-2xl border border-slate-200 bg-white overflow-hidden flex flex-col card-transition card-tilt shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] {{ $glowClass }} animate-fade-in-up cursor-pointer hover:no-underline hover:border-transparent z-10" style="animation-delay: {{ ($index + 1) * 100 }}ms;">
                             <!-- Hover Gradient Background Overlay -->
-                            <div class="absolute inset-0 bg-gradient-to-br {{ $gradientClasses }} opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-0"></div>
+                            <div class="absolute inset-0 bg-gradient-to-br {{ $gradientClasses }} opacity-0 group-hover:opacity-100 transition-all duration-500 z-0"></div>
 
                             <!-- Dynamic Glass Glare Overlay -->
                             <div class="card-glare absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20" style="background: radial-gradient(circle 250px at var(--x, 50%) var(--y, 50%), rgba(255,255,255,0.2) 0%, transparent 80%);"></div>
@@ -258,7 +211,7 @@
                                 <div>
                                     <!-- Tech Icon Box -->
                                     <div class="mb-5">
-                                        <div class="card-icon-container w-12 h-12 rounded-xl bg-blue-50 border border-blue-100/50 flex items-center justify-center text-blue-600 font-extrabold text-[13px] tracking-wider shadow-sm transition-transform duration-300">
+                                        <div class="card-icon-container w-12 h-12 rounded-xl bg-blue-50 border border-blue-100/50 flex items-center justify-center text-blue-600 font-extrabold text-[13px] tracking-wider shadow-sm transition-all duration-300 group-hover:bg-white/20 group-hover:text-white group-hover:border-white/30">
                                             @if($path['icon'] === 'frontend')
                                                 HTML
                                             @elseif($path['icon'] === 'backend')
@@ -283,16 +236,16 @@
                                     </div>
 
                                     <!-- Content -->
-                                    <h3 class="card-title title-font text-2xl font-bold text-slate-900 mb-3 group-hover:text-blue-600 transition-colors duration-300">
+                                    <h3 class="card-title title-font text-2xl font-bold text-slate-900 mb-3 group-hover:text-white transition-colors duration-300">
                                         {{ $path['title'] }}
                                     </h3>
-                                    <p class="card-description text-slate-500 text-sm sm:text-base leading-relaxed">
+                                    <p class="card-description text-slate-500 text-sm sm:text-base leading-relaxed group-hover:text-blue-50 transition-colors duration-300">
                                         {{ $path['description'] }}
                                     </p>
                                 </div>
                                 
                                 <!-- Click Indicator at Bottom Right -->
-                                <div class="card-cta-container mt-6 flex items-center justify-end text-blue-600 font-semibold text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                <div class="card-cta-container mt-6 flex items-center justify-end text-blue-600 font-semibold text-sm opacity-0 group-hover:opacity-100 group-hover:text-white transition-all duration-300">
                                     <span>Mulai Belajar</span>
                                     <svg class="w-4 h-4 ml-1.5 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
@@ -447,6 +400,76 @@
                         target.shadowY = 4;
                         target.glareOpacity = 0;
                     });
+                });
+
+                // --- Interactive Floating Background Emojis ---
+                const particleContainer = document.getElementById('particle-container');
+                const emojis = ['💻', '🚀', '🎓', '🧠', '☕', '🎮', '⚡', '🧩', '✨', '⭐', '👾', '🐱', '📚', '🎨', '🔥'];
+                
+                for (let i = 0; i < 18; i++) {
+                    const item = document.createElement('div');
+                    item.className = 'absolute select-none cursor-pointer transition-all duration-500 hover:scale-150 hover:rotate-[360deg] active:scale-95 text-xl opacity-[0.12] hover:opacity-80 filter drop-shadow-sm pointer-events-auto';
+                    item.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+                    
+                    item.style.left = `${Math.random() * 92 + 4}%`;
+                    item.style.top = `${Math.random() * 85 + 5}%`;
+                    
+                    const animName = `float-explore-${i}`;
+                    const keyframes = `
+                        @keyframes ${animName} {
+                            0%, 100% { transform: translateY(0px) rotate(0deg); }
+                            50% { transform: translateY(${Math.random() * -45 - 15}px) rotate(${Math.random() * 26 - 13}deg); }
+                        }
+                    `;
+                    
+                    const styleSheet = document.createElement('style');
+                    styleSheet.innerText = keyframes;
+                    document.head.appendChild(styleSheet);
+                    
+                    item.style.animation = `${animName} ${Math.random() * 7 + 7}s ease-in-out infinite`;
+                    particleContainer.appendChild(item);
+                    
+                    item.addEventListener('click', () => {
+                        item.style.transform = 'scale(2.2) rotate(720deg)';
+                        item.style.opacity = '1';
+                        setTimeout(() => {
+                            item.style.transform = '';
+                            item.style.opacity = '0.12';
+                        }, 1000);
+                    });
+                }
+
+                // --- Interactive IT/Code-Themed Emitter Trail ---
+                const body = document.body;
+                const trailSymbols = ['{}', '</>', '[]', '()', '=>', '10', '01', 'js', 'php', 'py', 'git', 'sql', 'sys', 'cmd', 'git'];
+                
+                body.addEventListener('mousemove', (e) => {
+                    if (Math.random() > 0.20) return;
+                    
+                    const sparkle = document.createElement('div');
+                    sparkle.innerText = trailSymbols[Math.floor(Math.random() * trailSymbols.length)];
+                    sparkle.className = 'absolute font-mono font-black select-none pointer-events-none text-blue-600/90 drop-shadow-[0_0_6px_rgba(37,99,235,0.6)] z-[9999]';
+                    sparkle.style.left = `${e.pageX}px`;
+                    sparkle.style.top = `${e.pageY}px`;
+                    sparkle.style.fontSize = `${Math.random() * 10 + 11}px`;
+                    sparkle.style.transition = 'transform 1s cubic-bezier(0.1, 0.8, 0.3, 1), opacity 1.5s ease-out';
+                    
+                    sparkle.style.transform = 'translate(-50%, -50%) scale(0.4)';
+                    sparkle.style.opacity = '1';
+                    
+                    body.appendChild(sparkle);
+                    
+                    setTimeout(() => {
+                        const travelX = (Math.random() - 0.5) * 130;
+                        const travelY = -90 - Math.random() * 70;
+                        const rotate = Math.random() * 360 + 180;
+                        sparkle.style.transform = `translate(calc(-50% + ${travelX}px), calc(-50% + ${travelY}px)) scale(0) rotate(${rotate}deg)`;
+                        sparkle.style.opacity = '0';
+                    }, 50);
+                    
+                    setTimeout(() => {
+                        sparkle.remove();
+                    }, 1550);
                 });
             });
         </script>

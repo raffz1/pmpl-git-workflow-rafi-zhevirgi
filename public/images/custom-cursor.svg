@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+  <defs>
+    <linearGradient id="cursor-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <!-- Cyan to Blue to Indigo/Purple Gradient matching user's image -->
+      <stop offset="0%" stop-color="#29b6f6" />
+      <stop offset="50%" stop-color="#3b82f6" />
+      <stop offset="100%" stop-color="#6200ea" />
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="145%" height="145%">
+      <feDropShadow dx="1" dy="1.5" stdDeviation="1" flood-opacity="0.25" />
+    </filter>
+  </defs>
+  <g filter="url(#shadow)">
+    <!-- Sleek, curved, rounded joints arrow matching user image -->
+    <path d="M4.6,3.6 C3.8,2.7 2.3,3.3 2.4,4.5 L4.8,25.8 C4.9,27.1 6.6,27.6 7.4,26.5 L12.9,18.8 L21.6,18.0 C22.9,17.9 23.5,16.2 22.6,15.2 L4.6,3.6 Z" fill="url(#cursor-grad)" stroke="#ffffff" stroke-width="1.2" stroke-linejoin="round" />
+  </g>
+</svg>

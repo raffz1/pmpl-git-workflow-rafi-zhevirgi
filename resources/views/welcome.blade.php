@@ -20,34 +20,7 @@
     <body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col">
 
         <!-- Navigation Bar -->
-        <nav class="sticky top-0 z-50 bg-white/90 backdrop-blur-md shadow-sm border-b border-slate-100">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="flex justify-between items-center h-16">
-                    <!-- Left: Logo -->
-                    <div class="shrink-0 flex items-center">
-                        <a href="/" class="text-xl sm:text-2xl font-bold text-blue-600 tracking-tight">Path Deck</a>
-                    </div>
-                    
-                    <!-- Middle: Nav Links (Hidden on mobile) -->
-                    <div class="hidden md:flex space-x-8">
-                        <a href="#" class="text-slate-900 inline-flex items-center px-1 pt-1 border-b-2 border-blue-600 font-medium text-sm transition-colors">Dashboard</a>
-                        <a href="{{ route('explore.path') }}" class="text-slate-500 hover:text-slate-900 inline-flex items-center px-1 pt-1 border-b-2 border-transparent hover:border-slate-300 font-medium text-sm transition-colors">Explore path</a>
-                    </div>
-
-                    <!-- Right: Actions -->
-                    <div class="flex items-center space-x-3 sm:space-x-4">
-                        @auth
-                            <a href="{{ url('/dashboard') }}" class="text-sm font-medium text-slate-600 hover:text-blue-600 transition-colors">Dashboard</a>
-                        @else
-                            <a href="{{ url('/login') }}" class="text-sm font-medium text-slate-600 hover:text-blue-600 transition-colors">Login</a>
-                            <a href="{{ url('/register') }}" class="inline-flex items-center justify-center px-3 sm:px-4 py-2 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 transition-colors">
-                                Register
-                            </a>
-                        @endauth
-                    </div>
-                </div>
-            </div>
-        </nav>
+        @include('layouts.navbar')
 
         <!-- Main Content -->
         <main class="grow">

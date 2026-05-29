@@ -20,15 +20,7 @@
 <body class="min-h-screen flex flex-col antialiased text-slate-800">
 
     <!-- Top Navigation Bar -->
-    <div class="bg-white border-b border-slate-200">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-center h-14 items-center">
-                <a href="{{ url('/') }}" class="text-xl font-bold text-blue-600 tracking-tight hover:text-blue-700 transition-colors">
-                    Path Deck
-                </a>
-            </div>
-        </div>
-    </div>
+    @include('layouts.navbar')
 
     <!-- Main Content: Centered Card -->
     <main class="flex-grow flex items-center justify-center p-4 py-12">

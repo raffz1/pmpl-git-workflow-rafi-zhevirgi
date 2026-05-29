@@ -45,7 +45,7 @@
             </form>
 
             <div class="login-footer">
-                <p>Apakah Sudah Punya Akun? <a href="Login.blade.php">Login</a></p>
+                <p>Apakah Sudah Punya Akun? <a href="{{ url('/login') }}">Login</a></p>
             </div>
         </div>
     </main>
