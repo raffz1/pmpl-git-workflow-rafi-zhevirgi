@@ -66,4 +66,10 @@ class ExplorePathController extends Controller
         session(['active_path_id' => $id]);
         return redirect()->route('dashboard')->with('success', 'Berhasil memilih jalur pembelajaran!');
     }
+
+    public function frontendDetail()
+    {
+        $userName = auth()->check() ? (auth()->user()->name ?? 'Student') : 'Guest';
+        return view('detail-frontend', compact('userName'));
+    }
 }

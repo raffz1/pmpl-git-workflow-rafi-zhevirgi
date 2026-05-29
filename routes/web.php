@@ -25,6 +25,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // Explore Path (public access)
 Route::get('/explore', [ExplorePathController::class, 'index'])->name('explore.path');
+Route::get('/path/detail/frontend', [ExplorePathController::class, 'frontendDetail'])->name('path.detail.frontend');
 Route::get('/explore/enroll/{id}', [ExplorePathController::class, 'enroll'])->name('explore.enroll')->middleware('auth');
 
 // Protected Routes
