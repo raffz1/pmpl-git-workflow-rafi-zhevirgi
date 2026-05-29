@@ -22,13 +22,28 @@
                     Explore path
                     <span class="absolute bottom-0 left-0 h-0.5 bg-blue-600 transition-all duration-300 {{ Request::is('explore') || Request::is('explore/*') ? 'w-full' : 'w-0 group-hover:w-full' }}"></span>
                 </a>
+                @auth
+                <a href="{{ route('profile.show') }}" class="relative font-semibold text-sm transition-colors py-2 group {{ Request::is('profile') ? 'text-blue-600' : 'text-slate-600 hover:text-blue-600' }}">
+                    Profile
+                    <span class="absolute bottom-0 left-0 h-0.5 bg-blue-600 transition-all duration-300 {{ Request::is('profile') ? 'w-full' : 'w-0 group-hover:w-full' }}"></span>
+                </a>
+                @endauth
             </div>
 
             <!-- Right: Actions with Premium Hover States -->
             <div class="flex items-center space-x-4">
                 @auth
                     <div class="h-6 w-px bg-slate-200"></div>
-                    <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider hidden sm:inline">Hi, {{ auth()->user()->name ?? 'User' }}</span>
+                    <a href="{{ route('profile.show') }}" class="flex items-center gap-2.5 group">
+                        @if(auth()->user()->profile_photo)
+                            <img src="{{ auth()->user()->profile_photo }}" class="h-8 w-8 rounded-full border border-blue-200 group-hover:border-blue-500 transition-all object-cover">
+                        @else
+                            <div class="h-8 w-8 rounded-full border border-blue-200 group-hover:border-blue-500 transition-all bg-blue-50/80 flex items-center justify-center text-blue-600 font-extrabold text-xs">
+                                {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+                            </div>
+                        @endif
+                        <span class="text-xs font-semibold text-slate-500 group-hover:text-blue-600 transition-colors uppercase tracking-wider hidden sm:inline">Hi, {{ auth()->user()->name ?? 'User' }}</span>
+                    </a>
                     <form method="POST" action="{{ route('logout') }}" title="Logout">
                         @csrf
                         <button type="submit" class="text-blue-600 hover:text-white hover:bg-blue-600 flex items-center justify-center h-9 w-9 rounded-xl border border-blue-200 hover:border-transparent bg-blue-50/50 transition-all duration-300 hover:scale-105" title="Logout">

@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ExplorePathController;
+use App\Http\Controllers\ProfileController;
 
 Route::get('/', function () {
     return view('LandingPage'); 
@@ -51,4 +52,6 @@ Route::get('/explore/enroll/{id}', [ExplorePathController::class, 'enroll'])->na
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::post('/dashboard/reset', [DashboardController::class, 'resetProgress'])->name('dashboard.reset');
+    Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
+    Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
 });
