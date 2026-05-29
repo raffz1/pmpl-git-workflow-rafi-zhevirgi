@@ -1,0 +1,436 @@
+@import url("https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css");
+/* Mengimpor font agar bentuk huruf sama persis dengan desain Anda */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Plus+Jakarta+Sans:wght@500;700&display=swap');
+
+:root {
+    --primary-blue: #2563eb;
+    --text-dark: #0b1c30;
+    --text-gray: #475569;
+    --text-light-gray: #64748b;
+    --bg-light: #f8f9ff;
+    --border-color: #e2e8f0;
+}
+
+* {
+    box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(180deg, #ffffff 0%, var(--bg-light) 100%);
+    color: var(--text-dark);
+    line-height: 1.6;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Pengaturan Teksnya */
+h1, h2, h3 {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 700;
+}
+
+a {
+    text-decoration: none;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 24px;
+    border-radius: 6px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background-color: var(--primary-blue);
+    color: white;
+    border: 1px solid var(--primary-blue);
+}
+
+.btn-primary:hover {
+    background-color: #1d4ed8;
+}
+
+.btn-outline {
+    background-color: transparent;
+    color: var(--primary-blue);
+    border: 1px solid var(--primary-blue);
+}
+
+.btn-outline:hover {
+    background-color: #eff6ff;
+}
+
+.btn-white {
+    background-color: white;
+    color: var(--primary-blue);
+    border: 1px solid white;
+}
+
+/* bagian Navigasi Atas */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 5%;
+    background-color: white;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.navbar .logo {
+    color: var(--primary-blue);
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+}
+
+.nav-links a:not(.btn) {
+    color: var(--text-gray);
+    font-size: 16px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 500;
+}
+
+.nav-links a:not(.btn):hover {
+    color: var(--primary-blue);
+}
+
+/* Bagian Utama/hero ya */
+.hero {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 80px 5%;
+    gap: 40px;
+}
+
+.hero-content {
+    flex: 1;
+    max-width: 600px;
+}
+
+.hero .subtitle {
+    color: var(--primary-blue);
+    font-size: 12px;
+    letter-spacing: 1.2px;
+    margin-bottom: 16px;
+}
+
+.hero .title {
+    font-size: 48px;
+    margin-bottom: 24px;
+    font-family: 'Inter', sans-serif;
+}
+
+.hero .description {
+    color: var(--text-gray);
+    font-size: 18px;
+    margin-bottom: 32px;
+}
+
+.hero-buttons {
+    display: flex;
+    gap: 16px;
+}
+
+.hero-image {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.hero-image img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 12px;
+}
+
+/* Bagian Fitur */
+.features {
+    padding: 80px 5%;
+    text-align: center;
+    background-color: white;
+}
+
+.section-title {
+    font-size: 32px;
+    margin-bottom: 16px;
+}
+
+.section-subtitle {
+    color: var(--text-light-gray);
+    font-size: 18px;
+    max-width: 700px;
+    margin: 0 auto 48px auto;
+}
+
+.card-container {
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+    flex-wrap: wrap; 
+}
+
+.card {
+    background: white;
+    border: 2px solid var(--border-color);
+    border-radius: 20px;
+    padding: 40px 24px;
+    width: 100%;
+    max-width: 350px;
+    text-align: center;
+    box-shadow: 5px 5px 6px #00000010;
+    transition: transform 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px); 
+}
+
+.card-icon {
+    width: 60px;
+    height: 60px;
+    background-color: #eff6ff;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 24px auto;
+}
+
+.card h3 {
+    font-size: 24px;
+    margin-bottom: 16px;
+    font-family: 'Inter', sans-serif;
+}
+
+.card p {
+    color: var(--text-light-gray);
+    font-size: 16px;
+}
+
+.cta-bottom {
+    background: linear-gradient(90deg, #2563eb 0%, #6c96f3 100%);
+    color: white;
+    text-align: center;
+    padding: 60px 5%;
+    margin: 60px 5%;
+    border-radius: 11px;
+}
+
+.cta-title {
+    font-size: 30px;
+    font-weight: 600;
+    margin-bottom: 16px;
+}
+
+.cta-desc {
+    margin-bottom: 32px;
+    font-size: 18px;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 30px 24px;
+    color: var(--text-gray);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 500;
+    border-top: 1px solid var(--border-color);
+    margin-top: auto;
+}
+
+/* --- Tampilan Responsif  --- */
+@media (max-width: 768px) {
+    .hero {
+        flex-direction: column;
+        text-align: center;
+        padding: 40px 5%;
+    }
+    
+    .hero-buttons {
+        justify-content: center;
+    }
+
+    .nav-links {
+        display: none; /* Disembunyikan dulu di layar HP, biasanya diganti dengan menu hamburger */
+    }
+}
+
+/* ini buat login */
+
+.login-container {
+    flex: 1; 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 5%;
+}
+
+.login-logo {
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    color: var(--primary-blue);
+    font-size: 36px;
+    margin-bottom: 32px;
+    letter-spacing: -0.4px;
+}
+
+.login-card {
+    background-color: #ffffff;
+    width: 100%;
+    max-width: 420px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.05);
+    padding: 40px 32px;
+}
+
+.login-header {
+    text-align: center;
+    margin-bottom: 32px;
+}
+
+.login-header h2 {
+    font-family: 'Inter', sans-serif;
+    font-size: 30px;
+    color: var(--text-dark);
+    margin-bottom: 8px;
+    letter-spacing: -0.4px;
+}
+
+.login-header p {
+    color: var(--text-gray);
+    font-size: 14px;
+}
+
+.login-form .form-group {
+    margin-bottom: 24px;
+}
+
+.login-form label {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-dark);
+    display: block;
+    margin-bottom: 8px;
+    letter-spacing: 0.5px;
+}
+
+.label-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.label-row label {
+    margin-bottom: 0;
+}
+
+.forgot-password {
+    font-size: 12px;
+    color: var(--primary-blue);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+.forgot-password:hover {
+    text-decoration: underline;
+}
+
+.login-form input {
+    width: 100%;
+    height: 54px;
+    background-color: var(--bg-light);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 0 16px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    color: var(--text-dark);
+    transition: all 0.3s ease;
+}
+
+.login-form input:focus {
+    outline: none;
+    border-color: var(--primary-blue);
+    background-color: #ffffff;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.btn-block {
+    width: 100%;
+    height: 54px;
+    font-size: 16px;
+    margin-top: 8px;
+}
+
+.login-footer {
+    margin-top: 32px;
+    text-align: center;
+    font-size: 14px;
+    color: var(--text-dark);
+}
+
+.login-footer a {
+    color: var(--primary-blue);
+    font-weight: 600;
+    margin-left: 4px;
+}
+
+.login-footer a:hover {
+    text-decoration: underline;
+}
+
+/* Checkbox Register ya ini */
+
+
+.checkbox-group {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.checkbox-group input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    margin-top: 2px;
+    cursor: pointer;
+    background-color: transparent; 
+    box-shadow: none;
+    border: 1px solid var(--border-color);
+}
+
+.checkbox-group label {
+    font-size: 14px;
+    font-weight: 400;
+    text-transform: none;
+    letter-spacing: 0;
+    line-height: 1.4;
+    color: var(--text-gray);
+}
+
+.checkbox-group label a {
+    color: var(--primary-blue);
+    font-weight: 600;
+}
+
+.checkbox-group label a:hover {
+    text-decoration: underline;
+}

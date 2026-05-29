@@ -24,7 +24,7 @@
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex justify-between items-center h-16">
                     <!-- Left: Logo -->
-                    <div class="flex-shrink-0 flex items-center">
+                    <div class="shrink-0 flex items-center">
                         <a href="/" class="text-xl sm:text-2xl font-bold text-blue-600 tracking-tight">Path Deck</a>
                     </div>
                     
@@ -50,7 +50,7 @@
         </nav>
 
         <!-- Main Content -->
-        <main class="flex-grow">
+        <main class="grow">
             <!-- Hero Section -->
             <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-20">
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
@@ -77,7 +77,7 @@
                     <div class="relative w-full h-72 sm:h-96 lg:h-[480px] rounded-2xl overflow-hidden shadow-2xl group">
                         <!-- Unsplash placeholder related to PC / gaming / tech setup -->
                         <img src="https://images.unsplash.com/photo-1598550476439-6847785fcea6?q=80&w=2070&auto=format&fit=crop" alt="PC Gaming Setup" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
-                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900/30 to-transparent"></div>
+                        <div class="absolute inset-0 bg-linear-to-t from-slate-900/30 to-transparent"></div>
                     </div>
                 </div>
             </section>
@@ -137,7 +137,7 @@
 
             <!-- CTA Banner -->
             <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
-                <div class="bg-gradient-to-br from-blue-500 to-blue-700 rounded-3xl shadow-xl overflow-hidden relative">
+                <div class="bg-linear-to-br from-blue-500 to-blue-700 rounded-3xl shadow-xl overflow-hidden relative">
                     <!-- Decorative subtle elements -->
                     <div class="absolute top-0 right-0 -mr-12 -mt-12 w-80 h-80 rounded-full bg-white opacity-5 blur-3xl pointer-events-none"></div>
                     <div class="absolute bottom-0 left-0 -ml-12 -mb-12 w-80 h-80 rounded-full bg-white opacity-10 blur-3xl pointer-events-none"></div>
