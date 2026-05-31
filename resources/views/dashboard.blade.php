@@ -84,10 +84,10 @@
             <!-- Header Section -->
             <header class="mb-10 animate-fade-in-up" style="animation-delay: 50ms;">
                 <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight title-font">
-                    Welcome Back, {{ $userName }}!
+                    Welcome Back, <span class="bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 bg-clip-text text-transparent inline-block hover:scale-[1.02] transition-transform duration-300">{{ $userName }}</span>!
                 </h1>
-                <p class="text-sm sm:text-base text-slate-500 mt-2 font-medium">
-                    Pantau progres belajar dan asah terus keahlian IT kamu di Path Deck.
+                <p class="text-sm sm:text-base text-slate-500 mt-2 font-medium min-h-[40px] sm:min-h-[24px]">
+                    <span id="typing-text">Pantau progres belajar dan asah terus keahlian IT kamu di Path Deck.</span><span class="inline-block w-[2px] h-[1.1em] bg-blue-600 ml-1 animate-pulse align-middle" id="typing-cursor"></span>
                 </p>
             </header>
 
@@ -167,16 +167,13 @@
                                 <div class="bg-white border border-slate-200/80 rounded-2xl p-6 sm:p-8 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.04)] hover:shadow-md transition-all duration-300">
                                     <div class="border border-slate-200/60 bg-slate-50/10 rounded-2xl py-8 px-4 text-center mb-6">
                                         <p class="text-sm font-semibold text-slate-400">
-                                            kamu belum ada progres apa pun, yuk mulai dari sekarang!
+                                            Yahh, kamu belum ada progres apa pun, yuk mulai dari sekarang!
                                         </p>
                                     </div>
                                     <div class="flex items-center justify-between">
                                         <a href="{{ url('/explore') }}" class="inline-flex items-center justify-center px-6 py-2.5 text-sm font-bold rounded-xl bg-blue-600 text-white hover:bg-blue-700 shadow-md shadow-blue-500/10 hover:shadow-lg hover:shadow-blue-500/20 transition-all duration-300 hover:scale-[1.03]">
                                             Eksplor &rarr;
                                         </a>
-                                        <span class="text-xs font-semibold text-slate-400/60 cursor-default">
-                                            Reset Path
-                                        </span>
                                     </div>
                                 </div>
                             @endif
@@ -358,6 +355,56 @@
                     sparkle.remove();
                 }, 1550);
             });
+
+            // --- Typing Animation for Tagline ---
+            const phrases = [
+                "Pantau progres belajar dan asah terus keahlian IT kamu di Path Deck.",
+                "Tingkatkan skill kamu dan gapai karir impian sekarang juga.",
+                "Jelajahi berbagai pilihan learning path terstruktur dan interaktif.",
+                "Belajar teknologi terbaru kapan saja dan di mana saja sesukamu.",
+                "Asah potensi dirimu dan jadilah developer handal masa depan."
+            ];
+            
+            const typingTextSpan = document.getElementById('typing-text');
+            
+            let phraseIndex = 0;
+            let charIndex = phrases[0].length;
+            let isDeleting = true;
+            let typingSpeed = 60;
+            let erasingSpeed = 30;
+            let delayBetweenPhrases = 3000;
+            
+            function typeEffect() {
+                if (!typingTextSpan) return;
+                const currentPhrase = phrases[phraseIndex];
+                
+                if (isDeleting) {
+                    typingTextSpan.textContent = currentPhrase.substring(0, charIndex - 1) || "\u200B";
+                    charIndex--;
+                    typingSpeed = erasingSpeed;
+                } else {
+                    typingTextSpan.textContent = currentPhrase.substring(0, charIndex + 1);
+                    charIndex++;
+                    typingSpeed = 60;
+                }
+                
+                if (!isDeleting && charIndex === currentPhrase.length) {
+                    isDeleting = true;
+                    setTimeout(typeEffect, delayBetweenPhrases);
+                    return;
+                }
+                
+                if (isDeleting && charIndex === 0) {
+                    isDeleting = false;
+                    phraseIndex = (phraseIndex + 1) % phrases.length;
+                    setTimeout(typeEffect, 400);
+                    return;
+                }
+                
+                setTimeout(typeEffect, typingSpeed);
+            }
+            
+            setTimeout(typeEffect, delayBetweenPhrases);
         });
     </script>
 </body>

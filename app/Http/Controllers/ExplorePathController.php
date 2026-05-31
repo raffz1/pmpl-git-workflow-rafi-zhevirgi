@@ -107,6 +107,15 @@ class ExplorePathController extends Controller
                 session(['frontend_current_step' => $currentStep]);
             }
         }
+        
+        if ($request->wantsJson() || $request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'currentStep' => $currentStep,
+                'message' => 'Selamat! Modul berhasil diselesaikan.'
+            ]);
+        }
+        
         return redirect()->route('path.detail.frontend')->with('success', 'Selamat! Modul berhasil diselesaikan.');
     }
 
@@ -158,6 +167,15 @@ class ExplorePathController extends Controller
                 session(['backend_current_step' => $currentStep]);
             }
         }
+        
+        if ($request->wantsJson() || $request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'currentStep' => $currentStep,
+                'message' => 'Selamat! Modul berhasil diselesaikan.'
+            ]);
+        }
+        
         return redirect()->route('path.detail.backend')->with('success', 'Selamat! Modul berhasil diselesaikan.');
     }
 
@@ -209,6 +227,15 @@ class ExplorePathController extends Controller
                 session(['fullstack_current_step' => $currentStep]);
             }
         }
+        
+        if ($request->wantsJson() || $request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'currentStep' => $currentStep,
+                'message' => 'Selamat! Modul berhasil diselesaikan.'
+            ]);
+        }
+        
         return redirect()->route('path.detail.fullstack')->with('success', 'Selamat! Modul berhasil diselesaikan.');
     }
 
@@ -260,6 +287,15 @@ class ExplorePathController extends Controller
                 session(['pm_current_step' => $currentStep]);
             }
         }
+        
+        if ($request->wantsJson() || $request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'currentStep' => $currentStep,
+                'message' => 'Selamat! Modul berhasil diselesaikan.'
+            ]);
+        }
+        
         return redirect()->route('path.detail.pm')->with('success', 'Selamat! Modul berhasil diselesaikan.');
     }
 
@@ -311,6 +347,15 @@ class ExplorePathController extends Controller
                 session(['uiux_current_step' => $currentStep]);
             }
         }
+        
+        if ($request->wantsJson() || $request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'currentStep' => $currentStep,
+                'message' => 'Selamat! Modul berhasil diselesaikan.'
+            ]);
+        }
+        
         return redirect()->route('path.detail.uiux')->with('success', 'Selamat! Modul berhasil diselesaikan.');
     }
 

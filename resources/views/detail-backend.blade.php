@@ -600,19 +600,19 @@
                                 <svg class="w-4 h-4 text-blue-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
                                 </svg>
-                                <span>Anda menyukai pemecahan masalah dengan logika sistematis dan perancangan arsitektur data.</span>
+                                <span>Menyukai pemecahan masalah dengan logika sistematis dan perancangan arsitektur data.</span>
                             </li>
                             <li class="flex items-start gap-2.5">
                                 <svg class="w-4 h-4 text-blue-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
                                 </svg>
-                                <span>Anda senang membangun API yang efisien dan mengoptimalkan performa kueri database.</span>
+                                <span>Senang membangun API yang efisien dan mengoptimalkan performa kueri database.</span>
                             </li>
                             <li class="flex items-start gap-2.5">
                                 <svg class="w-4 h-4 text-blue-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
                                 </svg>
-                                <span>Anda ingin membangun fondasi sistem yang aman, kokoh, dan mampu menangani traffic tinggi.</span>
+                                <span>Ingin membangun fondasi sistem yang aman, kokoh, dan mampu menangani traffic tinggi.</span>
                             </li>
                         </ul>
                     </div>

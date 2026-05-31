@@ -35,7 +35,7 @@
             </form>
 
             <div class="login-footer">
-                <p>Apakah Sudah Daftar Akun? <a href="{{ url('/register') }}">Register</a></p>
+                <p>Apakah Sudah Daftar Akun? <a href="{{ url('/register') }}">Daftar Sekarang</a></p>
             </div>
         </div>
     </main>

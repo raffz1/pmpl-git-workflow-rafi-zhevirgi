@@ -42,7 +42,7 @@ class AuthController extends Controller
         }
 
         return back()->withErrors([
-            'email' => 'Kredensial yang diberikan tidak cocok dengan data kami.',
+            'email' => 'Email atau Password kamu salah, silahkan periksa kembali',
         ])->onlyInput('email');
     }
 
@@ -60,7 +60,7 @@ class AuthController extends Controller
         }
 
         return back()->withErrors([
-            'email' => 'Kredensial yang diberikan tidak cocok dengan data kami.',
+            'email' => 'Email atau Password kamu salah, silahkan periksa kembali',
         ])->onlyInput('email');
     }
 
