@@ -73,36 +73,63 @@
 
         window.addEventListener('scroll', () => {
             let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            const isLearning = document.body.classList.contains('is-learning-page');
             
-            // 1. Shrink/Expand height and padding based on scroll offset
-            if (scrollTop > 40) {
-                // Scrolled: compact state (solid light-grey bg)
-                navbar.style.top = '8px';
-                navInner.style.height = '48px';
-                navContainer.classList.add('shadow-md', 'bg-slate-50', 'border-slate-200/80');
-                navContainer.classList.remove('shadow-lg', 'bg-white', 'border-slate-200/40');
-            } else {
-                // Top: normal state (solid white bg)
-                navbar.style.top = '16px';
-                navInner.style.height = '64px';
-                navContainer.classList.add('shadow-lg', 'bg-white', 'border-slate-200/40');
-                navContainer.classList.remove('shadow-md', 'bg-slate-50', 'border-slate-200/80');
-            }
-
-            // 2. Slide translation hide/show based on scroll direction (only if scrolled down past 150px)
-            if (scrollTop > 150) {
-                if (scrollTop > lastScrollTop) {
-                    // Scroll Down: shrink and translate slightly up, but DO NOT hide completely
-                    navbar.style.transform = 'translateY(-12px)';
-                    navbar.style.opacity = '0.9';
+            if (isLearning) {
+                // Shrink height and padding based on scroll offset
+                if (scrollTop > 40) {
+                    navbar.style.top = '8px';
+                    navInner.style.height = '48px';
+                    navContainer.classList.add('shadow-md', 'bg-slate-50', 'border-slate-200/80');
+                    navContainer.classList.remove('shadow-lg', 'bg-white', 'border-slate-200/40');
                 } else {
-                    // Scroll Up: slide back down and show fully
+                    navbar.style.top = '16px';
+                    navInner.style.height = '64px';
+                    navContainer.classList.add('shadow-lg', 'bg-white', 'border-slate-200/40');
+                    navContainer.classList.remove('shadow-md', 'bg-slate-50', 'border-slate-200/80');
+                }
+
+                // Scroll hide/show translation based on direction
+                if (scrollTop > 80) {
+                    if (scrollTop > lastScrollTop) {
+                        // Scroll Down: hide completely
+                        navbar.style.transform = 'translateY(-150%)';
+                        navbar.style.opacity = '0';
+                    } else {
+                        // Scroll Up: show normal
+                        navbar.style.transform = 'translateY(0)';
+                        navbar.style.opacity = '1';
+                    }
+                } else {
                     navbar.style.transform = 'translateY(0)';
                     navbar.style.opacity = '1';
                 }
             } else {
-                navbar.style.transform = 'translateY(0)';
-                navbar.style.opacity = '1';
+                // Default behavior for other pages
+                if (scrollTop > 40) {
+                    navbar.style.top = '8px';
+                    navInner.style.height = '48px';
+                    navContainer.classList.add('shadow-md', 'bg-slate-50', 'border-slate-200/80');
+                    navContainer.classList.remove('shadow-lg', 'bg-white', 'border-slate-200/40');
+                } else {
+                    navbar.style.top = '16px';
+                    navInner.style.height = '64px';
+                    navContainer.classList.add('shadow-lg', 'bg-white', 'border-slate-200/40');
+                    navContainer.classList.remove('shadow-md', 'bg-slate-50', 'border-slate-200/80');
+                }
+
+                if (scrollTop > 150) {
+                    if (scrollTop > lastScrollTop) {
+                        navbar.style.transform = 'translateY(-12px)';
+                        navbar.style.opacity = '0.9';
+                    } else {
+                        navbar.style.transform = 'translateY(0)';
+                        navbar.style.opacity = '1';
+                    }
+                } else {
+                    navbar.style.transform = 'translateY(0)';
+                    navbar.style.opacity = '1';
+                }
             }
             
             lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;

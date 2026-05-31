@@ -104,42 +104,184 @@
             transform: scale(1) translateY(0);
         }
 
-        /* Quiz Modal Transition Animations */
+        /* Sub-page overlay for Quiz */
         #quiz-modal {
-            transition: opacity 0.3s ease-out;
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            bottom: 0 !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            z-index: 99999 !important;
+            background-color: #F3F7FF !important;
+            overflow-y: auto !important;
+            display: none;
+            flex-direction: column;
+            opacity: 0;
+            transform: scale(0.95);
+            transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
         #quiz-modal.show {
-            opacity: 1;
+            display: flex !important;
+            opacity: 1 !important;
+            transform: scale(1) !important;
         }
-        #quiz-modal.show #quiz-modal-container {
-            transform: scale(1) translateY(0);
+        #quiz-card-stack {
+            height: 460px !important;
+        }
+
+        /* Deck Card Stack Classes with 3D tilts and smooth transitions */
+        .quiz-card-stack-item {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            perspective: 1500px;
+            will-change: transform, opacity;
+            transform: translate3d(0, 0, 0);
+            transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.6s ease;
+        }
+
+        .quiz-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            will-change: transform;
+            transform: translate3d(0, 0, 0);
+            transition: transform 0.75s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .quiz-card-stack-item.flipped .quiz-card-inner {
+            transform: translate3d(0, 0, 0) rotateY(180deg);
+        }
+
+        .quiz-card-front, .quiz-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 28px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.02);
+            background: white;
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            display: flex;
+            flex-direction: column;
+            padding: 32px;
+            justify-content: space-between;
+            will-change: transform;
+            transform: translate3d(0, 0, 0);
+        }
+
+        .quiz-card-back {
+            transform: translate3d(0, 0, 0) rotateY(180deg);
+        }
+
+        /* 3D card swap animation to-back */
+        @keyframes moveToBack {
+            0% {
+                transform: translate3d(0, 0, 0) scale(1) rotate(0deg);
+                z-index: 50;
+                opacity: 1;
+            }
+            45% {
+                transform: translate3d(-120%, -30px, 100px) rotate(-12deg) scale(0.95);
+                z-index: 50;
+                opacity: 0.9;
+            }
+            50% {
+                z-index: 10;
+            }
+            100% {
+                transform: translate3d(0, 48px, -80px) scale(0.8) rotate(0deg);
+                z-index: 10;
+                opacity: 0.15;
+            }
+        }
+
+        /* Quiz Exit Confirmation Modal transitions */
+        #quiz-exit-confirm-modal {
+            z-index: 100001 !important;
+            transition: opacity 0.25s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+        .quiz-card-stack-item.move-to-back {
+            animation: moveToBack 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards !important;
+            pointer-events: none !important;
         }
 
         /* Interactive Quiz Option Cards */
         .quiz-option-card {
-            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-            cursor: pointer;
-            border-width: 2px;
+            border: 2px solid #E2E8F0 !important;
+            border-radius: 16px !important;
+            padding: 16px 20px !important;
+            display: flex !important;
+            align-items: center !important;
+            gap: 16px !important;
+            cursor: pointer !important;
+            transition: all 0.2s ease !important;
+            background: white !important;
+            font-size: 14px !important;
+            font-weight: 600 !important;
+            color: #334155 !important;
+            width: 100% !important;
+            text-align: left !important;
         }
         .quiz-option-card:hover {
-            border-color: rgba(59, 130, 246, 0.4);
-            background-color: rgba(59, 130, 246, 0.02);
-            transform: translateY(-2px);
+            border-color: #94A3B8 !important;
+            background-color: #F8FAFC !important;
         }
         .quiz-option-card.selected {
-            border-color: rgba(37, 99, 235, 1);
-            background-color: rgba(37, 99, 235, 0.04);
-            box-shadow: 0 8px 20px -4px rgba(37, 99, 235, 0.15);
+            border-color: #0050d2 !important;
+            background-color: #EFF6FF !important;
+            color: #0050d2 !important;
+        }
+        .quiz-opt-indicator {
+            width: 20px !important;
+            height: 20px !important;
+            border-radius: 50% !important;
+            border: 2px solid #CBD5E1 !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            flex-shrink: 0 !important;
+            transition: all 0.2s ease !important;
+        }
+        .quiz-option-card.selected .quiz-opt-indicator {
+            border-color: #0050d2 !important;
+        }
+        .quiz-opt-dot {
+            width: 10px !important;
+            height: 10px !important;
+            border-radius: 50% !important;
+            background-color: #0050d2 !important;
+            display: none !important;
+        }
+        .quiz-option-card.selected .quiz-opt-dot {
+            display: block !important;
         }
         .quiz-option-card.correct {
-            border-color: #10b981 !important;
-            background-color: #f0fdf4 !important;
-            color: #15803d !important;
+            border-color: #10B981 !important;
+            background-color: #F0FDF4 !important;
+            color: #15803D !important;
         }
         .quiz-option-card.incorrect {
-            border-color: #ef4444 !important;
-            background-color: #fef2f2 !important;
-            color: #b91c1c !important;
+            border-color: #EF4444 !important;
+            background-color: #FEF2F2 !important;
+            color: #B91C1C !important;
+        }
+
+        /* Shrinkable learning-view header styles */
+        #learning-view header {
+            transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+        #learning-view header.shrink {
+            height: 48px !important;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+            border-bottom-color: rgba(226, 232, 240, 0.8) !important;
         }
 
         /* Content Transitions */
@@ -170,7 +312,7 @@
         }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col overflow-x-hidden relative">
+<body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col overflow-x-hidden relative is-learning-page">
 
     <!-- Top Navigation Bar -->
     @include('layouts.navbar')
@@ -533,7 +675,9 @@
             </section>
         </div>
 
-        <!-- Learning View Workspace (Redesigned Split Pane Layout matching user's image exactly) -->
+    </main>
+
+    <!-- Learning View Workspace (Redesigned Split Pane Layout matching user's image exactly) -->
         <div id="learning-view" class="hidden opacity-0 fixed inset-0 bg-white z-[60] flex flex-col overflow-hidden font-sans transition-all duration-350">
             
             <!-- 100% Width Custom Top Navbar -->
@@ -586,7 +730,7 @@
                             <h2 id="workspace-lesson-title" class="text-xl font-extrabold text-slate-900 mt-1">Pengenalan</h2>
                         </div>
                         <div class="flex items-center space-x-4">
-                            <span id="workspace-progress-fraction" class="text-sm font-extrabold text-slate-800">1/7</span>
+                            <span id="workspace-progress-fraction" class="text-sm font-extrabold text-slate-800 font-mono">1/7</span>
                             <span class="h-6 w-px bg-slate-200"></span>
                             <button id="marks-btn" onclick="toggleCurrentModuleMark()" class="flex items-center gap-1.5 text-sm font-extrabold text-[#0050d2] hover:opacity-80 transition-opacity cursor-pointer">
                                 <svg id="marks-icon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
@@ -594,11 +738,18 @@
                                 </svg>
                                 <span id="marks-text">Marks</span>
                             </button>
+                            <span class="h-6 w-px bg-slate-200"></span>
+                            <button onclick="closeLearningView()" class="flex items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-slate-800 hover:bg-slate-100 border border-slate-200 rounded-xl px-3 py-1.5 bg-slate-50 transition-all duration-200 cursor-pointer shadow-sm active:scale-95">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                                Keluar
+                            </button>
                         </div>
                     </div>
 
                     <!-- Content Area (Scrollable) -->
-                    <div class="grow overflow-y-auto px-12 py-10 bg-white">
+                    <div id="workspace-scroll-container" class="grow overflow-y-auto px-12 py-10 bg-white">
                         <div class="max-w-4xl mx-auto">
                             
                             <!-- Content Box -->
@@ -655,23 +806,6 @@
                         </div>
                     </div>
 
-                    <!-- Footer Navigation -->
-                    <div class="h-20 border-t border-slate-200 px-12 flex justify-between items-center bg-white shrink-0">
-                        <button onclick="closeLearningView()" class="flex items-center gap-1.5 text-sm font-bold text-slate-500 hover:text-slate-800 transition-colors cursor-pointer">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
-                            </svg>
-                            Kembali ke Roadmap
-                        </button>
-                        
-                        <button id="workspace-next-btn" onclick="goToNextModule()" class="flex items-center gap-2 text-sm font-bold text-[#0050d2] hover:opacity-80 transition-opacity cursor-pointer">
-                            Next
-                            <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-                            </svg>
-                        </button>
-                    </div>
-
                 </div>
                 
                 <!-- Right Pane: Sidebar -->
@@ -702,94 +836,109 @@
             </div>
         </div>
 
-        <!-- Interactive Quiz Modal -->
-        <div id="quiz-modal" class="fixed inset-0 z-[110] hidden items-center justify-center p-4 sm:p-6 bg-slate-950/60 backdrop-blur-sm opacity-0 transition-opacity duration-300">
-            <div id="quiz-modal-container" class="bg-white rounded-[28px] max-w-xl w-full overflow-hidden shadow-[0_24px_60px_-15px_rgba(0,0,0,0.3)] relative transform scale-90 translate-y-8 transition-all duration-300 max-h-[90vh] flex flex-col">
+        <!-- Interactive Quiz Modal (Fullscreen Sub-page) -->
+        <div id="quiz-modal" class="fixed inset-0 z-[110] hidden flex-col bg-[#F3F7FF] transition-all duration-300 opacity-0 transform scale-95 overflow-y-auto">
+            
+            <!-- Ambient Glowing Blobs inside Quiz Modal -->
+            <div class="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+                <div class="absolute top-[10%] left-[-10%] w-[350px] h-[350px] rounded-full bg-blue-300/25 blur-3xl animate-float-blob" style="animation-duration: 10s;"></div>
+                <div class="absolute bottom-[10%] right-[-10%] w-[350px] h-[350px] rounded-full bg-indigo-300/20 blur-3xl animate-float-blob" style="animation-delay: -4s; animation-duration: 12s;"></div>
+            </div>
+
+            <!-- Quiz Modal Container -->
+            <div id="quiz-modal-container" class="w-full max-w-4xl mx-auto px-6 py-8 flex flex-col justify-between grow relative z-10">
                 
-                <!-- Quiz Modal Header -->
-                <div class="px-6 py-4 border-b border-slate-100 flex justify-between items-center bg-slate-50 shrink-0">
+                <!-- Sub-page Header -->
+                <div class="flex justify-between items-center shrink-0 mb-6">
                     <div>
-                        <span class="text-[9px] font-black uppercase tracking-wider text-blue-600 block">KUIS CHECKPOINT</span>
-                        <h3 id="quiz-modal-lesson-title" class="text-sm sm:text-base font-black text-slate-800">HTML Basics</h3>
+                        <span class="text-xs font-black uppercase tracking-wider text-blue-600 block">KUIS CHECKPOINT</span>
+                        <h3 id="quiz-modal-lesson-title" class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight title-font mt-1">HTML Basics</h3>
+                        <p class="text-sm text-slate-500 mt-1 font-medium">Kerjakan kuis berikut!</p>
                     </div>
-                    <button onclick="closeQuizModal()" class="w-8 h-8 rounded-full bg-white hover:bg-slate-100 flex items-center justify-center text-slate-400 hover:text-slate-700 transition-colors shadow-sm cursor-pointer border border-slate-200/30">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                    </button>
+                    
+                    <div class="text-right flex flex-col items-end">
+                        <span id="quiz-progress-text-main" class="text-[11px] font-bold text-slate-400 tracking-wider uppercase block font-mono">QUESTION 1 OF 5</span>
+                        <button onclick="handleQuizCloseAttempt()" class="mt-2 w-10 h-10 rounded-full bg-white hover:bg-slate-100 flex items-center justify-center text-slate-400 hover:text-slate-700 transition-all duration-200 shadow-sm cursor-pointer border border-slate-200/30 hover:scale-105 active:scale-95">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
                 </div>
 
-                <!-- Quiz Content -->
-                <div class="p-6 sm:p-8 overflow-y-auto grow flex flex-col justify-between">
-                    
-                    <!-- Main Quiz Block -->
-                    <div id="quiz-question-container">
-                        <!-- Progress Bar -->
-                        <div class="mb-6 shrink-0">
-                            <div class="flex justify-between items-center text-xs font-bold text-slate-400 mb-2">
-                                <span>Progress Kuis</span>
-                                <span id="quiz-question-number">Pertanyaan 1 dari 3</span>
-                            </div>
-                            <div class="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
-                                <div id="quiz-progress-bar" class="bg-blue-600 h-1.5 rounded-full transition-all duration-350" style="width: 33%"></div>
-                            </div>
-                        </div>
-
-                        <!-- Active Question Text -->
-                        <h4 id="quiz-question-text" class="text-sm sm:text-base font-black text-slate-900 leading-snug mb-5">
-                            Apakah tag HTML yang digunakan untuk membuat judul utama paling besar?
-                        </h4>
-
-                        <!-- Options Wrapper -->
-                        <div id="quiz-options-wrapper" class="space-y-2 mb-6">
-                            <!-- Options injected dynamically -->
-                        </div>
+                <!-- Sleek progress bar -->
+                <div class="w-full mb-8 shrink-0">
+                    <div class="w-full bg-slate-200/60 rounded-full h-2 overflow-hidden">
+                        <div id="quiz-progress-bar-main" class="bg-blue-600 h-2 rounded-full transition-all duration-500" style="width: 20%"></div>
                     </div>
+                </div>
 
-                    <!-- Foot validation button -->
-                    <div id="quiz-action-footer" class="flex justify-end pt-4 border-t border-slate-100">
-                        <button id="quiz-submit-answer-btn" disabled onclick="checkSelectedAnswer()" class="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 bg-slate-200 text-slate-400 font-extrabold rounded-2xl text-xs sm:text-sm transition-all duration-300 cursor-not-allowed">
-                            Verifikasi Jawaban
-                        </button>
+                <!-- Quiz Card Stack Area -->
+                <div class="grow flex items-center justify-center p-2 relative min-h-[460px] mb-6">
+                    <!-- 3D Stack Container -->
+                    <div id="quiz-card-stack" class="relative w-full max-w-[460px] h-[440px] mx-auto select-none" style="perspective: 1200px;">
+                        <!-- Cards will be dynamically loaded here by JS -->
                     </div>
+                </div>
 
-                    <!-- Quiz Success Screen -->
-                    <div id="quiz-success-section" class="hidden flex flex-col items-center justify-center text-center py-6">
-                        <div class="w-14 h-14 rounded-2xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-2xl shadow-sm mb-4 animate-bounce">
+                <!-- Result Overlay Screen -->
+                <div id="quiz-result-screen" class="hidden absolute inset-0 bg-[#F3F7FF] z-50 flex flex-col items-center justify-center text-center p-6 animate-fade-in-up">
+                    <div class="bg-white rounded-[32px] p-8 sm:p-10 max-w-md w-full shadow-2xl border border-slate-100/50 flex flex-col items-center">
+                        <div id="result-badge-container" class="w-20 h-20 rounded-[24px] bg-emerald-50 text-emerald-500 flex items-center justify-center text-4xl shadow-sm mb-6 animate-bounce">
                             🎉
                         </div>
-                        <h3 class="text-lg sm:text-xl font-black text-slate-950 mb-2">Luar Biasa! Kuis Selesai</h3>
-                        <p class="text-xs text-slate-500 leading-relaxed mb-6 max-w-sm">Kamu berhasil menjawab semua pertanyaan dengan benar. Progres belajar kamu sudah disimpan secara realtime.</p>
-                        <button onclick="closeQuizModalAndUnlock()" class="w-full sm:w-auto inline-flex items-center justify-center px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold rounded-xl text-xs shadow-md shadow-emerald-600/20 hover:shadow-lg transition-all duration-300 cursor-pointer">
+                        <h3 id="result-title" class="text-2xl font-black text-slate-950 mb-2">Kuis Selesai!</h3>
+                        <p id="result-desc" class="text-sm text-slate-500 leading-relaxed mb-6 font-medium">Kamu berhasil menyelesaikan kuis ini.</p>
+                        
+                        <div class="bg-slate-50 border border-slate-100 rounded-2xl py-4 px-6 w-full mb-8 flex justify-around">
+                            <div>
+                                <span class="text-xs text-slate-400 block mb-0.5 font-bold">Total Soal</span>
+                                <span class="text-lg font-extrabold text-slate-800">5</span>
+                            </div>
+                            <div class="w-px bg-slate-200"></div>
+                            <div>
+                                <span class="text-xs text-slate-400 block mb-0.5 font-bold font-mono">Benar</span>
+                                <span id="result-correct-count" class="text-lg font-extrabold text-emerald-600">5</span>
+                            </div>
+                            <div class="w-px bg-slate-200"></div>
+                            <div>
+                                <span class="text-xs text-slate-400 block mb-0.5 font-bold">Status</span>
+                                <span id="result-status-badge" class="text-xs font-bold text-emerald-600 bg-emerald-50 px-2.5 py-0.5 rounded-lg border border-emerald-200">LULUS</span>
+                            </div>
+                        </div>
+                        
+                        <button id="result-continue-btn" onclick="closeQuizModalAndUnlock()" class="w-full inline-flex items-center justify-center px-6 py-4 bg-blue-600 hover:bg-blue-700 text-white font-extrabold rounded-2xl text-sm shadow-lg shadow-blue-500/25 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] cursor-pointer">
                             Lanjutkan Belajar
                         </button>
-                    </div>
-
-                    <!-- Quiz Fail Screen -->
-                    <div id="quiz-fail-section" class="hidden flex flex-col items-center justify-center text-center py-6">
-                        <div class="w-14 h-14 rounded-2xl bg-red-100 text-red-600 flex items-center justify-center text-2xl shadow-sm mb-4">
-                            ❌
-                        </div>
-                        <h3 class="text-lg sm:text-xl font-black text-slate-950 mb-2">Ada Jawaban yang Salah</h3>
-                        <p class="text-xs text-slate-500 leading-relaxed mb-6 max-w-sm">Jangan menyerah! Coba baca kembali materinya dan ulangi kuis untuk menyelesaikan checkpoint ini.</p>
-                        <button onclick="restartQuiz()" class="w-full sm:w-auto inline-flex items-center justify-center px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-extrabold rounded-xl text-xs shadow-md shadow-blue-600/20 hover:shadow-lg transition-all duration-300 cursor-pointer">
+                        
+                        <button id="result-retry-btn" onclick="restartQuiz()" class="w-full mt-3 inline-flex items-center justify-center px-6 py-4 bg-slate-100 hover:bg-slate-200 text-slate-700 font-extrabold rounded-2xl text-sm transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] cursor-pointer">
                             Coba Lagi
                         </button>
                     </div>
-
                 </div>
 
             </div>
-        </div>     </section>
-
-    </main>
-
-    <!-- Footer -->
-    <footer class="border-t border-slate-200 bg-slate-50 py-8 mt-auto relative z-20">
-        <div class="max-w-7xl mx-auto px-4 text-center">
-            <p class="text-sm text-slate-500 font-medium">&copy; 2026 Path Deck</p>
         </div>
-    </footer>
+    </section>
+
+    <!-- Quiz Exit Confirmation Modal -->
+    <div id="quiz-exit-confirm-modal" class="fixed inset-0 z-[150] hidden items-center justify-center p-4 sm:p-6 bg-slate-950/60 backdrop-blur-sm opacity-0">
+        <div class="bg-white rounded-[28px] max-w-md w-full p-8 shadow-[0_24px_60px_-15px_rgba(0,0,0,0.3)] border border-slate-100 flex flex-col items-center text-center transform scale-95 transition-all duration-300">
+            <div class="w-16 h-16 rounded-[20px] bg-amber-50 text-amber-500 border border-amber-100 flex items-center justify-center text-3xl mb-5 shadow-sm">
+                ⚠️
+            </div>
+            <h3 class="text-xl font-bold text-slate-950 mb-3 title-font">Keluar dari Kuis?</h3>
+            <p class="text-sm text-slate-500 leading-relaxed mb-6 font-medium">Apakah kamu yakin ingin menghentikan kuis? Kuis akan diulang dari awal jika kamu keluar sekarang.</p>
+            <div class="flex gap-3 w-full">
+                <button onclick="confirmExitQuiz(true)" class="flex-1 py-3.5 bg-rose-600 hover:bg-rose-700 text-white font-extrabold rounded-2xl text-sm transition-all duration-200 cursor-pointer shadow-md shadow-rose-500/10 active:scale-95">
+                    Ya, Keluar
+                </button>
+                <button onclick="confirmExitQuiz(false)" class="flex-1 py-3.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-extrabold rounded-2xl text-sm transition-all duration-200 cursor-pointer active:scale-95">
+                    Tidak, Lanjut
+                </button>
+            </div>
+        </div>
+    </div>
 
     <!-- Mini Card Modal (Informasi Umum) -->
     <div id="info-modal" class="fixed inset-0 z-[100] hidden items-center justify-center p-4 sm:p-6 bg-slate-950/60 backdrop-blur-sm opacity-0">
@@ -931,11 +1080,22 @@
         document.addEventListener('DOMContentLoaded', () => {
             // --- Global Learning Path Variables ---
             let currentStep = {{ $currentStep }};
-        let activeModuleIndex = 0;
-        let progressChanged = false;
-        let selectedOptionIdx = null;
-        let currentQuestionIndex = 0;
-        let quizScore = 0;
+            let activeModuleIndex = 0;
+            let progressChanged = false;
+            let selectedOptions = [null, null, null, null, null];
+            let currentQuestionIndex = 0;
+            let quizScore = 0;
+
+            // Check if we should auto open a module from a previous redirect/reload
+            const autoOpenIndex = sessionStorage.getItem('autoOpenModuleIndex');
+            if (autoOpenIndex !== null) {
+                sessionStorage.removeItem('autoOpenModuleIndex');
+                const idx = parseInt(autoOpenIndex, 10);
+                // Open learning view directly with delay to let layout load
+                setTimeout(() => {
+                    openLearningView(idx);
+                }, 400);
+            }
 
         // --- Modules Detailed Data (Custom Content & Interactive Quizzes) ---
         const modulesData = [
@@ -982,6 +1142,24 @@
                             "A. Menyimpan data ke database",
                             "B. Memberikan logika interaktif pada halaman web",
                             "C. Mengatur gaya dan warna elemen"
+                        ],
+                        correct: 1
+                    },
+                    {
+                        question: "Siapa yang bertanggung jawab atas logika server dan database?",
+                        options: [
+                            "A. Frontend Developer",
+                            "B. Backend Developer",
+                            "C. UI/UX Designer"
+                        ],
+                        correct: 1
+                    },
+                    {
+                        question: "Apa peran utama dari seorang Frontend Developer?",
+                        options: [
+                            "A. Menulis query database",
+                            "B. Merancang antarmuka pengguna yang interaktif dan responsif di browser",
+                            "C. Membuat server web menggunakan Linux"
                         ],
                         correct: 1
                     }
@@ -1033,6 +1211,24 @@
                             "C. Otomatis mewarnai tombol menjadi biru"
                         ],
                         correct: 1
+                    },
+                    {
+                        question: "Tag HTML mana yang digunakan untuk membuat hyperlink?",
+                        options: [
+                            "A. &lt;link&gt;",
+                            "B. &lt;href&gt;",
+                            "C. &lt;a&gt;"
+                        ],
+                        correct: 2
+                    },
+                    {
+                        question: "Tag HTML manakah yang digunakan untuk membuat daftar berurutan (numbered list)?",
+                        options: [
+                            "A. &lt;ul&gt;",
+                            "B. &lt;ol&gt;",
+                            "C. &lt;li&gt;"
+                        ],
+                        correct: 1
                     }
                 ]
             },
@@ -1082,6 +1278,24 @@
                             "C. Menghubungkan CSS dengan JavaScript"
                         ],
                         correct: 1
+                    },
+                    {
+                        question: "Properti CSS mana yang digunakan untuk mengubah warna teks suatu elemen?",
+                        options: [
+                            "A. color",
+                            "B. text-color",
+                            "C. background-color"
+                        ],
+                        correct: 0
+                    },
+                    {
+                        question: "Nilai position mana yang membuat elemen tetap di posisinya saat halaman di-scroll?",
+                        options: [
+                            "A. absolute",
+                            "B. relative",
+                            "C. fixed"
+                        ],
+                        correct: 2
                     }
                 ]
             },
@@ -1129,6 +1343,24 @@
                             "A. Mendengarkan musik latar belakang",
                             "B. Merespons interaksi pengguna seperti klik, ketik, atau scroll",
                             "C. Menghapus database secara otomatis"
+                        ],
+                        correct: 1
+                    },
+                    {
+                        question: "Bagaimana cara menulis komentar satu baris di JavaScript?",
+                        options: [
+                            "A. // komentar",
+                            "B. &lt;!-- komentar --&gt;",
+                            "C. /* komentar */"
+                        ],
+                        correct: 0
+                    },
+                    {
+                        question: "Tipe data manakah di JavaScript yang mewakili nilai benar atau salah?",
+                        options: [
+                            "A. String",
+                            "B. Boolean",
+                            "C. Number"
                         ],
                         correct: 1
                     }
@@ -1180,6 +1412,24 @@
                             "C. Otomatis membackup database"
                         ],
                         correct: 1
+                    },
+                    {
+                        question: "Di antara berikut ini, manakah yang merupakan framework progresif berbasis JavaScript?",
+                        options: [
+                            "A. Laravel",
+                            "B. Vue.js",
+                            "C. Django"
+                        ],
+                        correct: 1
+                    },
+                    {
+                        question: "Apa kegunaan dari State Management library seperti Redux atau Vuex?",
+                        options: [
+                            "A. Mengatur routing halaman",
+                            "B. Mengelola status/data aplikasi secara terpusat",
+                            "C. Mempercepat koneksi database"
+                        ],
+                        correct: 1
                     }
                 ]
             },
@@ -1227,6 +1477,24 @@
                             "A. Mengelola database relasional",
                             "B. Menginstal dan mengelola library eksternal untuk proyek JavaScript",
                             "C. Melakukan compile file PHP"
+                        ],
+                        correct: 1
+                    },
+                    {
+                        question: "Perintah Git mana yang digunakan untuk mengunduh perubahan dari repositori remote ke repositori lokal Anda?",
+                        options: [
+                            "A. git push",
+                            "B. git clone",
+                            "C. git pull"
+                        ],
+                        correct: 2
+                    },
+                    {
+                        question: "Apa kegunaan dari bundler seperti Vite atau Webpack?",
+                        options: [
+                            "A. Menulis kode HTML secara otomatis",
+                            "B. Menggabungkan dan mengoptimalkan aset/file kode agar siap dideploy",
+                            "C. Menguji performa server hosting"
                         ],
                         correct: 1
                     }
@@ -1278,6 +1546,24 @@
                             "C. Mengamankan file database"
                         ],
                         correct: 1
+                    },
+                    {
+                        question: "Apa kegunaan utama dari sertifikat SSL/HTTPS pada suatu website?",
+                        options: [
+                            "A. Mengurangi biaya hosting",
+                            "B. Mengenkripsi lalu lintas data dan meningkatkan keamanan website",
+                            "C. Mempercepat waktu loading gambar"
+                        ],
+                        correct: 1
+                    },
+                    {
+                        question: "Manakah dari berkas berikut yang biasanya dikonfigurasi untuk memberi tahu robot mesin pencari bagian mana dari situs yang tidak boleh diindeks?",
+                        options: [
+                            "A. index.html",
+                            "B. sitemap.xml",
+                            "C. robots.txt"
+                        ],
+                        correct: 2
                     }
                 ]
             }
@@ -1356,7 +1642,7 @@
         };
 
         // --- Workspace Module Content Loader ---
-        function loadModuleContent(index) {
+        window.loadModuleContent = function(index) {
             activeModuleIndex = index;
             const data = modulesData[index];
 
@@ -1400,15 +1686,17 @@
 
             // Next button text settings
             const nextBtn = document.getElementById('workspace-next-btn');
-            if (index === 6) {
-                nextBtn.innerHTML = `Selesai <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>`;
-            } else {
-                nextBtn.innerHTML = `Next <svg class="w-4 h-4 text-[#0050d2]" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg>`;
+            if (nextBtn) {
+                if (index === 6) {
+                    nextBtn.innerHTML = `Selesai <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>`;
+                } else {
+                    nextBtn.innerHTML = `Next <svg class="w-4 h-4 text-[#0050d2]" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg>`;
+                }
             }
 
             renderSidebarProgress();
             renderSidebarLibrary();
-        }
+        };
 
         // --- Sidebar Render Handlers ---
         function renderSidebarProgress() {
@@ -1533,37 +1821,42 @@
             });
         }
 
-        // --- Quiz System Logic ---
+        // --- Quiz System Logic (Stacked 3D Flip Card Deck) ---
         window.launchInteractiveQuiz = function() {
             const data = modulesData[activeModuleIndex];
             
-            // Set header
+            // Set header title
             document.getElementById('quiz-modal-lesson-title').innerText = data.title;
             
-            // Show first question
+            // Reset state
             currentQuestionIndex = 0;
             quizScore = 0;
+            selectedOptions = [null, null, null, null, null];
 
-            // Reset layouts
-            document.getElementById('quiz-question-container').classList.remove('hidden');
-            document.getElementById('quiz-action-footer').classList.remove('hidden');
-            document.getElementById('quiz-success-section').classList.add('hidden');
-            document.getElementById('quiz-fail-section').classList.add('hidden');
+            // Hide results screen
+            const resultScreen = document.getElementById('quiz-result-screen');
+            resultScreen.classList.remove('flex');
+            resultScreen.classList.add('hidden');
 
-            renderQuizQuestion();
+            // Render all cards
+            renderQuizStack();
 
-            // Open Modal
+            // Open Modal with scale/fade transitions
             const quizModal = document.getElementById('quiz-modal');
             quizModal.classList.remove('hidden');
             quizModal.classList.add('flex');
             void quizModal.offsetWidth;
             quizModal.classList.add('show');
+            quizModal.classList.remove('opacity-0', 'scale-95');
+            quizModal.classList.add('opacity-100', 'scale-100');
             document.body.classList.add('overflow-hidden');
         };
 
         window.closeQuizModal = function() {
             const quizModal = document.getElementById('quiz-modal');
             quizModal.classList.remove('show');
+            quizModal.classList.remove('opacity-100', 'scale-100');
+            quizModal.classList.add('opacity-0', 'scale-95');
             document.body.classList.remove('overflow-hidden');
             setTimeout(() => {
                 quizModal.classList.remove('flex');
@@ -1571,150 +1864,336 @@
             }, 300);
         };
 
-        function renderQuizQuestion() {
-            const data = modulesData[activeModuleIndex];
-            const q = data.quiz[currentQuestionIndex];
-            selectedOptionIdx = null;
-
-            // Question counter
-            document.getElementById('quiz-question-number').innerText = `Pertanyaan ${currentQuestionIndex + 1} dari 3`;
+        window.handleQuizCloseAttempt = function() {
+            const resultScreen = document.getElementById('quiz-result-screen');
+            const isResultOpen = resultScreen && !resultScreen.classList.contains('hidden');
             
-            // Question progress bar
-            const pct = Math.round(((currentQuestionIndex + 1) / 3) * 100);
-            document.getElementById('quiz-progress-bar').style.width = `${pct}%`;
+            if (isResultOpen) {
+                // Just close normally
+                closeQuizModal();
+            } else {
+                // Show confirmation modal
+                const confirmModal = document.getElementById('quiz-exit-confirm-modal');
+                if (confirmModal) {
+                    confirmModal.classList.remove('hidden');
+                    confirmModal.classList.add('flex');
+                    // Trigger reflow for transition
+                    void confirmModal.offsetWidth;
+                    confirmModal.classList.add('opacity-100');
+                    confirmModal.querySelector('div').classList.add('scale-100');
+                }
+            }
+        };
 
-            // Question text
-            document.getElementById('quiz-question-text').innerHTML = q.question;
+        window.confirmExitQuiz = function(shouldExit) {
+            const confirmModal = document.getElementById('quiz-exit-confirm-modal');
+            if (confirmModal) {
+                confirmModal.classList.remove('opacity-100');
+                confirmModal.querySelector('div').classList.remove('scale-100');
+                setTimeout(() => {
+                    confirmModal.classList.remove('flex');
+                    confirmModal.classList.add('hidden');
+                    if (shouldExit) {
+                        closeQuizModal();
+                    }
+                }, 300);
+            }
+        };
 
-            // Render options
-            const optionsWrapper = document.getElementById('quiz-options-wrapper');
-            optionsWrapper.innerHTML = '';
+        function renderQuizStack() {
+            const data = modulesData[activeModuleIndex];
+            const stackContainer = document.getElementById('quiz-card-stack');
+            stackContainer.innerHTML = '';
 
-            q.options.forEach((opt, idx) => {
-                const optHtml = `
-                    <div id="quiz-opt-card-${idx}" onclick="selectQuizOption(${idx})" class="quiz-option-card border border-slate-200/80 rounded-2xl p-4 flex items-center justify-between text-xs sm:text-sm font-semibold text-slate-700 bg-white">
-                        <span>${opt}</span>
-                        <span class="w-4 h-4 rounded-full border border-slate-300 flex items-center justify-center shrink-0">
-                            <span class="w-2 h-2 rounded-full bg-blue-600 hidden" id="quiz-opt-dot-${idx}"></span>
-                        </span>
+            data.quiz.forEach((q, qIdx) => {
+                let optionsHtml = '';
+                q.options.forEach((opt, oIdx) => {
+                    optionsHtml += `
+                        <div id="quiz-opt-card-${qIdx}-${oIdx}" onclick="selectQuizOption(${qIdx}, ${oIdx})" class="quiz-option-card">
+                            <span class="quiz-opt-indicator" id="quiz-opt-indicator-${qIdx}-${oIdx}">
+                                <span class="quiz-opt-dot" id="quiz-opt-dot-${qIdx}-${oIdx}"></span>
+                            </span>
+                            <span class="quiz-opt-text">${opt}</span>
+                        </div>
+                    `;
+                });
+
+                const cardHtml = `
+                    <div id="quiz-card-item-${qIdx}" class="quiz-card-stack-item">
+                        <div class="quiz-card-inner w-full h-full">
+                            <!-- FRONT -->
+                            <div class="quiz-card-front">
+                                <div class="flex justify-between items-start mb-4 shrink-0">
+                                    <span class="text-xs font-black tracking-wider text-slate-400 font-mono">PERTANYAAN ${qIdx + 1} DARI 5</span>
+                                    <span class="text-3xl font-extrabold text-slate-300 font-sans">${qIdx + 1}</span>
+                                </div>
+                                
+                                <div class="grow flex flex-col justify-between overflow-y-auto pr-1">
+                                    <div>
+                                        <h4 class="text-lg sm:text-xl font-bold text-slate-800 leading-snug mb-6">${q.question}</h4>
+                                        <div class="space-y-3 mb-6">
+                                            ${optionsHtml}
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="flex justify-end pt-4 border-t border-slate-100 shrink-0">
+                                        <button id="quiz-confirm-btn-${qIdx}" disabled onclick="verifyQuizCardAnswer(${qIdx})" class="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3.5 bg-slate-100 text-slate-400 font-extrabold rounded-2xl text-xs sm:text-sm transition-all duration-300 cursor-not-allowed">
+                                            Verifikasi Jawaban
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- BACK -->
+                            <div class="quiz-card-back">
+                                <div class="flex justify-between items-start mb-4 shrink-0">
+                                    <span class="text-xs font-black tracking-wider text-slate-400 font-mono">HASIL CHECKPOINT</span>
+                                    <span id="result-icon-${qIdx}" class="text-xl">🎉</span>
+                                </div>
+                                
+                                <div class="grow flex flex-col justify-between overflow-y-auto">
+                                    <div class="text-center py-6 flex flex-col items-center justify-center grow">
+                                        <div id="feedback-badge-${qIdx}" class="w-16 h-16 rounded-[20px] flex items-center justify-center text-3xl mb-4 shadow-sm animate-bounce">
+                                            🎉
+                                        </div>
+                                        <h4 id="feedback-title-${qIdx}" class="text-lg font-black mb-2 text-slate-950">Jawaban Kamu Benar!</h4>
+                                        <p id="feedback-desc-${qIdx}" class="text-xs sm:text-sm text-slate-500 leading-relaxed max-w-xs font-medium"></p>
+                                    </div>
+                                    
+                                    <div class="flex justify-end pt-4 border-t border-slate-100 shrink-0">
+                                        <button onclick="slideOutAndNext(${qIdx})" class="w-full sm:w-auto inline-flex items-center justify-center px-8 py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-extrabold rounded-2xl text-xs sm:text-sm transition-all duration-300 shadow-md shadow-blue-500/20 cursor-pointer">
+                                            Lanjut
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 `;
-                optionsWrapper.insertAdjacentHTML('beforeend', optHtml);
+                stackContainer.insertAdjacentHTML('beforeend', cardHtml);
             });
 
-            // Disable submit button initially
-            const submitBtn = document.getElementById('quiz-submit-answer-btn');
-            submitBtn.className = "w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 bg-slate-200 text-slate-400 font-extrabold rounded-2xl text-xs sm:text-sm transition-all duration-300 cursor-not-allowed";
-            submitBtn.setAttribute('disabled', 'true');
-            submitBtn.innerText = "Verifikasi Jawaban";
-            submitBtn.onclick = checkSelectedAnswer;
+            updateStackTransforms();
+            updateQuizProgressIndicators();
         }
 
-        window.selectQuizOption = function(idx) {
-            if (document.getElementById('quiz-opt-card-0').classList.contains('correct') || 
-                document.getElementById('quiz-opt-card-0').classList.contains('incorrect')) {
-                // Answer already verified, cannot change
-                return;
-            }
+        function updateStackTransforms() {
+            const cards = document.querySelectorAll('.quiz-card-stack-item');
+            cards.forEach((card, index) => {
+                const relativeIndex = index - currentQuestionIndex;
+                
+                // If it already went to the back, we don't overwrite its styles
+                if (card.classList.contains('move-to-back')) {
+                    return;
+                }
 
-            selectedOptionIdx = idx;
+                if (relativeIndex < 0) {
+                    card.classList.add('move-to-back');
+                    card.style.pointerEvents = 'none';
+                    return;
+                }
+                
+                // Active Card
+                if (relativeIndex === 0) {
+                    card.classList.remove('slide-out', 'move-to-back');
+                    card.style.transform = 'translate3d(0, 0, 0) scale(1) rotate(0deg)';
+                    card.style.zIndex = '50';
+                    card.style.opacity = '1';
+                    card.style.pointerEvents = 'auto';
+                } else {
+                    card.classList.remove('slide-out', 'move-to-back');
+                    const offsetTranslateY = relativeIndex * 12;
+                    const offsetTranslateZ = -relativeIndex * 20;
+                    const scale = 1 - (relativeIndex * 0.04);
+                    const opacity = 1 - (relativeIndex * 0.15);
+                    const rotate = (relativeIndex % 2 === 0 ? 1.5 : -1.5) * relativeIndex;
+                    
+                    card.style.transform = `translate3d(0, ${offsetTranslateY}px, ${offsetTranslateZ}px) scale(${scale}) rotate(${rotate}deg)`;
+                    card.style.zIndex = `${50 - relativeIndex}`;
+                    card.style.opacity = opacity > 0 ? opacity.toString() : '0';
+                    card.style.pointerEvents = 'none';
+                }
+            });
+        }
 
-            // Clear selections
-            for (let i = 0; i < 3; i++) {
-                const card = document.getElementById(`quiz-opt-card-${i}`);
-                if (card) {
-                    card.classList.remove('selected');
-                    document.getElementById(`quiz-opt-dot-${i}`).classList.add('hidden');
+        function updateQuizProgressIndicators() {
+            const progressText = document.getElementById('quiz-progress-text-main');
+            const progressBar = document.getElementById('quiz-progress-bar-main');
+            
+            const currentQ = Math.min(5, currentQuestionIndex + 1);
+            progressText.innerText = `SOAL ${currentQ} DARI 5`;
+            
+            const pct = Math.round((currentQ / 5) * 100);
+            progressBar.style.width = `${pct}%`;
+        }
+
+        window.selectQuizOption = function(qIdx, oIdx) {
+            const cardEl = document.getElementById(`quiz-card-item-${qIdx}`);
+            if (cardEl && cardEl.classList.contains('flipped')) return;
+
+            selectedOptions[qIdx] = oIdx;
+
+            const q = modulesData[activeModuleIndex].quiz[qIdx];
+            for (let i = 0; i < q.options.length; i++) {
+                const optEl = document.getElementById(`quiz-opt-card-${qIdx}-${i}`);
+                if (optEl) {
+                    optEl.classList.remove('selected');
                 }
             }
 
-            // Add selection
-            document.getElementById(`quiz-opt-card-${idx}`).classList.add('selected');
-            document.getElementById(`quiz-opt-dot-${idx}`).classList.remove('hidden');
+            const selEl = document.getElementById(`quiz-opt-card-${qIdx}-${oIdx}`);
+            if (selEl) {
+                selEl.classList.add('selected');
+            }
 
-            // Enable submit button
-            const submitBtn = document.getElementById('quiz-submit-answer-btn');
-            submitBtn.className = "w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-extrabold rounded-2xl text-xs sm:text-sm transition-all duration-300 cursor-pointer shadow-md shadow-blue-500/20";
-            submitBtn.removeAttribute('disabled');
+            // Enable verify button
+            const verifyBtn = document.getElementById(`quiz-confirm-btn-${qIdx}`);
+            if (verifyBtn) {
+                verifyBtn.className = "px-6 py-3 bg-[#0050d2] hover:bg-[#0040a8] text-white font-extrabold rounded-2xl text-xs sm:text-sm transition-all duration-300 cursor-pointer shadow-md shadow-[#0050d2]/15";
+                verifyBtn.removeAttribute('disabled');
+            }
         };
 
-        window.checkSelectedAnswer = function() {
+        window.verifyQuizCardAnswer = function(qIdx) {
             const data = modulesData[activeModuleIndex];
-            const q = data.quiz[currentQuestionIndex];
+            const q = data.quiz[qIdx];
+            const userChoice = selectedOptions[qIdx];
+            const isCorrect = userChoice === q.correct;
 
-            // Disable selections on all cards
-            for (let i = 0; i < 3; i++) {
-                const card = document.getElementById(`quiz-opt-card-${i}`);
-                if (card) {
-                    card.classList.remove('selected');
-                }
+            // Highlight choice cards on front side
+            for (let i = 0; i < q.options.length; i++) {
+                const optEl = document.getElementById(`quiz-opt-card-${qIdx}-${i}`);
+                if (optEl) optEl.classList.remove('selected');
             }
 
-            const selectedCard = document.getElementById(`quiz-opt-card-${selectedOptionIdx}`);
-            
-            if (selectedOptionIdx === q.correct) {
-                // Correct answer
-                selectedCard.classList.add('correct');
+            const userOptEl = document.getElementById(`quiz-opt-card-${qIdx}-${userChoice}`);
+            const correctOptEl = document.getElementById(`quiz-opt-card-${qIdx}-${q.correct}`);
+
+            if (isCorrect) {
+                if (userOptEl) userOptEl.classList.add('correct');
                 quizScore++;
             } else {
-                // Incorrect answer
-                selectedCard.classList.add('incorrect');
-                
-                // Highlight correct answer
-                document.getElementById(`quiz-opt-card-${q.correct}`).classList.add('correct');
+                if (userOptEl) userOptEl.classList.add('incorrect');
+                if (correctOptEl) correctOptEl.classList.add('correct');
             }
 
-            // Change validation button to next
-            const submitBtn = document.getElementById('quiz-submit-answer-btn');
-            submitBtn.innerText = "Lanjut";
-            submitBtn.onclick = goToNextQuizQuestion;
+            // Fill Back side feedback
+            const feedbackBadge = document.getElementById(`feedback-badge-${qIdx}`);
+            const feedbackTitle = document.getElementById(`feedback-title-${qIdx}`);
+            const feedbackDesc = document.getElementById(`feedback-desc-${qIdx}`);
+            const resultIcon = document.getElementById(`result-icon-${qIdx}`);
+
+            if (isCorrect) {
+                feedbackBadge.className = "w-16 h-16 rounded-[20px] bg-emerald-50 text-emerald-600 flex items-center justify-center text-3xl mb-4 shadow-sm border border-emerald-100";
+                feedbackBadge.innerHTML = "🎉";
+                feedbackTitle.innerText = "Jawaban Kamu Benar!";
+                feedbackTitle.className = "text-lg font-black mb-2 text-emerald-600";
+                feedbackDesc.innerText = "Hebat! Pemahaman kamu tentang materi ini sangat baik.";
+                resultIcon.innerText = "🎉";
+            } else {
+                feedbackBadge.className = "w-16 h-16 rounded-[20px] bg-rose-50 text-rose-600 flex items-center justify-center text-3xl mb-4 shadow-sm border border-rose-100";
+                feedbackBadge.innerHTML = "❌";
+                feedbackTitle.innerText = "Jawaban Kamu Salah";
+                feedbackTitle.className = "text-lg font-black mb-2 text-rose-600";
+                
+                const correctOptionText = q.options[q.correct];
+                feedbackDesc.innerHTML = `Kurang tepat. Jawaban yang benar adalah:<br><strong class="text-slate-800 mt-1.5 inline-block text-sm bg-slate-50 border border-slate-200/50 py-1.5 px-3 rounded-xl">${correctOptionText}</strong>`;
+                resultIcon.innerText = "❌";
+            }
+
+            // Add flip animation class
+            const cardEl = document.getElementById(`quiz-card-item-${qIdx}`);
+            if (cardEl) {
+                cardEl.classList.add('flipped');
+            }
         };
 
-        function goToNextQuizQuestion() {
-            currentQuestionIndex++;
-            const data = modulesData[activeModuleIndex];
-
-            if (currentQuestionIndex < data.quiz.length) {
-                renderQuizQuestion();
-            } else {
-                // Quiz completed
-                document.getElementById('quiz-question-container').classList.add('hidden');
-                document.getElementById('quiz-action-footer').classList.add('hidden');
-
-                if (quizScore === 3) {
-                    // Success (All correct)
-                    document.getElementById('quiz-success-section').classList.remove('hidden');
-                    
-                    // Mark as complete in DB if active step
-                    if (activeModuleIndex === currentStep) {
-                        completeActiveModuleRealtime();
-                    }
-                } else {
-                    // Fail (Has errors)
-                    document.getElementById('quiz-fail-section').classList.remove('hidden');
-                }
+        window.slideOutAndNext = function(qIdx) {
+            const cardEl = document.getElementById(`quiz-card-item-${qIdx}`);
+            if (cardEl) {
+                cardEl.style.transform = ''; // Clear inline styles so keyframe animations can work
+                cardEl.classList.remove('flipped'); // Unflip it as it goes to the back
+                cardEl.classList.add('move-to-back');
             }
+            
+            currentQuestionIndex++;
+            
+            setTimeout(() => {
+                if (currentQuestionIndex < 5) {
+                    updateStackTransforms();
+                    updateQuizProgressIndicators();
+                } else {
+                    showQuizResults();
+                }
+            }, 600); // Trigger transition after the swing out phase starts
+        };
+
+        function showQuizResults() {
+            const resultScreen = document.getElementById('quiz-result-screen');
+            const resultBadge = document.getElementById('result-badge-container');
+            const resultTitle = document.getElementById('result-title');
+            const resultDesc = document.getElementById('result-desc');
+            const resultCorrect = document.getElementById('result-correct-count');
+            const resultStatus = document.getElementById('result-status-badge');
+            const resultContinueBtn = document.getElementById('result-continue-btn');
+
+            resultCorrect.innerText = `${quizScore} / 5`;
+
+            if (quizScore >= 4) {
+                // Pass (Lulus)
+                resultBadge.className = "w-20 h-20 rounded-[24px] bg-emerald-50 text-emerald-500 flex items-center justify-center text-4xl shadow-sm mb-6 animate-bounce";
+                resultBadge.innerHTML = "🎉";
+                resultTitle.innerText = "Luar Biasa! Kuis Selesai";
+                resultDesc.innerText = "Kamu berhasil menyelesaikan checkpoint ini dengan sangat baik. Progres belajar kamu disimpan secara real-time.";
+                resultStatus.innerText = "LULUS";
+                resultStatus.className = "text-xs font-bold text-emerald-600 bg-emerald-50 px-2.5 py-0.5 rounded-lg border border-emerald-200";
+                
+                resultContinueBtn.classList.remove('hidden');
+                // Auto mark completed in DB if it's the active step
+                if (activeModuleIndex === currentStep) {
+                    completeActiveModuleRealtime();
+                }
+            } else {
+                // Fail (Gagal)
+                resultBadge.className = "w-20 h-20 rounded-[24px] bg-rose-50 text-rose-500 flex items-center justify-center text-4xl shadow-sm mb-6";
+                resultBadge.innerHTML = "❌";
+                resultTitle.innerText = "Belum Lulus Checkpoint";
+                resultDesc.innerText = "Nilai kamu masih di bawah batas kelulusan (minimal 4 benar). Ulangi kuis untuk menuntaskan checkpoint ini.";
+                resultStatus.innerText = "GAGAL";
+                resultStatus.className = "text-xs font-bold text-rose-600 bg-rose-50 px-2.5 py-0.5 rounded-lg border border-rose-200";
+                
+                resultContinueBtn.classList.add('hidden');
+            }
+
+            resultScreen.classList.remove('hidden');
+            resultScreen.classList.add('flex');
         }
 
         window.restartQuiz = function() {
-            // Reset question flow layouts
-            document.getElementById('quiz-question-container').classList.remove('hidden');
-            document.getElementById('quiz-action-footer').classList.remove('hidden');
-            document.getElementById('quiz-success-section').classList.add('hidden');
-            document.getElementById('quiz-fail-section').classList.add('hidden');
-
             currentQuestionIndex = 0;
             quizScore = 0;
-            renderQuizQuestion();
+            selectedOptions = [null, null, null, null, null];
+
+            // Hide results screen
+            const resultScreen = document.getElementById('quiz-result-screen');
+            resultScreen.classList.remove('flex');
+            resultScreen.classList.add('hidden');
+
+            renderQuizStack();
         };
 
         window.closeQuizModalAndUnlock = function() {
             closeQuizModal();
             // Automatically select next module if it has just been unlocked
-            if (activeModuleIndex + 1 <= currentStep && activeModuleIndex < 6) {
+            if (progressChanged && activeModuleIndex < 6) {
+                sessionStorage.setItem('autoOpenModuleIndex', activeModuleIndex + 1);
+                window.location.reload();
+            } else if (activeModuleIndex + 1 <= currentStep && activeModuleIndex < 6) {
                 setTimeout(() => {
                     loadModuleContent(activeModuleIndex + 1);
                 }, 300);
+            } else {
+                closeLearningView();
             }
         };
 
@@ -1735,6 +2214,20 @@
                 card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)';
             });
         });
+
+        // --- Workspace Header Scroll Shrink Effect ---
+        const scrollContainer = document.getElementById('workspace-scroll-container');
+        const headerEl = document.querySelector('#learning-view header');
+
+        if (scrollContainer && headerEl) {
+            scrollContainer.addEventListener('scroll', () => {
+                if (scrollContainer.scrollTop > 50) {
+                    headerEl.classList.add('shrink');
+                } else {
+                    headerEl.classList.remove('shrink');
+                }
+            });
+        }
 
         // --- Background Tech/Emoji Floating Particle Elements ---
         const particleContainer = document.getElementById('particle-container');

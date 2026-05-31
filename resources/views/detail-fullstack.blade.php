@@ -105,7 +105,7 @@
         }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col overflow-x-hidden relative">
+<body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col overflow-x-hidden relative is-learning-page">
 
     <!-- Top Navigation Bar -->
     @include('layouts.navbar')
@@ -488,12 +488,7 @@
 
     </main>
 
-    <!-- Footer -->
-    <footer class="border-t border-slate-200 bg-slate-50 py-8 mt-auto relative z-20">
-        <div class="max-w-7xl mx-auto px-4 text-center">
-            <p class="text-sm text-slate-500 font-medium">&copy; 2026 Path Deck</p>
-        </div>
-    </footer>
+
 
     <!-- Mini Card Modal (Informasi Umum) -->
     <div id="info-modal" class="fixed inset-0 z-[100] hidden items-center justify-center p-4 sm:p-6 bg-slate-950/60 backdrop-blur-sm opacity-0">

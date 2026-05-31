@@ -105,7 +105,7 @@
         }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col overflow-x-hidden relative">
+<body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col overflow-x-hidden relative is-learning-page">
 
     <!-- Top Navigation Bar -->
     @include('layouts.navbar')
