@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Path;
 
 class DashboardController extends Controller
 {
@@ -32,140 +33,95 @@ class DashboardController extends Controller
             $uiuxStep = session('uiux_current_step', 0);
         }
         
-        $userName = auth()->user()->name ?? 'Student';
+        $userName = auth()->check() ? (auth()->user()->name ?? 'Student') : 'Guest';
+        $isAdmin = auth()->check() && auth()->user()->isAdmin();
+
+        // Fetch paths from database
+        $dbPaths = Path::with('modules')->get();
         
-        $frontendModulesList = [
-            0 => 'Modul 1 : Pendahuluan',
-            1 => 'Modul 2 : Pengenalan HTML',
-            2 => 'Modul 3 : Pendalaman HTML',
-            3 => 'Modul 4 : Pengenalan CSS',
-            4 => 'Modul 5 : Pendalaman CSS',
-            5 => 'Modul 6 : Layout Responsive',
-            6 => 'Modul 7 : Quiz',
-            7 => 'Kurikulum Selesai! 🎉'
-        ];
-        $frontendModule = $frontendModulesList[$frontendStep] ?? 'Kurikulum Selesai! 🎉';
-        $frontendProgress = min(100, round(($frontendStep / 7) * 100));
-        $frontendLessons = $frontendStep . '/7';
+        $paths = [];
+        foreach ($dbPaths as $path) {
+            $step = 0;
+            switch ($path->slug) {
+                case 'frontend':
+                    $step = $frontendStep;
+                    $url = route('path.detail.frontend');
+                    break;
+                case 'backend':
+                    $step = $backendStep;
+                    $url = route('path.detail.backend');
+                    break;
+                case 'uiux':
+                    $step = $uiuxStep;
+                    $url = route('path.detail.uiux');
+                    break;
+                case 'fullstack':
+                    $step = $fullstackStep;
+                    $url = route('path.detail.fullstack');
+                    break;
+                case 'project-manager':
+                    $step = $pmStep;
+                    $url = route('path.detail.pm');
+                    break;
+                default:
+                    if (auth()->check()) {
+                        $customProgress = auth()->user()->custom_paths_progress ?? [];
+                        $step = isset($customProgress[$path->slug]) ? (int)$customProgress[$path->slug] : 0;
+                    } else {
+                        $step = session($path->slug . '_current_step', 0);
+                    }
+                    $url = route('path.detail.dynamic', $path->slug);
+                    break;
+            }
 
-        $backendModulesList = [
-            0 => 'Modul 1 : Dasar-dasar Pemrograman',
-            1 => 'Modul 2 : Konsep Dasar Web Development',
-            2 => 'Modul 3 : Dasar-dasar Database',
-            3 => 'Modul 4 : Framework Backend',
-            4 => 'Modul 5 : Keamanan Dasar',
-            5 => 'Modul 6 : Menguasai Version Control System (Git)',
-            6 => 'Modul 7 : Deploy dan Cloud Computing',
-            7 => 'Modul 8 : Quiz',
-            8 => 'Kurikulum Selesai! 🎉'
-        ];
-        $backendModule = $backendModulesList[$backendStep] ?? 'Kurikulum Selesai! 🎉';
-        $backendProgress = min(100, round(($backendStep / 8) * 100));
-        $backendLessons = $backendStep . '/8';
+            $totalModules = $path->modules->count();
+            if ($totalModules == 0) {
+                $totalModules = 7; // Fallback
+            }
 
-        $fullstackModulesList = [
-            0 => 'Modul 1 : HTML, CSS, JavaScript',
-            1 => 'Modul 2 : Responsive Web Design',
-            2 => 'Modul 3 : Git & GitHub',
-            3 => 'Modul 4 : Frontend Framework',
-            4 => 'Modul 5 : Backend Development',
-            5 => 'Modul 6 : Database',
-            6 => 'Modul 7 : API & Authentication',
-            7 => 'Modul 8 : Deployment & Hosting',
-            8 => 'Modul 9 : Testing dan optimization',
-            9 => 'Modul 10 : QUIZ',
-            10 => 'Kurikulum Selesai! 🎉'
-        ];
-        $fullstackModule = $fullstackModulesList[$fullstackStep] ?? 'Kurikulum Selesai! 🎉';
-        $fullstackProgress = min(100, round(($fullstackStep / 10) * 100));
-        $fullstackLessons = $fullstackStep . '/10';
+            $currentModuleModel = $path->modules->where('step_number', $step)->first();
+            if ($step >= $totalModules) {
+                $moduleTitle = 'Kurikulum Selesai! 🎉';
+                $progress = 100;
+            } else {
+                $moduleTitle = $currentModuleModel ? ('Modul ' . ($step + 1) . ' : ' . $currentModuleModel->title) : 'Belum Memulai';
+                $progress = min(100, round(($step / $totalModules) * 100));
+            }
 
-        $pmModulesList = [
-            0 => 'Modul 1 : Dasar manajemen proyek',
-            1 => 'Modul 2 : Komunikasi & leadership',
-            2 => 'Modul 3 : Agile & Scrum',
-            3 => 'Modul 4 : Requirement gathering',
-            4 => 'Modul 5 : Timeline & task management',
-            5 => 'Modul 6 : Risk management',
-            6 => 'Modul 7 : Product & business understanding',
-            7 => 'Modul 8 : Tools PM',
-            8 => 'Modul 9 : Stakeholder management',
-            9 => 'Modul 10 : QUIZ',
-            10 => 'Kurikulum Selesai! 🎉'
-        ];
-        $pmModule = $pmModulesList[$pmStep] ?? 'Kurikulum Selesai! 🎉';
-        $pmProgress = min(100, round(($pmStep / 10) * 100));
-        $pmLessons = $pmStep . '/10';
-
-        $uiuxModulesList = [
-            0 => 'Modul 1 : Dasar desain visual',
-            1 => 'Modul 2 : Typography, warna, layout',
-            2 => 'Modul 3 : Design thinking',
-            3 => 'Modul 4 : User research',
-            4 => 'Modul 5 : Wireframe & user flow',
-            5 => 'Modul 6 : Figma / design tools',
-            6 => 'Modul 7 : Prototyping',
-            7 => 'Modul 8 : Design system',
-            8 => 'Modul 9 : Usability testing',
-            9 => 'Modul 10 : QUIZ',
-            10 => 'Kurikulum Selesai! 🎉'
-        ];
-        $uiuxModule = $uiuxModulesList[$uiuxStep] ?? 'Kurikulum Selesai! 🎉';
-        $uiuxProgress = min(100, round(($uiuxStep / 10) * 100));
-        $uiuxLessons = $uiuxStep . '/10';
- 
-        $paths = [
-            1 => [
-                'title' => 'Front End Developer',
-                'module' => $frontendModule,
-                'progress' => $frontendProgress,
-                'lessons' => $frontendLessons,
-                'quiz' => '92%',
-                'image' => 'https://images.unsplash.com/photo-1547082299-de196ea013d6?w=600&auto=format&fit=crop&q=80',
-                'url' => route('path.detail.frontend'),
-            ],
-            2 => [
-                'title' => 'Back End Developer',
-                'module' => $backendModule,
-                'progress' => $backendProgress,
-                'lessons' => $backendLessons,
-                'quiz' => '88%',
-                'image' => 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=600&auto=format&fit=crop&q=80',
-                'url' => route('path.detail.backend'),
-            ],
-            3 => [
-                'title' => 'UI/UX Designer',
-                'module' => $uiuxModule,
-                'progress' => $uiuxProgress,
-                'lessons' => $uiuxLessons,
-                'quiz' => '95%',
-                'image' => 'https://images.unsplash.com/photo-1586717791821-3f44a563fa4c?w=600&auto=format&fit=crop&q=80',
-                'url' => route('path.detail.uiux'),
-            ],
-            4 => [
-                'title' => 'Full Stack Developer',
-                'module' => $fullstackModule,
-                'progress' => $fullstackProgress,
-                'lessons' => $fullstackLessons,
-                'quiz' => '90%',
-                'image' => 'https://images.unsplash.com/photo-1605379399642-870262d3d051?w=600&auto=format&fit=crop&q=80',
-                'url' => route('path.detail.fullstack'),
-            ],
-            5 => [
-                'title' => 'Project Manager',
-                'module' => $pmModule,
-                'progress' => $pmProgress,
-                'lessons' => $pmLessons,
-                'quiz' => '94%',
-                'image' => 'https://images.unsplash.com/photo-1531403009284-440f080d1e12?w=600&auto=format&fit=crop&q=80',
-                'url' => route('path.detail.pm'),
-            ]
-        ];
+            $paths[$path->id] = [
+                'id' => $path->id,
+                'title' => $path->title,
+                'module' => $moduleTitle,
+                'progress' => $progress,
+                'lessons' => $step . '/' . $totalModules,
+                'quiz' => '90%', // Static placeholder
+                'image' => $path->image,
+                'url' => $url,
+                'slug' => $path->slug,
+            ];
+        }
         
-        $activePath = isset($paths[$activePathId]) ? $paths[$activePathId] : null;
-        $progressCount = ($activePath && $activePath['progress'] > 0) ? 1 : 0;
+        $activePath = null;
+        if ($activePathId && isset($paths[$activePathId])) {
+            $activePath = $paths[$activePathId];
+        } else {
+            foreach ($paths as $p) {
+                if ($p['progress'] > 0) {
+                    $activePath = $p;
+                    if (auth()->check()) {
+                        $user = auth()->user();
+                        $user->active_path_id = $p['id'];
+                        $user->save();
+                    }
+                    session(['active_path_id' => $p['id']]);
+                    break;
+                }
+            }
+        }
+        
+        $progressCount = $activePath ? 1 : 0;
   
-        return view('dashboard', compact('progressCount', 'activePath', 'userName'));
+        return view('dashboard', compact('progressCount', 'activePath', 'userName', 'isAdmin'));
     }
   
     public function resetProgress()
@@ -185,6 +141,7 @@ class DashboardController extends Controller
             $user->fullstack_current_step = 0;
             $user->pm_current_step = 0;
             $user->uiux_current_step = 0;
+            $user->custom_paths_progress = [];
             $user->save();
         }
         return redirect()->route('dashboard')->with('success', 'Progress berhasil di-reset.');

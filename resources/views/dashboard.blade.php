@@ -115,7 +115,7 @@
                                 Continue Learning
                             </h2>
                             
-                            @if(isset($progressCount) && $progressCount > 0 && $activePath)
+                            @if($activePath)
                                 <div class="bg-white border border-slate-200/80 rounded-2xl p-6 sm:p-8 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.04)] flex flex-col sm:flex-row gap-6 relative group hover:border-blue-200 hover:shadow-[0_12px_32px_-8px_rgba(59,130,246,0.12)] transition-all duration-300">
                                     <!-- Progress Badge in Top Right -->
                                     <div class="absolute top-6 right-6">
@@ -228,7 +228,7 @@
                             </h3>
                             
                             <div class="space-y-5">
-                                @if(isset($progressCount) && $progressCount > 0 && $activePath)
+                                @if($activePath)
                                     <div class="flex justify-between items-center pb-3 border-b border-slate-100">
                                         <span class="text-sm font-medium text-slate-500">Completed Lessons</span>
                                         <span class="text-sm font-extrabold text-slate-800 bg-slate-50 px-2.5 py-1 rounded-lg border border-slate-100">{{ $activePath['lessons'] }}</span>

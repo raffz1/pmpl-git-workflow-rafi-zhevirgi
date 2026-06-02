@@ -59,4 +59,25 @@ Route::middleware('auth')->group(function () {
     Route::post('/path/detail/uiux/reset', [ExplorePathController::class, 'resetUiuxDetailProgress'])->name('path.uiux.reset');
 
     Route::get('/explore/enroll/{id}', [ExplorePathController::class, 'enroll'])->name('explore.enroll');
+
+    // Admin updates routes
+    Route::post('/admin/path/{id}/update', [ExplorePathController::class, 'updatePath'])->name('admin.path.update');
+    Route::post('/admin/module/{id}/update', [ExplorePathController::class, 'updateModule'])->name('admin.module.update');
+    Route::post('/admin/quiz/{id}/update', [ExplorePathController::class, 'updateQuiz'])->name('admin.quiz.update');
+
+    // Admin creations routes
+    Route::post('/admin/path/store', [ExplorePathController::class, 'storePath'])->name('admin.path.store');
+    Route::post('/admin/path/{path_id}/module/store', [ExplorePathController::class, 'storeModule'])->name('admin.module.store');
+
+    // Admin deletions routes
+    Route::post('/admin/path/{id}/delete', [ExplorePathController::class, 'deletePath'])->name('admin.path.delete');
+    Route::post('/admin/module/{id}/delete', [ExplorePathController::class, 'deleteModule'])->name('admin.module.delete');
+
+    // Generic detail paths and actions
+    Route::get('/path/detail/{slug}', [ExplorePathController::class, 'detailBySlug'])->name('path.detail.dynamic');
+    Route::post('/path/detail/{slug}/complete', [ExplorePathController::class, 'completeStepDynamic'])->name('path.detail.complete.dynamic');
+    Route::post('/path/detail/{slug}/reset', [ExplorePathController::class, 'resetStepDynamic'])->name('path.detail.reset.dynamic');
+
+    // Real-time updates polling
+    Route::get('/api/path/{slug}/check-updates', [ExplorePathController::class, 'checkUpdates'])->name('api.path.check-updates');
 });

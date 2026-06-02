@@ -112,6 +112,7 @@
         </style>
     </head>
     <body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col overflow-x-hidden">
+        @php $isAdmin = auth()->check() && auth()->user()->isAdmin(); @endphp
 
         <!-- Top Navigation Bar -->
         @include('layouts.navbar')
@@ -144,13 +145,28 @@
             <div class="max-w-7xl mx-auto relative z-10">
                 
                 <!-- Hero Section -->
-                <div class="max-w-4xl mb-12 sm:mb-16 animate-fade-in-up" style="animation-delay: 50ms;">
-                    <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 leading-tight tracking-tight mb-4">
-                        Explore Your Path
-                    </h1>
-                    <p class="text-base sm:text-lg text-slate-500 leading-relaxed font-normal">
-                        Pilih jalur pembelajaran khusus yang dirancang untuk mencapai tingkat kemahiran sesuai standar industri. <br class="hidden sm:inline">Setiap jalur merupakan program terstruktur yang dirancang untuk mencapai penguasaan yang mendalam.
-                    </p>
+                <div class="max-w-7xl mb-12 sm:mb-16 animate-fade-in-up flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6" style="animation-delay: 50ms;">
+                    <div class="max-w-4xl">
+                        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 leading-tight tracking-tight mb-4">
+                            Explore Your Path
+                        </h1>
+                        <p class="text-base sm:text-lg text-slate-500 leading-relaxed font-normal">
+                            Pilih jalur pembelajaran khusus yang dirancang untuk mencapai tingkat kemahiran sesuai standar industri. <br class="hidden sm:inline">Setiap jalur merupakan program terstruktur yang dirancang untuk mencapai penguasaan yang mendalam.
+                        </p>
+                    </div>
+                    @if($isAdmin)
+                    <div class="shrink-0 self-start sm:self-center flex items-center gap-3">
+                        <!-- Add Path Button -->
+                        <button id="admin-add-path-btn" onclick="openAddPathModal()" class="hidden flex items-center gap-1.5 text-xs font-bold text-slate-600 hover:text-blue-600 hover:bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 bg-white transition-all duration-200 cursor-pointer shadow-sm active:scale-95">
+                            ➕ Tambah Path Baru
+                        </button>
+
+                        <button id="edit-mode-toggle-btn" onclick="toggleEditMode()" class="flex items-center gap-2 text-xs font-bold text-slate-600 border border-slate-200 rounded-xl px-4 py-2.5 bg-white transition-all duration-200 cursor-pointer shadow-sm hover:bg-slate-50">
+                            <span class="w-2 h-2 rounded-full bg-slate-400 transition-colors duration-300" id="edit-mode-indicator"></span>
+                            <span>Edit Mode: <strong id="edit-mode-text">OFF</strong></span>
+                        </button>
+                    </div>
+                    @endif
                 </div>
 
                 <!-- Career Cards Grid Section -->
@@ -190,7 +206,7 @@
                         @endphp
 
                         <!-- Interactive Career Card (Wrapped in click link) -->
-                        <a href="{{ auth()->check() ? ($path['slug'] === 'frontend' ? route('path.detail.frontend') : ($path['slug'] === 'backend' ? route('path.detail.backend') : ($path['slug'] === 'fullstack' ? route('path.detail.fullstack') : ($path['slug'] === 'project-manager' ? route('path.detail.pm') : ($path['slug'] === 'uiux' ? route('path.detail.uiux') : route('login')))))) : route('login') }}" class="group relative rounded-2xl border border-slate-200 bg-white overflow-hidden flex flex-col card-transition card-tilt shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] {{ $glowClass }} animate-fade-in-up cursor-pointer hover:no-underline hover:border-transparent z-10" style="animation-delay: {{ ($index + 1) * 100 }}ms;">
+                        <a href="{{ auth()->check() ? route('path.detail.dynamic', $path['slug']) : route('login') }}" class="group relative rounded-2xl border border-slate-200 bg-white overflow-hidden flex flex-col card-transition card-tilt shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] {{ $glowClass }} animate-fade-in-up cursor-pointer hover:no-underline hover:border-transparent z-10" style="animation-delay: {{ ($index + 1) * 100 }}ms;">
                             <!-- Hover Gradient Background Overlay -->
                             <div class="absolute inset-0 bg-gradient-to-br {{ $gradientClasses }} opacity-0 group-hover:opacity-100 transition-all duration-500 z-0"></div>
 
@@ -204,6 +220,15 @@
                                 
                                 <!-- A subtle colored accent bar on top of card -->
                                 <div class="absolute top-0 inset-x-0 h-1.5 transition-all duration-300 {{ $accentBarColor }}"></div>
+
+                                @if($isAdmin)
+                                    <!-- Edit Path Button Overlay -->
+                                    <button type="button" onclick="event.preventDefault(); event.stopPropagation(); openEditPathModal({{ json_encode($path) }})" class="admin-edit-path-btn hidden absolute top-4 right-4 z-30 w-10 h-10 rounded-xl bg-white/90 hover:bg-white text-slate-800 flex items-center justify-center shadow-lg transition-transform hover:scale-105 border border-slate-200 cursor-pointer" title="Edit Path Card">
+                                        <svg class="w-5 h-5 text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                                        </svg>
+                                    </button>
+                                @endif
                             </div>
 
                             <!-- Card Body -->
@@ -473,5 +498,433 @@
                 });
             });
         </script>
+
+        @if($isAdmin)
+        <!-- Edit Path Modal -->
+        <div id="edit-path-modal" class="fixed inset-0 z-[100] hidden items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm transition-opacity duration-300 opacity-0">
+            <div class="bg-white rounded-3xl w-full max-w-2xl overflow-hidden shadow-2xl border border-slate-100 transition-transform duration-300 scale-95 flex flex-col max-h-[90vh]">
+                <!-- Modal Header -->
+                <div class="px-8 py-5 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+                    <h3 class="text-xl font-bold text-slate-900 title-font flex items-center gap-2">
+                        <span class="w-2.5 h-6 bg-blue-600 rounded-full inline-block"></span>
+                        Edit Path Card: <span id="modal-path-title-display"></span>
+                    </h3>
+                    <button type="button" onclick="closeEditPathModal()" class="w-8 h-8 rounded-full hover:bg-slate-200 text-slate-400 hover:text-slate-600 flex items-center justify-center transition-colors border-0 bg-transparent cursor-pointer text-sm">
+                        ✕
+                    </button>
+                </div>
+
+                <!-- Modal Body (Scrollable) -->
+                <form id="edit-path-form" onsubmit="submitEditPath(event)" class="flex-grow overflow-y-auto p-8 space-y-6">
+                    @csrf
+                    <input type="hidden" id="edit-path-id" name="id">
+
+                    <!-- Title -->
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Nama Path</label>
+                        <input type="text" id="edit-path-title" name="title" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-blue-500 font-medium text-slate-800 text-sm">
+                    </div>
+
+                    <!-- Image URL -->
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Image URL</label>
+                        <input type="text" id="edit-path-image" name="image" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-blue-500 font-medium text-slate-800 text-sm">
+                    </div>
+
+                    <!-- Description -->
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Short Description</label>
+                        <textarea id="edit-path-description" name="description" rows="3" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-blue-500 font-medium text-slate-800 text-sm"></textarea>
+                    </div>
+
+                    <!-- Career Description -->
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Detailed Career Description</label>
+                        <textarea id="edit-path-career_description" name="career_description" rows="4" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-blue-500 font-medium text-slate-800 text-sm"></textarea>
+                    </div>
+
+                    <!-- Two columns: theme & salary -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Theme -->
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Tema Warna</label>
+                            <select id="edit-path-theme" name="theme" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-blue-500 font-medium text-slate-800 text-sm bg-white">
+                                <option value="cyan">Cyan (Front End)</option>
+                                <option value="green">Green (Back End)</option>
+                                <option value="pink">Pink (UI/UX)</option>
+                                <option value="orange">Orange (Full Stack)</option>
+                                <option value="yellow">Yellow (Project Manager)</option>
+                            </select>
+                        </div>
+
+                        <!-- Salary Range -->
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Salary Range</label>
+                            <input type="text" id="edit-path-salary" name="salary_range" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-blue-500 font-medium text-slate-800 text-sm">
+                        </div>
+                    </div>
+
+                    <!-- Skills -->
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Skills (Comma-separated)</label>
+                        <input type="text" id="edit-path-skills" placeholder="e.g. HTML, CSS, React" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-blue-500 font-medium text-slate-800 text-sm">
+                    </div>
+
+                    <!-- Suitability criteria -->
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Kriteria Kecocokan (Enter-separated)</label>
+                        <textarea id="edit-path-suitability" rows="3" placeholder="Satu baris untuk satu kriteria..." class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-blue-500 font-medium text-slate-800 text-sm"></textarea>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="flex justify-between items-center pt-4 border-t border-slate-100">
+                        <button type="button" onclick="deleteCurrentPath()" class="px-6 py-3 bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200 font-bold rounded-2xl text-sm transition-all cursor-pointer">
+                            🗑️ Hapus Path
+                        </button>
+                        <div class="flex gap-3">
+                            <button type="button" onclick="closeEditPathModal()" class="px-6 py-3 border border-slate-200 bg-transparent hover:bg-slate-50 text-slate-500 font-bold rounded-2xl text-sm transition-colors cursor-pointer">
+                                Batal
+                            </button>
+                            <button type="submit" class="px-8 py-3 bg-blue-600 hover:bg-blue-700 border-0 text-white font-bold rounded-2xl text-sm transition-all shadow-md shadow-blue-500/10 cursor-pointer">
+                                Simpan Perubahan
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Add Path Modal -->
+        <div id="add-path-modal" class="fixed inset-0 z-[100] hidden items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm transition-opacity duration-300 opacity-0">
+            <div class="bg-white rounded-3xl w-full max-w-2xl overflow-hidden shadow-2xl border border-slate-100 transition-transform duration-300 scale-95 flex flex-col max-h-[90vh]">
+                <!-- Modal Header -->
+                <div class="px-8 py-5 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+                    <h3 class="text-xl font-bold text-slate-900 title-font flex items-center gap-2">
+                        <span class="w-2.5 h-6 bg-blue-600 rounded-full inline-block"></span>
+                        Tambah Path Karir Baru
+                    </h3>
+                    <button type="button" onclick="closeAddPathModal()" class="w-8 h-8 rounded-full hover:bg-slate-200 text-slate-400 hover:text-slate-600 flex items-center justify-center transition-colors border-0 bg-transparent cursor-pointer text-sm">
+                        ✕
+                    </button>
+                </div>
+
+                <!-- Modal Body (Scrollable) -->
+                <form id="add-path-form" onsubmit="submitAddPath(event)" class="flex-grow overflow-y-auto p-8 space-y-6">
+                    @csrf
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Title -->
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Nama Path</label>
+                            <input type="text" id="add-path-title" name="title" required class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-blue-500 font-medium text-slate-800 text-sm" placeholder="e.g. DevOps Engineer">
+                        </div>
+
+                        <!-- Slug -->
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Slug URL (Unique)</label>
+                            <input type="text" id="add-path-slug" name="slug" required class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-blue-500 font-medium text-slate-800 text-sm" placeholder="e.g. devops">
+                        </div>
+                    </div>
+
+                    <!-- Image URL -->
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Image URL</label>
+                        <input type="text" id="add-path-image" name="image" required class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-blue-500 font-medium text-slate-800 text-sm" placeholder="e.g. https://images.unsplash.com/photo-...">
+                    </div>
+
+                    <!-- Description -->
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Short Description</label>
+                        <textarea id="add-path-description" name="description" required rows="2" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-blue-500 font-medium text-slate-800 text-sm" placeholder="Kuasai cara mengotomatisasi pipeline integrasi..."></textarea>
+                    </div>
+
+                    <!-- Career Description -->
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Detailed Career Description</label>
+                        <textarea id="add-path-career_description" name="career_description" required rows="3" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-blue-500 font-medium text-slate-800 text-sm" placeholder="DevOps Engineer bertanggung jawab untuk..."></textarea>
+                    </div>
+
+                    <!-- Two columns: theme & salary -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Theme -->
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Tema Warna</label>
+                            <select id="add-path-theme" name="theme" required class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-blue-500 font-medium text-slate-800 text-sm bg-white">
+                                <option value="cyan">Cyan (Front End theme)</option>
+                                <option value="green">Green (Back End theme)</option>
+                                <option value="pink">Pink (UI/UX theme)</option>
+                                <option value="orange">Orange (Full Stack theme)</option>
+                                <option value="yellow">Yellow (Project Manager theme)</option>
+                            </select>
+                        </div>
+
+                        <!-- Salary Range -->
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Salary Range</label>
+                            <input type="text" id="add-path-salary" name="salary_range" required class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-blue-500 font-medium text-slate-800 text-sm" placeholder="e.g. Rp 8.000.000 - Rp 20.000.000">
+                        </div>
+                    </div>
+
+                    <!-- Skills -->
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Skills (Comma-separated)</label>
+                        <input type="text" id="add-path-skills" required placeholder="e.g. Docker, Kubernetes, CI/CD" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-blue-500 font-medium text-slate-800 text-sm">
+                    </div>
+
+                    <!-- Suitability criteria -->
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Kriteria Kecocokan (Enter-separated)</label>
+                        <textarea id="add-path-suitability" required rows="3" placeholder="Satu baris untuk satu kriteria..." class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-blue-500 font-medium text-slate-800 text-sm"></textarea>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="flex justify-end gap-3 pt-4 border-t border-slate-100">
+                        <button type="button" onclick="closeAddPathModal()" class="px-6 py-3 border border-slate-200 bg-transparent hover:bg-slate-50 text-slate-500 font-bold rounded-2xl text-sm transition-colors cursor-pointer">
+                            Batal
+                        </button>
+                        <button type="submit" class="px-8 py-3 bg-blue-600 hover:bg-blue-700 border-0 text-white font-bold rounded-2xl text-sm transition-all shadow-md shadow-blue-500/10 cursor-pointer">
+                            Tambah Path
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                const editModal = document.getElementById('edit-path-modal');
+                const editForm = document.getElementById('edit-path-form');
+
+                let editModeActive = false;
+                window.toggleEditMode = function() {
+                    editModeActive = !editModeActive;
+                    const toggleBtn = document.getElementById('edit-mode-toggle-btn');
+                    const indicator = document.getElementById('edit-mode-indicator');
+                    const text = document.getElementById('edit-mode-text');
+                    const editPathBtns = document.querySelectorAll('.admin-edit-path-btn');
+
+                    if (editModeActive) {
+                        if (toggleBtn) {
+                            toggleBtn.classList.remove('text-slate-600', 'border-slate-200', 'bg-white');
+                            toggleBtn.classList.add('text-emerald-700', 'border-emerald-200', 'bg-emerald-50');
+                        }
+                        if (indicator) {
+                            indicator.classList.remove('bg-slate-400');
+                            indicator.classList.add('bg-emerald-500', 'animate-pulse');
+                        }
+                        if (text) text.innerText = 'ON';
+
+                        editPathBtns.forEach(btn => btn.classList.remove('hidden'));
+                        const addPathBtn = document.getElementById('admin-add-path-btn');
+                        if (addPathBtn) addPathBtn.classList.remove('hidden');
+                    } else {
+                        if (toggleBtn) {
+                            toggleBtn.classList.remove('text-emerald-700', 'border-emerald-200', 'bg-emerald-50');
+                            toggleBtn.classList.add('text-slate-600', 'border-slate-200', 'bg-white');
+                        }
+                        if (indicator) {
+                            indicator.classList.remove('bg-emerald-500', 'animate-pulse');
+                            indicator.classList.add('bg-slate-400');
+                        }
+                        if (text) text.innerText = 'OFF';
+
+                        editPathBtns.forEach(btn => btn.classList.add('hidden'));
+                        const addPathBtn = document.getElementById('admin-add-path-btn');
+                        if (addPathBtn) addPathBtn.classList.add('hidden');
+                    }
+                };
+
+                window.openEditPathModal = function(path) {
+                    document.getElementById('edit-path-id').value = path.id;
+                    document.getElementById('edit-path-title').value = path.title;
+                    document.getElementById('modal-path-title-display').innerText = path.title;
+                    document.getElementById('edit-path-image').value = path.image;
+                    document.getElementById('edit-path-description').value = path.description;
+                    document.getElementById('edit-path-career_description').value = path.career_description || '';
+                    document.getElementById('edit-path-theme').value = path.theme;
+                    document.getElementById('edit-path-salary').value = path.salary_range;
+
+                    // Skills array to comma string
+                    const skillsStr = Array.isArray(path.skills) ? path.skills.join(', ') : '';
+                    document.getElementById('edit-path-skills').value = skillsStr;
+
+                    // Suitability array to enter-separated string
+                    const suitabilityStr = Array.isArray(path.suitability) ? path.suitability.join('\n') : '';
+                    document.getElementById('edit-path-suitability').value = suitabilityStr;
+
+                    // Open modal
+                    editModal.classList.remove('hidden');
+                    editModal.classList.add('flex');
+                    setTimeout(() => {
+                        editModal.classList.add('opacity-100');
+                        editModal.querySelector('div').classList.remove('scale-95');
+                        editModal.querySelector('div').classList.add('scale-100');
+                    }, 50);
+                    document.body.classList.add('overflow-hidden');
+                };
+
+                window.closeEditPathModal = function() {
+                    editModal.classList.remove('opacity-100');
+                    editModal.querySelector('div').classList.remove('scale-100');
+                    editModal.querySelector('div').classList.add('scale-95');
+                    setTimeout(() => {
+                        editModal.classList.remove('flex');
+                        editModal.classList.add('hidden');
+                    }, 300);
+                    document.body.classList.remove('overflow-hidden');
+                };
+
+                window.submitEditPath = function(e) {
+                    e.preventDefault();
+                    const pathId = document.getElementById('edit-path-id').value;
+                    const csrfToken = document.querySelector('input[name="_token"]').value;
+
+                    // Split skills
+                    const skillsVal = document.getElementById('edit-path-skills').value
+                        .split(',')
+                        .map(s => s.trim())
+                        .filter(s => s.length > 0);
+
+                    // Split suitability
+                    const suitabilityVal = document.getElementById('edit-path-suitability').value
+                        .split('\n')
+                        .map(s => s.trim())
+                        .filter(s => s.length > 0);
+
+                    const data = {
+                        title: document.getElementById('edit-path-title').value,
+                        image: document.getElementById('edit-path-image').value,
+                        description: document.getElementById('edit-path-description').value,
+                        career_description: document.getElementById('edit-path-career_description').value,
+                        theme: document.getElementById('edit-path-theme').value,
+                        salary_range: document.getElementById('edit-path-salary').value,
+                        skills: skillsVal,
+                        suitability: suitabilityVal
+                    };
+
+                    fetch(`/admin/path/${pathId}/update`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': csrfToken,
+                            'Accept': 'application/json'
+                        },
+                        body: JSON.stringify(data)
+                    })
+                    .then(res => res.json())
+                    .then(resData => {
+                        if (resData.success) {
+                            alert(resData.message);
+                            window.location.reload();
+                        } else {
+                            alert('Gagal menyimpan: ' + JSON.stringify(resData.errors || resData.message));
+                        }
+                    })
+                    .catch(err => {
+                        console.error(err);
+                        alert('Terjadi kesalahan jaringan.');
+                    });
+                };
+
+                window.deleteCurrentPath = function() {
+                    const pathId = document.getElementById('edit-path-id').value;
+                    const pathTitle = document.getElementById('modal-path-title-display').innerText;
+                    
+                    if (!confirm(`Apakah Anda yakin ingin menghapus path "${pathTitle}" beserta seluruh modul dan kuis di dalamnya? Tindakan ini tidak dapat dibatalkan.`)) {
+                        return;
+                    }
+                    
+                    const csrfToken = document.querySelector('input[name="_token"]').value;
+                    
+                    fetch(`/admin/path/${pathId}/delete`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': csrfToken,
+                            'Accept': 'application/json'
+                        }
+                    })
+                    .then(res => res.json())
+                    .then(resData => {
+                        if (resData.success) {
+                            alert(resData.message);
+                            window.location.reload();
+                        } else {
+                            alert('Gagal menghapus path: ' + JSON.stringify(resData.errors || resData.message));
+                        }
+                    })
+                    .catch(err => {
+                        console.error(err);
+                        alert('Terjadi kesalahan jaringan.');
+                    });
+                };
+
+                const addModal = document.getElementById('add-path-modal');
+
+                window.openAddPathModal = function() {
+                    document.getElementById('add-path-form').reset();
+                    addModal.classList.remove('hidden');
+                    addModal.classList.add('flex');
+                    setTimeout(() => {
+                        addModal.classList.add('opacity-100');
+                        addModal.querySelector('div').classList.remove('scale-95');
+                        addModal.querySelector('div').classList.add('scale-100');
+                    }, 50);
+                    document.body.classList.add('overflow-hidden');
+                };
+
+                window.closeAddPathModal = function() {
+                    addModal.classList.remove('opacity-100');
+                    addModal.querySelector('div').classList.remove('scale-100');
+                    addModal.querySelector('div').classList.add('scale-95');
+                    setTimeout(() => {
+                        addModal.classList.remove('flex');
+                        addModal.classList.add('hidden');
+                    }, 300);
+                    document.body.classList.remove('overflow-hidden');
+                };
+
+                window.submitAddPath = function(e) {
+                    e.preventDefault();
+                    const csrfToken = document.querySelector('input[name="_token"]').value;
+
+                    const data = {
+                        title: document.getElementById('add-path-title').value,
+                        slug: document.getElementById('add-path-slug').value,
+                        image: document.getElementById('add-path-image').value,
+                        description: document.getElementById('add-path-description').value,
+                        career_description: document.getElementById('add-path-career_description').value,
+                        theme: document.getElementById('add-path-theme').value,
+                        salary_range: document.getElementById('add-path-salary').value,
+                        skills: document.getElementById('add-path-skills').value,
+                        suitability: document.getElementById('add-path-suitability').value
+                    };
+
+                    fetch('/admin/path/store', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': csrfToken,
+                            'Accept': 'application/json'
+                        },
+                        body: JSON.stringify(data)
+                    })
+                    .then(res => res.json())
+                    .then(resData => {
+                        if (resData.success) {
+                            alert(resData.message);
+                            window.location.reload();
+                        } else {
+                            alert('Gagal membuat path: ' + JSON.stringify(resData.errors || resData.message));
+                        }
+                    })
+                    .catch(err => {
+                        console.error(err);
+                        alert('Terjadi kesalahan jaringan.');
+                    });
+                };
+            });
+        </script>
+        @endif
     </body>
 </html>
