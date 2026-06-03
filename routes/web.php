@@ -64,14 +64,17 @@ Route::middleware('auth')->group(function () {
     Route::post('/admin/path/{id}/update', [ExplorePathController::class, 'updatePath'])->name('admin.path.update');
     Route::post('/admin/module/{id}/update', [ExplorePathController::class, 'updateModule'])->name('admin.module.update');
     Route::post('/admin/quiz/{id}/update', [ExplorePathController::class, 'updateQuiz'])->name('admin.quiz.update');
+    Route::post('/admin/module/{id}/quiz-settings/update', [ExplorePathController::class, 'updateQuizSettings'])->name('admin.module.quiz-settings.update');
 
     // Admin creations routes
     Route::post('/admin/path/store', [ExplorePathController::class, 'storePath'])->name('admin.path.store');
     Route::post('/admin/path/{path_id}/module/store', [ExplorePathController::class, 'storeModule'])->name('admin.module.store');
+    Route::post('/admin/module/{module_id}/quiz/store', [ExplorePathController::class, 'storeQuiz'])->name('admin.quiz.store');
 
     // Admin deletions routes
     Route::post('/admin/path/{id}/delete', [ExplorePathController::class, 'deletePath'])->name('admin.path.delete');
     Route::post('/admin/module/{id}/delete', [ExplorePathController::class, 'deleteModule'])->name('admin.module.delete');
+    Route::post('/admin/quiz/{id}/delete', [ExplorePathController::class, 'deleteQuiz'])->name('admin.quiz.delete');
 
     // Generic detail paths and actions
     Route::get('/path/detail/{slug}', [ExplorePathController::class, 'detailBySlug'])->name('path.detail.dynamic');

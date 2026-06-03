@@ -881,7 +881,7 @@
                         </div>
 
                         <!-- Checkpoint Quiz Card -->
-                        <div id="workspace-quiz-card" class="bg-white border border-slate-200 rounded-3xl p-8 shadow-[0_4px_24px_-4px_rgba(0,0,0,0.03)] relative overflow-hidden transition-all duration-350 hover:shadow-md cursor-pointer" onclick="launchInteractiveQuiz()">
+                        <div id="workspace-quiz-card" class="bg-white border border-slate-200 rounded-3xl p-8 shadow-[0_4px_24px_-4px_rgba(0,0,0,0.03)] relative overflow-hidden transition-all duration-350 hover:shadow-md cursor-pointer" onclick="handleQuizCardClick()">
                             <div class="absolute left-0 top-0 bottom-0 w-1.5 bg-[#0050d2]"></div>
                             
                             <div class="flex flex-col gap-4">
@@ -895,7 +895,7 @@
                                     <p class="text-xs text-slate-500 leading-relaxed">Sebelum melanjutkan ke modul selanjutnya, mari pastikan kamu telah menguasai konsep inti dari bab ini.</p>
                                 </div>
                                 <div class="flex items-center gap-3">
-                                    <button class="inline-flex items-center gap-2 px-5 py-2.5 bg-[#0050d2] hover:bg-[#0040a8] border-0 text-white rounded-xl text-xs font-bold shadow-md shadow-[#0050d2]/10 transition-all duration-300">
+                                    <button type="button" onclick="event.stopPropagation(); handleQuizCardClick()" class="inline-flex items-center gap-2 px-5 py-2.5 bg-[#0050d2] hover:bg-[#0040a8] border-0 text-white rounded-xl text-xs font-bold shadow-md shadow-[#0050d2]/10 transition-all duration-300">
                                         Mulai Kuis Sekarang
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
@@ -911,7 +911,7 @@
                         </div>
 
                         <!-- Checkpoint Completed Card -->
-                        <div id="workspace-quiz-completed-card" class="hidden bg-white border border-slate-200 rounded-3xl p-8 shadow-sm relative overflow-hidden">
+                        <div id="workspace-quiz-completed-card" class="hidden bg-white border border-slate-200 rounded-3xl p-8 shadow-sm relative overflow-hidden" onclick="handleCompletedQuizCardClick()">
                             <div class="absolute left-0 top-0 bottom-0 w-1.5 bg-emerald-500"></div>
                             <div class="flex items-start gap-4">
                                 <div class="w-10 h-10 rounded-xl bg-emerald-500 flex items-center justify-center text-white shadow-md shrink-0">
@@ -1271,71 +1271,126 @@
         </div>
     </div>
 
-    <!-- Edit Quiz Modal -->
+    <!-- Edit Quiz Modal (Advanced Two-Column Layout) -->
     <div id="edit-quiz-modal" class="fixed inset-0 z-[120] hidden items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm transition-opacity duration-300 opacity-0">
-        <div class="bg-white rounded-3xl w-full max-w-3xl overflow-hidden shadow-2xl border border-slate-100 transition-transform duration-300 scale-95 flex flex-col max-h-[90vh]">
-            <div class="px-8 py-5 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
-                <h3 class="text-xl font-bold text-slate-900 title-font flex items-center gap-2">
+        <div class="bg-white rounded-3xl w-full max-w-5xl overflow-hidden shadow-2xl border border-slate-100 transition-transform duration-300 scale-95 flex flex-col max-h-[90vh]">
+            <!-- Header -->
+            <div class="px-8 py-5 border-b border-slate-100 flex items-center justify-between bg-slate-50/50 shrink-0">
+                <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2">
                     <span class="w-2.5 h-6 bg-blue-600 rounded-full inline-block"></span>
-                    Edit Checkpoint Quiz
+                    Kelola Checkpoint Quiz
                 </h3>
                 <button type="button" onclick="closeEditQuizModal()" class="w-8 h-8 rounded-full hover:bg-slate-200 text-slate-400 hover:text-slate-600 flex items-center justify-center transition-colors border-0 bg-transparent cursor-pointer text-sm">
                     ✕
                 </button>
             </div>
 
-            <div class="px-8 py-3 bg-slate-50 border-b border-slate-100 flex gap-2">
-                @for($i = 0; $i < 5; $i++)
-                <button type="button" id="quiz-tab-{{ $i }}" onclick="selectQuizEditTab({{ $i }})" class="px-4 py-2 text-xs font-bold rounded-xl border border-slate-200 transition-all cursor-pointer bg-white text-slate-600 hover:border-blue-400">
-                    Soal {{ $i + 1 }}
-                </button>
-                @endfor
+            <!-- Two-Column Content -->
+            <div class="flex-grow overflow-hidden flex flex-col md:flex-row">
+                
+                <!-- Left Pane: Settings & Questions List -->
+                <div class="w-full md:w-[380px] border-r border-slate-100 flex flex-col overflow-hidden bg-slate-50/50">
+                    <!-- Quiz Display Settings -->
+                    <div class="p-5 border-b border-slate-100 bg-white space-y-4">
+                        <h4 class="text-xs font-extrabold text-slate-400 uppercase tracking-wider">Pengaturan Tampilan User</h4>
+                        
+                        <div class="space-y-3">
+                            <label class="flex items-start gap-2.5 cursor-pointer">
+                                <input type="radio" name="quiz_display_mode" value="random" class="mt-0.5 text-blue-600 focus:ring-blue-500 cursor-pointer" onchange="handleDisplayModeChange('random')">
+                                <div>
+                                    <span class="text-sm font-bold text-slate-700 block">Acak / Random</span>
+                                    <span class="text-xs text-slate-400 font-medium">Pilih 5 soal secara acak untuk user.</span>
+                                </div>
+                            </label>
+                            
+                            <label class="flex items-start gap-2.5 cursor-pointer">
+                                <input type="radio" name="quiz_display_mode" value="custom" class="mt-0.5 text-blue-600 focus:ring-blue-500 cursor-pointer" onchange="handleDisplayModeChange('custom')">
+                                <div>
+                                    <span class="text-sm font-bold text-slate-700 block">Custom Selection</span>
+                                    <span class="text-xs text-slate-400 font-medium">Pilih manual 5 soal yang akan tampil.</span>
+                                </div>
+                            </label>
+                        </div>
+
+                        <!-- Selection progress -->
+                        <div id="custom-selection-counter-wrapper" class="hidden bg-blue-50/50 border border-blue-100 rounded-xl p-3 flex items-center justify-between">
+                            <span class="text-xs font-bold text-slate-600">Dipilih untuk User:</span>
+                            <span id="custom-selection-counter" class="text-xs font-extrabold text-blue-600 font-mono">0 / 5</span>
+                        </div>
+                    </div>
+
+                    <!-- Questions List Container -->
+                    <div class="p-5 flex-grow overflow-y-auto flex flex-col gap-3">
+                        <div class="flex items-center justify-between">
+                            <h4 class="text-xs font-extrabold text-slate-400 uppercase tracking-wider">Daftar Semua Soal</h4>
+                            <button type="button" onclick="prepareAddQuiz()" class="inline-flex items-center gap-1 text-xs font-extrabold text-blue-600 hover:text-blue-700 transition-colors border-0 bg-transparent cursor-pointer">
+                                ＋ Tambah Soal
+                            </button>
+                        </div>
+
+                        <!-- Questions List -->
+                        <div id="quiz-questions-list" class="space-y-2 mt-2">
+                            <!-- Populated by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Pane: Add/Edit Question Form -->
+                <div class="flex-grow overflow-y-auto p-8 bg-white flex flex-col">
+                    <form id="edit-quiz-form" onsubmit="submitFormQuiz(event)" class="space-y-6 flex-grow">
+                        @csrf
+                        <input type="hidden" id="edit-quiz-id" value="">
+                        
+                        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                            <h4 id="form-quiz-title" class="text-sm font-extrabold text-slate-800 uppercase tracking-wider">Tambah Soal Baru</h4>
+                            <button type="button" id="form-quiz-reset-btn" onclick="prepareAddQuiz()" class="hidden text-xs font-bold text-slate-500 hover:text-slate-800 border-0 bg-transparent cursor-pointer">
+                                Batal / Bersihkan Form
+                            </button>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Pertanyaan</label>
+                            <textarea id="edit-quiz-question" rows="3" required placeholder="Masukkan pertanyaan kuis di sini..." class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-blue-500 font-medium text-slate-800 text-sm placeholder:text-slate-400"></textarea>
+                        </div>
+
+                        <div class="space-y-4">
+                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider">Pilihan Jawaban</label>
+                            
+                            <div class="flex items-center gap-3">
+                                <span class="text-sm font-extrabold text-slate-400">A.</span>
+                                <input type="text" id="edit-quiz-opt-0" required placeholder="Jawaban A" class="flex-grow px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-blue-500 font-medium text-slate-800 text-sm placeholder:text-slate-400">
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <span class="text-sm font-extrabold text-slate-400">B.</span>
+                                <input type="text" id="edit-quiz-opt-1" required placeholder="Jawaban B" class="flex-grow px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-blue-500 font-medium text-slate-800 text-sm placeholder:text-slate-400">
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <span class="text-sm font-extrabold text-slate-400">C.</span>
+                                <input type="text" id="edit-quiz-opt-2" required placeholder="Jawaban C" class="flex-grow px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-blue-500 font-medium text-slate-800 text-sm placeholder:text-slate-400">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Jawaban Yang Benar</label>
+                            <select id="edit-quiz-correct" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-blue-500 font-medium text-slate-800 text-sm bg-white">
+                                <option value="0">Pilihan A</option>
+                                <option value="1">Pilihan B</option>
+                                <option value="2">Pilihan C</option>
+                            </select>
+                        </div>
+
+                        <div class="flex justify-end gap-3 pt-6 border-t border-slate-100 shrink-0">
+                            <button type="button" onclick="closeEditQuizModal()" class="px-6 py-3 border border-slate-200 bg-transparent hover:bg-slate-50 text-slate-500 font-bold rounded-2xl text-sm transition-colors cursor-pointer">
+                                Tutup
+                            </button>
+                            <button type="submit" id="form-submit-btn" class="px-8 py-3 bg-blue-600 hover:bg-blue-700 border-0 text-white font-bold rounded-2xl text-sm transition-all shadow-md shadow-blue-500/10 cursor-pointer">
+                                Simpan Soal
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
             </div>
-
-            <form id="edit-quiz-form" onsubmit="submitEditQuiz(event)" class="flex-grow overflow-y-auto p-8 space-y-6">
-                @csrf
-                <input type="hidden" id="edit-quiz-id">
-
-                <div>
-                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Pertanyaan</label>
-                    <textarea id="edit-quiz-question" rows="3" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-blue-500 font-medium text-slate-800 text-sm"></textarea>
-                </div>
-
-                <div class="space-y-4">
-                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider">Pilihan Jawaban</label>
-                    
-                    <div class="flex items-center gap-3">
-                        <span class="text-sm font-bold text-slate-400">A.</span>
-                        <input type="text" id="edit-quiz-opt-0" class="flex-grow px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-blue-500 font-medium text-slate-800 text-sm">
-                    </div>
-                    <div class="flex items-center gap-3">
-                        <span class="text-sm font-bold text-slate-400">B.</span>
-                        <input type="text" id="edit-quiz-opt-1" class="flex-grow px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-blue-500 font-medium text-slate-800 text-sm">
-                    </div>
-                    <div class="flex items-center gap-3">
-                        <span class="text-sm font-bold text-slate-400">C.</span>
-                        <input type="text" id="edit-quiz-opt-2" class="flex-grow px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-blue-500 font-medium text-slate-800 text-sm">
-                    </div>
-                </div>
-
-                <div>
-                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Jawaban Yang Benar</label>
-                    <select id="edit-quiz-correct" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-blue-500 font-medium text-slate-800 text-sm bg-white">
-                        <option value="0">Pilihan A</option>
-                        <option value="1">Pilihan B</option>
-                        <option value="2">Pilihan C</option>
-                    </select>
-                </div>
-
-                <div class="flex justify-end gap-3 pt-4 border-t border-slate-100">
-                    <button type="button" onclick="closeEditQuizModal()" class="px-6 py-3 border border-slate-200 bg-transparent hover:bg-slate-50 text-slate-500 font-bold rounded-2xl text-sm transition-colors cursor-pointer">
-                        Batal
-                    </button>
-                    <button type="submit" class="px-8 py-3 bg-blue-600 hover:bg-blue-700 border-0 text-white font-bold rounded-2xl text-sm transition-all shadow-md shadow-blue-500/10 cursor-pointer">
-                        Simpan Soal Ini
-                    </button>
-                </div>
-            </form>
         </div>
     </div>
     @endif
@@ -1786,7 +1841,7 @@
                 
                 currentQuestionIndex = 0;
                 quizScore = 0;
-                selectedOptions = [null, null, null, null, null];
+                selectedOptions = Array(data.quiz ? data.quiz.length : 0).fill(null);
 
                 const resultScreen = document.getElementById('quiz-result-screen');
                 resultScreen.classList.remove('flex');
@@ -1877,7 +1932,7 @@
                                 <!-- FRONT -->
                                 <div class="quiz-card-front">
                                     <div class="flex justify-between items-start mb-4 shrink-0">
-                                        <span class="text-xs font-black tracking-wider text-slate-400 font-mono">PERTANYAAN ${qIdx + 1} DARI 5</span>
+                                        <span class="text-xs font-black tracking-wider text-slate-400 font-mono">PERTANYAAN ${qIdx + 1} DARI ${data.quiz.length}</span>
                                         <span class="text-3xl font-extrabold text-slate-300 font-sans">${qIdx + 1}</span>
                                     </div>
                                     
@@ -1968,13 +2023,21 @@
             }
 
             function updateQuizProgressIndicators() {
+                const data = modulesData[activeModuleIndex];
+                const totalQuiz = data.quiz ? data.quiz.length : 0;
                 const progressText = document.getElementById('quiz-progress-text-main');
                 const progressBar = document.getElementById('quiz-progress-bar-main');
                 
-                const currentQ = Math.min(5, currentQuestionIndex + 1);
-                progressText.innerText = `SOAL ${currentQ} DARI 5`;
+                if (totalQuiz === 0) {
+                    progressText.innerText = `BELUM ADA SOAL`;
+                    progressBar.style.width = `0%`;
+                    return;
+                }
+
+                const currentQ = Math.min(totalQuiz, currentQuestionIndex + 1);
+                progressText.innerText = `SOAL ${currentQ} DARI ${totalQuiz}`;
                 
-                const pct = Math.round((currentQ / 5) * 100);
+                const pct = Math.round((currentQ / totalQuiz) * 100);
                 progressBar.style.width = `${pct}%`;
             }
 
@@ -2056,6 +2119,9 @@
             };
 
             window.slideOutAndNext = function(qIdx) {
+                const data = modulesData[activeModuleIndex];
+                const totalQuiz = data.quiz ? data.quiz.length : 0;
+
                 const cardEl = document.getElementById(`quiz-card-item-${qIdx}`);
                 if (cardEl) {
                     cardEl.style.transform = '';
@@ -2066,7 +2132,7 @@
                 currentQuestionIndex++;
                 
                 setTimeout(() => {
-                    if (currentQuestionIndex < 5) {
+                    if (currentQuestionIndex < totalQuiz) {
                         updateStackTransforms();
                         updateQuizProgressIndicators();
                     } else {
@@ -2076,6 +2142,9 @@
             };
 
             function showQuizResults() {
+                const data = modulesData[activeModuleIndex];
+                const totalQuiz = data.quiz ? data.quiz.length : 0;
+
                 const resultScreen = document.getElementById('quiz-result-screen');
                 const resultBadge = document.getElementById('result-badge-container');
                 const resultTitle = document.getElementById('result-title');
@@ -2084,11 +2153,12 @@
                 const resultStatus = document.getElementById('result-status-badge');
                 const resultContinueBtn = document.getElementById('result-continue-btn');
 
-                resultCorrect.innerText = `${quizScore} / 5`;
+                resultCorrect.innerText = `${quizScore} / ${totalQuiz}`;
 
                 const isAdmin = @json($isAdmin);
+                const passingScore = totalQuiz > 0 ? Math.ceil(totalQuiz * 0.8) : 0;
 
-                if (quizScore >= 4) {
+                if (totalQuiz === 0 || quizScore >= passingScore) {
                     resultBadge.className = "w-20 h-20 rounded-[24px] bg-emerald-50 text-emerald-500 flex items-center justify-center text-4xl shadow-sm mb-6 animate-bounce";
                     resultBadge.innerHTML = "🎉";
                     resultTitle.innerText = "Luar Biasa! Kuis Selesai";
@@ -2104,7 +2174,7 @@
                     resultBadge.className = "w-20 h-20 rounded-[24px] bg-rose-50 text-rose-500 flex items-center justify-center text-4xl shadow-sm mb-6";
                     resultBadge.innerHTML = "❌";
                     resultTitle.innerText = "Belum Lulus Checkpoint";
-                    resultDesc.innerText = "Nilai kamu masih di bawah batas kelulusan (minimal 4 benar). Ulangi kuis untuk menuntaskan checkpoint ini.";
+                    resultDesc.innerText = `Nilai kamu masih di bawah batas kelulusan (minimal ${passingScore} benar). Ulangi kuis untuk menuntaskan checkpoint ini.`;
                     resultStatus.innerText = "GAGAL";
                     resultStatus.className = "text-xs font-bold text-rose-600 bg-rose-50 px-2.5 py-0.5 rounded-lg border border-rose-200";
                     
@@ -2280,11 +2350,29 @@
                 }
             });
 
+            // --- Global Quiz Click Handlers ---
+            window.editModeActive = false;
+            window.handleQuizCardClick = function() {
+                if (window.editModeActive) {
+                    if (typeof openEditQuizModal === 'function') {
+                        openEditQuizModal();
+                    }
+                } else {
+                    launchInteractiveQuiz();
+                }
+            };
+            window.handleCompletedQuizCardClick = function() {
+                if (window.editModeActive) {
+                    if (typeof openEditQuizModal === 'function') {
+                        openEditQuizModal();
+                    }
+                }
+            };
+
             @if($isAdmin)
             // --- Admin Modals Logic ---
-            let editModeActive = false;
             window.toggleEditMode = function() {
-                editModeActive = !editModeActive;
+                window.editModeActive = !window.editModeActive;
                 const toggleBtn = document.getElementById('edit-mode-toggle-btn');
                 const indicator = document.getElementById('edit-mode-indicator');
                 const text = document.getElementById('edit-mode-text');
@@ -2292,8 +2380,9 @@
                 const editModBtn = document.getElementById('admin-edit-module-btn');
                 const editModSep = document.getElementById('admin-edit-module-separator');
                 const editQuizBtn = document.getElementById('admin-edit-quiz-btn');
+                const compCard = document.getElementById('workspace-quiz-completed-card');
 
-                if (editModeActive) {
+                if (window.editModeActive) {
                     if (toggleBtn) {
                         toggleBtn.classList.remove('text-slate-600', 'border-slate-200', 'bg-white');
                         toggleBtn.classList.add('text-emerald-700', 'border-emerald-200', 'bg-emerald-50');
@@ -2312,6 +2401,9 @@
                     if (addModBtn) addModBtn.classList.remove('hidden');
                     if (addModSep) addModSep.classList.remove('hidden');
                     if (editQuizBtn) editQuizBtn.classList.remove('hidden');
+                    if (compCard) {
+                        compCard.classList.add('cursor-pointer', 'hover:border-slate-300', 'transition-all', 'duration-350', 'hover:shadow-md');
+                    }
                 } else {
                     if (toggleBtn) {
                         toggleBtn.classList.remove('text-emerald-700', 'border-emerald-200', 'bg-emerald-50');
@@ -2331,6 +2423,9 @@
                     if (addModBtn) addModBtn.classList.add('hidden');
                     if (addModSep) addModSep.classList.add('hidden');
                     if (editQuizBtn) editQuizBtn.classList.add('hidden');
+                    if (compCard) {
+                        compCard.classList.remove('cursor-pointer', 'hover:border-slate-300', 'transition-all', 'duration-350', 'hover:shadow-md');
+                    }
                 }
             };
 
@@ -2414,9 +2509,40 @@
                 });
             };
 
+            // Advanced Quiz Management variables and functions
+            let currentDisplayMode = 'random'; // 'random' or 'custom'
+            let customSelectedQuestionIds = [];
+            let activeQuizIndexForEdit = null;
+
             window.openEditQuizModal = function() {
-                editingQuizIndex = 0;
-                selectQuizEditTab(0);
+                const data = modulesData[activeModuleIndex];
+                if (!data) return;
+
+                // Load display settings from the active module
+                currentDisplayMode = data.quiz_selection_type || 'random';
+                customSelectedQuestionIds = Array.isArray(data.quiz_custom_questions) ? [...data.quiz_custom_questions] : [];
+
+                // Update Radio buttons
+                const radios = document.getElementsByName('quiz_display_mode');
+                radios.forEach(radio => {
+                    if (radio.value === currentDisplayMode) {
+                        radio.checked = true;
+                    }
+                });
+
+                // Update custom selected counter visibility
+                const counterWrapper = document.getElementById('custom-selection-counter-wrapper');
+                if (currentDisplayMode === 'custom') {
+                    counterWrapper.classList.remove('hidden');
+                } else {
+                    counterWrapper.classList.add('hidden');
+                }
+
+                // Render left-side list of questions
+                renderQuestionsList();
+
+                // Prepare form for a new question initially
+                prepareAddQuiz();
 
                 editQuizModal.classList.remove('hidden');
                 editQuizModal.classList.add('flex');
@@ -2437,39 +2563,181 @@
                 }, 300);
             };
 
-            window.selectQuizEditTab = function(idx) {
-                editingQuizIndex = idx;
-                
-                for(let i=0; i<5; i++) {
-                    const tabBtn = document.getElementById(`quiz-tab-${i}`);
-                    if (i === idx) {
-                        tabBtn.className = "px-4 py-2 text-xs font-bold rounded-xl border border-blue-500 bg-blue-50 text-blue-600 transition-all cursor-pointer";
-                    } else {
-                        tabBtn.className = "px-4 py-2 text-xs font-bold rounded-xl border border-slate-200 bg-white text-slate-600 hover:border-blue-400 transition-all cursor-pointer";
-                    }
+            window.renderQuestionsList = function() {
+                const data = modulesData[activeModuleIndex];
+                const listContainer = document.getElementById('quiz-questions-list');
+                if (!listContainer) return;
+
+                listContainer.innerHTML = '';
+
+                // Update selection counter
+                const counter = document.getElementById('custom-selection-counter');
+                if (counter) {
+                    counter.innerText = `${customSelectedQuestionIds.length} / 5`;
                 }
 
-                const data = modulesData[activeModuleIndex];
-                const quizItem = data.quiz[idx];
-                
-                if (quizItem) {
-                    document.getElementById('edit-quiz-id').value = quizItem.id;
-                    document.getElementById('edit-quiz-question').value = quizItem.question;
-                    document.getElementById('edit-quiz-opt-0').value = quizItem.options[0] || '';
-                    document.getElementById('edit-quiz-opt-1').value = quizItem.options[1] || '';
-                    document.getElementById('edit-quiz-opt-2').value = quizItem.options[2] || '';
-                    document.getElementById('edit-quiz-correct').value = quizItem.correct;
-                } else {
-                    alert("Data kuis tidak ditemukan!");
+                if (!data.quiz || data.quiz.length === 0) {
+                    listContainer.innerHTML = `
+                        <div class="text-center py-6 px-4 bg-white border border-dashed border-slate-200 rounded-2xl">
+                            <svg class="w-8 h-8 text-slate-300 mx-auto mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" />
+                            </svg>
+                            <span class="text-xs font-semibold text-slate-400 block">Belum ada soal kuis di modul ini.</span>
+                        </div>
+                    `;
+                    return;
                 }
+
+                data.quiz.forEach((q, idx) => {
+                    const isSelected = customSelectedQuestionIds.includes(q.id);
+                    const isEditing = activeQuizIndexForEdit === idx;
+
+                    // Build Card item
+                    const item = document.createElement('div');
+                    item.className = `p-3 rounded-2xl border transition-all duration-200 flex items-start gap-2.5 bg-white relative group ${
+                        isEditing ? 'border-blue-500 shadow-sm ring-1 ring-blue-500/20' : 'border-slate-100 hover:border-slate-200 shadow-[0_2px_8px_-3px_rgba(0,0,0,0.03)]'
+                    }`;
+
+                    let checkboxHtml = '';
+                    if (currentDisplayMode === 'custom') {
+                        checkboxHtml = `
+                            <input type="checkbox" onchange="toggleQuestionSelection(${q.id}, this)" ${isSelected ? 'checked' : ''} class="mt-1 w-4 h-4 text-blue-600 rounded border-slate-300 focus:ring-blue-500 cursor-pointer">
+                        `;
+                    }
+
+                    item.innerHTML = `
+                        ${checkboxHtml}
+                        <div class="flex-grow min-w-0 cursor-pointer" onclick="selectQuizToEdit(${idx})">
+                            <div class="flex items-center gap-1.5 mb-1">
+                                <span class="text-[10px] font-black text-slate-400 font-mono tracking-wider uppercase">Soal #${idx + 1}</span>
+                                ${isSelected && currentDisplayMode === 'custom' ? '<span class="px-1.5 py-0.5 rounded-md bg-blue-50 text-[9px] font-extrabold text-blue-600 border border-blue-100">User Display</span>' : ''}
+                            </div>
+                            <h5 class="text-xs font-bold text-slate-700 truncate pr-6">${q.question || '(Tanpa pertanyaan)'}</h5>
+                        </div>
+                        <button type="button" onclick="deleteQuizQuestion(${q.id}, event)" class="absolute right-2.5 top-2.5 w-6 h-6 rounded-lg bg-red-50 text-red-500 opacity-0 group-hover:opacity-100 focus:opacity-100 hover:bg-red-500 hover:text-white flex items-center justify-center transition-all border-0 cursor-pointer" title="Hapus Soal">
+                            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                            </svg>
+                        </button>
+                    `;
+
+                    listContainer.appendChild(item);
+                });
             };
 
-            window.submitEditQuiz = function(e) {
-                e.preventDefault();
-                const quizId = document.getElementById('edit-quiz-id').value;
-                const csrfToken = document.querySelector('input[name="_token"]').value;
+            window.toggleQuestionSelection = function(id, checkbox) {
+                if (checkbox.checked) {
+                    if (customSelectedQuestionIds.length >= 5) {
+                        checkbox.checked = false;
+                        alert('Anda hanya bisa memilih maksimal 5 soal untuk ditampilkan ke user!');
+                        return;
+                    }
+                    if (!customSelectedQuestionIds.includes(id)) {
+                        customSelectedQuestionIds.push(id);
+                    }
+                } else {
+                    customSelectedQuestionIds = customSelectedQuestionIds.filter(x => x !== id);
+                }
 
-                const data = {
+                renderQuestionsList();
+                updateQuizSettingsOnBackend();
+            };
+
+            window.handleDisplayModeChange = function(mode) {
+                currentDisplayMode = mode;
+                const counterWrapper = document.getElementById('custom-selection-counter-wrapper');
+                if (mode === 'custom') {
+                    counterWrapper.classList.remove('hidden');
+                } else {
+                    counterWrapper.classList.add('hidden');
+                }
+
+                renderQuestionsList();
+                updateQuizSettingsOnBackend();
+            };
+
+            window.updateQuizSettingsOnBackend = function() {
+                const data = modulesData[activeModuleIndex];
+                if (!data) return;
+
+                const csrfToken = document.querySelector('input[name="_token"]').value;
+                const payload = {
+                    quiz_selection_type: currentDisplayMode,
+                    quiz_custom_questions: customSelectedQuestionIds
+                };
+
+                fetch(`/admin/module/${data.id}/quiz-settings/update`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken,
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                })
+                .then(res => res.json())
+                .then(resData => {
+                    if (resData.success) {
+                        // Update local cache
+                        data.quiz_selection_type = currentDisplayMode;
+                        data.quiz_custom_questions = [...customSelectedQuestionIds];
+                    } else {
+                        alert('Gagal memperbarui pengaturan kuis: ' + JSON.stringify(resData.errors || resData.message));
+                    }
+                })
+                .catch(err => {
+                    console.error(err);
+                });
+            };
+
+            window.prepareAddQuiz = function() {
+                activeQuizIndexForEdit = null;
+                
+                document.getElementById('edit-quiz-id').value = '';
+                document.getElementById('edit-quiz-question').value = '';
+                document.getElementById('edit-quiz-opt-0').value = '';
+                document.getElementById('edit-quiz-opt-1').value = '';
+                document.getElementById('edit-quiz-opt-2').value = '';
+                document.getElementById('edit-quiz-correct').value = '0';
+
+                document.getElementById('form-quiz-title').innerText = 'Tambah Soal Baru';
+                document.getElementById('form-quiz-reset-btn').classList.add('hidden');
+                document.getElementById('form-submit-btn').innerText = 'Tambah Soal';
+
+                // Re-render to clear highlights in left pane
+                renderQuestionsList();
+            };
+
+            window.selectQuizToEdit = function(idx) {
+                const data = modulesData[activeModuleIndex];
+                if (!data || !data.quiz || !data.quiz[idx]) return;
+
+                activeQuizIndexForEdit = idx;
+                const q = data.quiz[idx];
+
+                document.getElementById('edit-quiz-id').value = q.id;
+                document.getElementById('edit-quiz-question').value = q.question;
+                document.getElementById('edit-quiz-opt-0').value = q.options[0] || '';
+                document.getElementById('edit-quiz-opt-1').value = q.options[1] || '';
+                document.getElementById('edit-quiz-opt-2').value = q.options[2] || '';
+                document.getElementById('edit-quiz-correct').value = q.correct;
+
+                document.getElementById('form-quiz-title').innerText = `Edit Soal #${idx + 1}`;
+                document.getElementById('form-quiz-reset-btn').classList.remove('hidden');
+                document.getElementById('form-submit-btn').innerText = 'Simpan Perubahan';
+
+                // Re-render to highlight active question in left pane
+                renderQuestionsList();
+            };
+
+            window.submitFormQuiz = function(e) {
+                e.preventDefault();
+                const csrfToken = document.querySelector('input[name="_token"]').value;
+                const data = modulesData[activeModuleIndex];
+                if (!data) return;
+
+                const quizId = document.getElementById('edit-quiz-id').value;
+                const payload = {
                     question: document.getElementById('edit-quiz-question').value,
                     options: [
                         document.getElementById('edit-quiz-opt-0').value,
@@ -2479,33 +2747,86 @@
                     correct: parseInt(document.getElementById('edit-quiz-correct').value, 10)
                 };
 
-                fetch(`/admin/quiz/${quizId}/update`, {
+                const url = quizId ? `/admin/quiz/${quizId}/update` : `/admin/module/${data.id}/quiz/store`;
+                
+                fetch(url, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                         'X-CSRF-TOKEN': csrfToken,
                         'Accept': 'application/json'
                     },
-                    body: JSON.stringify(data)
+                    body: JSON.stringify(payload)
                 })
                 .then(res => res.json())
                 .then(resData => {
                     if (resData.success) {
                         alert(resData.message);
                         
-                        const localQuiz = modulesData[activeModuleIndex].quiz[editingQuizIndex];
-                        localQuiz.question = data.question;
-                        localQuiz.options = data.options;
-                        localQuiz.correct = data.correct;
-                        
-                        if (editingQuizIndex < 4) {
-                            selectQuizEditTab(editingQuizIndex + 1);
+                        if (quizId) {
+                            // Update local cached array
+                            const qIdx = data.quiz.findIndex(x => x.id == quizId);
+                            if (qIdx !== -1) {
+                                data.quiz[qIdx] = {
+                                    id: parseInt(quizId, 10),
+                                    question: payload.question,
+                                    options: payload.options,
+                                    correct: payload.correct
+                                };
+                            }
                         } else {
-                            closeEditQuizModal();
-                            window.location.reload();
+                            // Store new quiz into local cached array
+                            data.quiz.push(resData.quiz);
                         }
+
+                        // Re-render list & clear form
+                        renderQuestionsList();
+                        prepareAddQuiz();
                     } else {
                         alert('Gagal menyimpan kuis: ' + JSON.stringify(resData.errors || resData.message));
+                    }
+                })
+                .catch(err => {
+                    console.error(err);
+                    alert('Terjadi kesalahan jaringan.');
+                });
+            };
+
+            window.deleteQuizQuestion = function(quizId, event) {
+                if (event) event.stopPropagation();
+                if (!confirm('Apakah Anda yakin ingin menghapus soal kuis ini?')) return;
+
+                const csrfToken = document.querySelector('input[name="_token"]').value;
+                const data = modulesData[activeModuleIndex];
+                if (!data) return;
+
+                fetch(`/admin/quiz/${quizId}/delete`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken,
+                        'Accept': 'application/json'
+                    }
+                })
+                .then(res => res.json())
+                .then(resData => {
+                    if (resData.success) {
+                        alert(resData.message);
+
+                        // Remove from local cache list
+                        data.quiz = data.quiz.filter(x => x.id !== quizId);
+
+                        // Remove from custom selection list if present
+                        customSelectedQuestionIds = customSelectedQuestionIds.filter(x => x !== quizId);
+                        
+                        // Update settings on backend to match
+                        updateQuizSettingsOnBackend();
+
+                        // Refresh list and prepare form
+                        renderQuestionsList();
+                        prepareAddQuiz();
+                    } else {
+                        alert('Gagal menghapus kuis: ' + JSON.stringify(resData.message));
                     }
                 })
                 .catch(err => {

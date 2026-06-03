@@ -374,6 +374,107 @@ class ExplorePathController extends Controller
         ]);
     }
 
+    public function storeQuiz(Request $request, $module_id)
+    {
+        if (!auth()->check() || !auth()->user()->isAdmin()) {
+            return response()->json(['success' => false, 'message' => 'Unauthorized.'], 403);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'question' => 'required|string',
+            'options' => 'required|array|min:2',
+            'correct' => 'required|integer|min:0',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['success' => false, 'errors' => $validator->errors()], 422);
+        }
+
+        $module = Module::findOrFail($module_id);
+        $quiz = $module->quizzes()->create([
+            'question' => $request->question,
+            'options' => $request->options,
+            'correct' => $request->correct,
+        ]);
+
+        // Touch parent module and path
+        $module->touch();
+        $module->path->touch();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Soal kuis baru berhasil ditambahkan!',
+            'quiz' => [
+                'id' => $quiz->id,
+                'question' => $quiz->question,
+                'options' => $quiz->options,
+                'correct' => $quiz->correct,
+            ]
+        ]);
+    }
+
+    public function deleteQuiz(Request $request, $id)
+    {
+        if (!auth()->check() || !auth()->user()->isAdmin()) {
+            return response()->json(['success' => false, 'message' => 'Unauthorized.'], 403);
+        }
+
+        $quiz = Quiz::findOrFail($id);
+        $module = $quiz->module;
+        
+        // Remove from custom list if present
+        if ($module->quiz_custom_questions && is_array($module->quiz_custom_questions)) {
+            $custom = $module->quiz_custom_questions;
+            if (($key = array_search($quiz->id, $custom)) !== false) {
+                unset($custom[$key]);
+                $module->quiz_custom_questions = array_values($custom);
+                $module->save();
+            }
+        }
+
+        $quiz->delete();
+
+        // Touch parent module and path
+        $module->touch();
+        $module->path->touch();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Soal kuis berhasil dihapus!'
+        ]);
+    }
+
+    public function updateQuizSettings(Request $request, $id)
+    {
+        if (!auth()->check() || !auth()->user()->isAdmin()) {
+            return response()->json(['success' => false, 'message' => 'Unauthorized.'], 403);
+        }
+
+        $module = Module::findOrFail($id);
+        
+        $validator = Validator::make($request->all(), [
+            'quiz_selection_type' => 'required|in:random,custom',
+            'quiz_custom_questions' => 'nullable|array',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['success' => false, 'errors' => $validator->errors()], 422);
+        }
+
+        $module->quiz_selection_type = $request->quiz_selection_type;
+        $module->quiz_custom_questions = $request->quiz_custom_questions ?? [];
+        $module->save();
+
+        $module->touch();
+        $module->path->touch();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Pengaturan kuis modul berhasil diperbarui!'
+        ]);
+    }
+
+
     public function checkUpdates(Request $request, $slug)
     {
         $path = Path::where('slug', $slug)->first();
