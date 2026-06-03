@@ -49,7 +49,6 @@
     <title>{{ $path->title }} - Path Deck</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     
-    <!-- Quill Rich Text Editor CDN -->
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
     
@@ -440,35 +439,27 @@
 </head>
 <body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col overflow-x-hidden relative">
 
-    <!-- CSRF Token Input -->
     @csrf
 
-    <!-- Top Navigation Bar -->
     @include('layouts.navbar')
 
-    <!-- Main Outer Wrapper containing layout details -->
     <div class="relative flex-grow min-h-screen bg-gradient-to-b from-white via-blue-50/15 to-white py-16 px-4 overflow-hidden">
         
-        <!-- Faded tech grid background -->
         <div class="absolute inset-0 bg-[linear-gradient(to_right,#3b82f605_1px,transparent_1px),linear-gradient(to_bottom,#3b82f605_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_80%,transparent_100%)] pointer-events-none z-0"></div>
 
-        <!-- Ambient Light Floating Blobs -->
         <div class="absolute top-[8%] left-[-8%] w-[450px] h-[450px] rounded-full bg-blue-300/10 blur-3xl pointer-events-none animate-float-blob" style="animation-duration: 11s;"></div>
         <div class="absolute bottom-[8%] right-[-10%] w-[480px] h-[480px] rounded-full bg-indigo-300/10 blur-3xl pointer-events-none animate-float-blob" style="animation-delay: -3s; animation-duration: 13s;"></div>
 
-        <!-- Particle Floating Items Container -->
         <div id="particle-container" class="absolute inset-0 overflow-hidden pointer-events-none z-0"></div>
 
         <main class="max-w-7xl mx-auto w-full relative z-10">
             
-            <!-- Back link -->
             <div class="mb-6 animate-fade-in-up">
                 <a href="{{ route('explore.path') }}" class="inline-flex items-center text-xs font-bold text-slate-500 hover:text-blue-600 transition-colors gap-1.5">
                     &larr; Kembali ke Explore
                 </a>
             </div>
 
-            <!-- Success Alert Notification -->
             @if(session('success'))
                 <div class="mb-6 p-4 rounded-xl bg-blue-50 border border-blue-200 text-blue-800 text-sm font-semibold flex items-center gap-3 animate-fade-in-up">
                     <svg class="w-5 h-5 text-blue-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
@@ -478,16 +469,12 @@
                 </div>
             @endif
 
-            <!-- Roadmap View (Timeline Outline) -->
             <div id="roadmap-view" class="transition-all duration-350">
-                <!-- Career Path Header Card -->
                 <section class="mb-14 animate-fade-in-up" style="animation-delay: 50ms;">
                     <div class="bg-gradient-to-br {{ $gradient }} rounded-3xl p-8 sm:p-10 shadow-[0_12px_40px_-6px_rgba(37,99,235,0.25)] flex flex-col lg:flex-row items-center gap-10 text-white relative overflow-hidden border-none">
-                        <!-- Grid overlay pattern -->
                         <div class="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:3rem_3rem] pointer-events-none"></div>
                         <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-blue-400/20 via-transparent to-transparent opacity-70 pointer-events-none"></div>
 
-                        <!-- Left: Text Information -->
                         <div class="flex-grow max-w-2xl order-2 lg:order-1 relative z-10">
                             <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-white/15 border border-white/20 text-white mb-4 tracking-wide uppercase">
                                 <svg class="w-3.5 h-3.5 text-blue-200 animate-pulse" fill="currentColor" viewBox="0 0 20 20">
@@ -502,7 +489,6 @@
                                 {{ $path->description }}
                             </p>
                             
-                            <!-- Information Trigger Button -->
                             <button id="open-info-btn" class="inline-flex items-center gap-2 px-4 py-2 border border-white/20 hover:border-white/40 rounded-xl text-xs font-bold text-white bg-white/10 hover:bg-white/20 transition-all duration-300 shadow-sm cursor-pointer hover:scale-[1.03]">
                                 Informasi Umum
                                 <svg class="w-4 h-4 text-blue-200" fill="currentColor" viewBox="0 0 20 20">
@@ -511,7 +497,6 @@
                             </button>
                         </div>
 
-                        <!-- Right: Mockup Image -->
                         <div class="w-full lg:w-[380px] h-60 sm:h-72 rounded-2xl overflow-hidden shadow-2xl border-4 border-white/10 group relative cursor-pointer order-1 lg:order-2 flex-shrink-0 z-10">
                             <img src="{{ $path->image }}" alt="{{ $path->title }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
                             <div class="absolute inset-0 bg-gradient-to-t from-indigo-950/40 to-transparent"></div>
@@ -519,7 +504,6 @@
                     </div>
                 </section>
 
-                <!-- Curriculum Section Header & Progress Bar -->
                 <section class="mb-14 animate-fade-in-up" style="animation-delay: 100ms;">
                     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-200/60 pb-6 mb-10">
                         <div class="flex items-center gap-4">
@@ -529,7 +513,6 @@
                             </h2>
                             
                             @if(!$isAdmin)
-                            <!-- Reset Progress Form -->
                             <form action="{{ $resetRoute }}" method="POST" class="inline">
                                 @csrf
                                 <button type="submit" class="inline-flex items-center gap-1.5 px-3 py-1 border border-red-200 hover:border-red-400 rounded-xl text-xs font-bold text-red-600 bg-red-50/50 hover:bg-red-50 transition-all duration-300 shadow-sm cursor-pointer hover:scale-[1.03]" title="Reset Detail Progress">
@@ -546,7 +529,6 @@
                             $totalModules = count($modules) ?: 7;
                             $percentVal = min(100, round(($currentStep / $totalModules) * 100));
                         @endphp
-                        <!-- Progress display -->
                         <div class="flex items-center gap-3 w-full sm:w-auto">
                             <span class="text-xs font-bold text-slate-400 whitespace-nowrap">Your Progress</span>
                             <div class="w-full sm:w-44 bg-slate-200/70 rounded-full h-2.5 overflow-hidden">
@@ -556,17 +538,14 @@
                         </div>
                     </div>
 
-                    <!-- Vertical Timeline Section -->
                     <div class="relative max-w-5xl mx-auto px-2 py-4">
                         
-                        <!-- Central vertical line -->
                         <div class="absolute timeline-line top-0 bottom-0 left-1/2 w-1.5 bg-slate-200 -translate-x-1/2 z-0 rounded-full overflow-hidden">
                             <div class="absolute top-0 w-full bg-gradient-to-b from-blue-400 via-blue-600 to-indigo-600 rounded-full shadow-[0_0_12px_rgba(59,130,246,0.8)]" style="height: {{ $percentVal }}%; transition: height 1.2s cubic-bezier(0.25, 1, 0.5, 1);">
                                 <div class="absolute bottom-0 left-0 right-0 h-4 bg-white animate-pulse rounded-full shadow-[0_0_15px_#fff]"></div>
                             </div>
                         </div>
 
-                        <!-- Curriculum Modules Grid Loop -->
                         <div class="space-y-12 relative z-10">
                             @foreach($modules as $index => $module)
                                 @php
@@ -609,7 +588,6 @@
 
                                 <div class="flex flex-col md:flex-row items-center justify-between w-full relative reveal-on-scroll">
                                     
-                                    <!-- Left Card -->
                                     <div class="w-full md:w-[44%] {{ $module->side === 'left' ? 'order-1' : 'order-3 opacity-0 pointer-events-none md:block hidden' }}">
                                         @if($module->side === 'left')
                                             @if($status !== 'Locked')
@@ -674,7 +652,6 @@
                                         @endif
                                     </div>
 
-                                    <!-- Timeline Node Circle -->
                                     <div class="timeline-node absolute left-1/2 -translate-x-1/2 w-10 h-10 rounded-full flex items-center justify-center z-10 {{ $nodeColor }} order-2 my-4 md:my-0">
                                         @if($nodeIcon === 'locked')
                                             <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
@@ -685,7 +662,6 @@
                                         @endif
                                     </div>
 
-                                    <!-- Right Card -->
                                     <div class="w-full md:w-[44%] {{ $module->side === 'right' ? 'order-3' : 'order-1 opacity-0 pointer-events-none md:block hidden' }}">
                                         @if($module->side === 'right')
                                             @if($status !== 'Locked')
@@ -761,10 +737,8 @@
         </main>
     </div>
 
-    <!-- Learning View Workspace (Redesigned Split Pane Layout) -->
     <div id="learning-view" class="hidden opacity-0 fixed inset-0 bg-white z-[60] flex flex-col overflow-hidden font-sans transition-all duration-350">
         
-        <!-- Navbar -->
         <header class="h-14 sm:h-16 border-b border-slate-200 bg-white px-3 sm:px-8 flex justify-between items-center shrink-0">
             <div class="flex items-center">
                 <a href="{{ route('dashboard') }}" class="flex items-center gap-1 sm:gap-2 text-[#0050d2]">
@@ -800,16 +774,12 @@
             </div>
         </header>
 
-        <!-- Sidebar Backdrop for Mobile -->
         <div id="sidebar-backdrop" onclick="toggleSidebar()" class="hidden fixed inset-0 bg-slate-900/40 backdrop-blur-xs z-40 md:hidden transition-opacity duration-300 opacity-0"></div>
 
-        <!-- Main split container -->
         <div class="grow flex overflow-hidden">
             
-            <!-- Left Pane -->
             <div class="flex-grow min-w-0 flex flex-col overflow-hidden bg-white">
                 
-                <!-- Sub-header Toolbar -->
                 <div class="h-20 border-b border-slate-200 px-4 sm:px-12 flex justify-between items-center bg-white shrink-0">
                     <div>
                         <span class="text-[10px] font-extrabold text-[#0050d2] uppercase tracking-wider block">CURRENT LESSON</span>
@@ -828,13 +798,13 @@
                         </button>
                         <span class="h-6 w-px bg-slate-200"></span>
 
-                        <!-- Edit Module Action -->
+                        <!-- edit module admin -->
                         <button id="admin-edit-module-btn" onclick="openEditModuleModal()" class="hidden flex items-center gap-1.5 text-xs font-bold text-slate-600 hover:text-blue-600 hover:bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-1.5 bg-white transition-all duration-200 cursor-pointer shadow-sm active:scale-95">
                             🔧 <span class="hidden sm:inline">Edit Modul</span>
                         </button>
                         <span id="admin-edit-module-separator" class="hidden h-6 w-px bg-slate-200"></span>
 
-                        <!-- Add Module Action -->
+                        <!-- menambahkan module admin -->
                         <button id="admin-add-module-btn" onclick="openAddModuleModal()" class="hidden flex items-center gap-1.5 text-xs font-bold text-slate-600 hover:text-emerald-600 hover:bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-1.5 bg-white transition-all duration-200 cursor-pointer shadow-sm active:scale-95">
                             ➕ <span class="hidden sm:inline">Tambah Modul</span>
                         </button>
@@ -849,7 +819,7 @@
                         </button>
                         <span class="h-6 w-px bg-slate-200"></span>
 
-                        <!-- Sidebar toggle button for both mobile and desktop -->
+                        <!-- Sidebar toggle button untuk mobile and desktop -->
                         <button id="sidebar-toggle-btn" onclick="toggleSidebar()" class="flex items-center justify-center w-9 h-9 rounded-xl border border-slate-200 bg-slate-50 text-slate-600 hover:text-[#0050d2] transition-all cursor-pointer">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
@@ -866,21 +836,17 @@
                     </div>
                 </div>
 
-                <!-- Content Area -->
                 <div id="workspace-scroll-container" class="grow overflow-y-auto px-12 py-10 bg-white custom-scrollbar">
                     <div class="max-w-4xl mx-auto">
                         
-                        <!-- Content Box -->
                         <div id="workspace-content-container" class="mb-10">
                             <h1 id="workspace-content-title" class="text-4xl font-extrabold text-slate-950 leading-tight mb-6">
                                 Apa itu {{ $path->title }}?
                             </h1>
                             <div id="workspace-content-body" class="ql-editor text-[15px] leading-relaxed text-slate-600 space-y-6">
-                                <!-- Injected dynamically -->
                             </div>
                         </div>
 
-                        <!-- Checkpoint Quiz Card -->
                         <div id="workspace-quiz-card" class="bg-white border border-slate-200 rounded-3xl p-8 shadow-[0_4px_24px_-4px_rgba(0,0,0,0.03)] relative overflow-hidden transition-all duration-350 hover:shadow-md cursor-pointer" onclick="handleQuizCardClick()">
                             <div class="absolute left-0 top-0 bottom-0 w-1.5 bg-[#0050d2]"></div>
                             
@@ -910,7 +876,6 @@
                             </div>
                         </div>
 
-                        <!-- Checkpoint Completed Card -->
                         <div id="workspace-quiz-completed-card" class="hidden bg-white border border-slate-200 rounded-3xl p-8 shadow-sm relative overflow-hidden" onclick="handleCompletedQuizCardClick()">
                             <div class="absolute left-0 top-0 bottom-0 w-1.5 bg-emerald-500"></div>
                             <div class="flex items-start gap-4">
@@ -928,7 +893,6 @@
                     </div>
                 </div>
 
-                <!-- Footer panel inside Pane -->
                 <div class="h-16 border-t border-slate-200 px-12 flex justify-between items-center bg-slate-50 shrink-0">
                     <button onclick="closeLearningView()" class="text-xs font-bold text-slate-500 hover:text-slate-800 flex items-center gap-1 cursor-pointer border-0 bg-transparent">
                         &larr; Back to timeline
@@ -941,7 +905,6 @@
 
             </div>
             
-            <!-- Right Pane: Sidebar -->
             <aside id="learning-sidebar" class="fixed md:relative inset-y-0 md:inset-y-auto right-0 md:right-auto z-50 md:z-auto w-[280px] md:w-[320px] transition-all duration-300 transform translate-x-full md:translate-x-0 border-l border-slate-200 bg-[#F2F7FF] flex flex-col shrink-0 overflow-y-auto shadow-2xl md:shadow-none">
                 <div class="bg-[#0050d2] p-6 text-white shrink-0">
                     <span class="text-[9px] font-extrabold tracking-widest text-blue-200/80 uppercase block mb-1">LEARNING PATH</span>
@@ -957,7 +920,6 @@
                 <div class="p-6">
                     <h3 class="text-base font-extrabold text-slate-800 mb-4 tracking-tight">Library</h3>
                     <div id="sidebar-library-list" class="divide-y divide-slate-200/60 border-t border-b border-slate-200/60">
-                        <!-- Injected dynamically -->
                     </div>
                 </div>
             </aside>
@@ -965,7 +927,6 @@
         </div>
     </div>
 
-    <!-- Interactive Quiz Modal -->
     <div id="quiz-modal" class="fixed inset-0 z-[110] hidden flex-col bg-[#F3F7FF] transition-all duration-300 opacity-0 transform scale-95 overflow-y-auto">
         <div class="absolute inset-0 z-0 overflow-hidden pointer-events-none">
             <div class="absolute top-[10%] left-[-10%] w-[350px] h-[350px] rounded-full bg-blue-300/25 blur-3xl animate-float-blob" style="animation-duration: 10s;"></div>
@@ -998,11 +959,9 @@
 
             <div class="grow flex items-center justify-center p-2 relative min-h-[460px] mb-6">
                 <div id="quiz-card-stack" class="relative w-full max-w-[460px] h-[440px] mx-auto select-none" style="perspective: 1200px;">
-                    <!-- Loaded dynamically -->
                 </div>
             </div>
 
-            <!-- Result Overlay Screen -->
             <div id="quiz-result-screen" class="hidden absolute inset-0 bg-[#F3F7FF] z-50 flex flex-col items-center justify-center text-center p-6 animate-fade-in-up">
                 <div class="bg-white rounded-[32px] p-8 sm:p-10 max-w-md w-full shadow-2xl border border-slate-100/50 flex flex-col items-center">
                     <div id="result-badge-container" class="w-20 h-20 rounded-[24px] bg-emerald-50 text-emerald-500 flex items-center justify-center text-4xl shadow-sm mb-6 animate-bounce">
@@ -1040,7 +999,6 @@
         </div>
     </div>
 
-    <!-- Quiz Exit Confirmation Modal -->
     <div id="quiz-exit-confirm-modal" class="fixed inset-0 z-[150] hidden items-center justify-center p-4 sm:p-6 bg-slate-950/60 backdrop-blur-sm opacity-0 transition-opacity duration-300">
         <div class="bg-white rounded-[28px] max-w-md w-full p-8 shadow-[0_24px_60px_-15px_rgba(0,0,0,0.3)] border border-slate-100 flex flex-col items-center text-center transform scale-95 transition-all duration-300">
             <div class="w-16 h-16 rounded-[20px] bg-amber-50 text-amber-500 border border-amber-100 flex items-center justify-center text-3xl mb-5 shadow-sm animate-pulse">
@@ -1059,7 +1017,6 @@
         </div>
     </div>
 
-    <!-- Mini Card Modal (Informasi Umum) -->
     <div id="info-modal" class="fixed inset-0 z-[100] hidden items-center justify-center p-4 sm:p-6 bg-slate-950/60 backdrop-blur-sm opacity-0">
         <div id="modal-container" class="bg-white rounded-[28px] max-w-4xl w-full overflow-hidden flex flex-col md:flex-row shadow-[0_24px_60px_-15px_rgba(0,0,0,0.3)] relative transform scale-90 translate-y-8 transition-all duration-500 max-h-[90vh] md:max-h-none overflow-y-auto md:overflow-y-visible">
             
@@ -1069,7 +1026,6 @@
                 </svg>
             </button>
 
-            <!-- Left Section -->
             <div class="w-full md:w-[35%] bg-[#f0f4ff] p-6 sm:p-8 flex flex-col justify-between relative overflow-hidden shrink-0">
                 <div class="absolute inset-0 bg-[linear-gradient(to_right,#3b82f605_1px,transparent_1px),linear-gradient(to_bottom,#3b82f605_1px,transparent_1px)] bg-[size:1.5rem_1.5rem] opacity-70"></div>
                 
@@ -1098,7 +1054,6 @@
                 </div>
             </div>
 
-            <!-- Right Section -->
             <div class="w-full md:w-[65%] p-6 sm:p-8 flex flex-col justify-between shrink-0 overflow-y-auto max-h-[60vh] md:max-h-none">
                 <div>
                     <span class="text-xs font-black tracking-wider text-slate-400 uppercase block mb-3 font-mono">
@@ -1109,10 +1064,8 @@
                         {{ $path->career_description }}
                     </p>
 
-                    <!-- Columns -->
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
                         
-                        <!-- Salary Range -->
                         <div class="bg-blue-50/50 border border-blue-100 rounded-2xl p-4 flex flex-col justify-between">
                             <span class="text-xs font-bold text-slate-400 block mb-1">
                                 Estimasi Gaji
@@ -1127,7 +1080,6 @@
                             </div>
                         </div>
 
-                        <!-- Skill Box -->
                         <div class="border border-slate-200/80 rounded-2xl p-4">
                             <span class="text-xs font-bold text-slate-400 block mb-3">
                                 Skill yang harus kamu kuasai
@@ -1143,7 +1095,6 @@
 
                     </div>
 
-                    <!-- Checklist -->
                     <div class="bg-blue-50/20 border border-blue-100/30 rounded-2xl p-5">
                         <h4 class="text-xs sm:text-sm font-black text-slate-800 tracking-tight title-font mb-4">
                             Cocok buat kamu yang...
@@ -1166,7 +1117,6 @@
     </div>
 
     @if($isAdmin)
-    <!-- Edit Module Modal -->
     <div id="edit-module-modal" class="fixed inset-0 z-[120] hidden items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm transition-opacity duration-300 opacity-0">
         <div class="bg-white rounded-3xl w-full max-w-3xl overflow-hidden shadow-2xl border border-slate-100 transition-transform duration-300 scale-95 flex flex-col max-h-[90vh]">
             <div class="px-8 py-5 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
@@ -1221,7 +1171,6 @@
         </div>
     </div>
 
-    <!-- Add Module Modal -->
     <div id="add-module-modal" class="fixed inset-0 z-[120] hidden items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm transition-opacity duration-300 opacity-0">
         <div class="bg-white rounded-3xl w-full max-w-3xl overflow-hidden shadow-2xl border border-slate-100 transition-transform duration-300 scale-95 flex flex-col max-h-[90vh]">
             <div class="px-8 py-5 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
@@ -1271,10 +1220,9 @@
         </div>
     </div>
 
-    <!-- Edit Quiz Modal (Advanced Two-Column Layout) -->
+    <!-- Edit Quiz Modal admin -->
     <div id="edit-quiz-modal" class="fixed inset-0 z-[120] hidden items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm transition-opacity duration-300 opacity-0">
         <div class="bg-white rounded-3xl w-full max-w-5xl overflow-hidden shadow-2xl border border-slate-100 transition-transform duration-300 scale-95 flex flex-col max-h-[90vh]">
-            <!-- Header -->
             <div class="px-8 py-5 border-b border-slate-100 flex items-center justify-between bg-slate-50/50 shrink-0">
                 <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2">
                     <span class="w-2.5 h-6 bg-blue-600 rounded-full inline-block"></span>
@@ -1285,12 +1233,10 @@
                 </button>
             </div>
 
-            <!-- Two-Column Content -->
             <div class="flex-grow overflow-hidden flex flex-col md:flex-row">
                 
-                <!-- Left Pane: Settings & Questions List -->
+                <!-- setting edit quiz -->
                 <div class="w-full md:w-[380px] border-r border-slate-100 flex flex-col overflow-hidden bg-slate-50/50">
-                    <!-- Quiz Display Settings -->
                     <div class="p-5 border-b border-slate-100 bg-white space-y-4">
                         <h4 class="text-xs font-extrabold text-slate-400 uppercase tracking-wider">Pengaturan Tampilan User</h4>
                         
@@ -1312,14 +1258,13 @@
                             </label>
                         </div>
 
-                        <!-- Selection progress -->
+                        <!-- selection progress -->
                         <div id="custom-selection-counter-wrapper" class="hidden bg-blue-50/50 border border-blue-100 rounded-xl p-3 flex items-center justify-between">
                             <span class="text-xs font-bold text-slate-600">Dipilih untuk User:</span>
                             <span id="custom-selection-counter" class="text-xs font-extrabold text-blue-600 font-mono">0 / 5</span>
                         </div>
                     </div>
 
-                    <!-- Questions List Container -->
                     <div class="p-5 flex-grow overflow-y-auto flex flex-col gap-3">
                         <div class="flex items-center justify-between">
                             <h4 class="text-xs font-extrabold text-slate-400 uppercase tracking-wider">Daftar Semua Soal</h4>
@@ -1328,9 +1273,7 @@
                             </button>
                         </div>
 
-                        <!-- Questions List -->
                         <div id="quiz-questions-list" class="space-y-2 mt-2">
-                            <!-- Populated by JavaScript -->
                         </div>
                     </div>
                 </div>
@@ -1395,10 +1338,8 @@
     </div>
     @endif
 
-    <!-- Interactive JS Scripts -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Initialize Quill Editor if container exists
             if (document.getElementById('editor-container')) {
                 window.quill = new Quill('#editor-container', {
                     theme: 'snow',

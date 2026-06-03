@@ -76,21 +76,16 @@
 </head>
 <body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col overflow-x-hidden relative">
 
-    <!-- Top Navigation Bar -->
     @include('layouts.navbar')
 
-    <!-- Ambient Glowing Background Decor (Matching other pages, clean & out of the way) -->
     <div class="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-        <!-- Faded Blue Grid Overlay -->
         <div class="absolute inset-0 bg-[linear-gradient(to_right,#3b82f610_1px,transparent_1px),linear-gradient(to_bottom,#3b82f610_1px,transparent_1px)] bg-[size:5rem_5rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_90%,transparent_100%)] opacity-100"></div>
         
-        <!-- Glowing Blobs -->
         <div class="absolute top-[8%] left-[-8%] w-[450px] h-[450px] rounded-full bg-blue-400/20 blur-3xl animate-float-blob" style="animation-duration: 9s;"></div>
         <div class="absolute top-[35%] right-[-12%] w-[500px] h-[500px] rounded-full bg-indigo-400/15 blur-3xl animate-float-blob" style="animation-delay: -3s; animation-duration: 12s;"></div>
         <div class="absolute bottom-[8%] left-[4%] w-[400px] h-[400px] rounded-full bg-cyan-300/18 blur-3xl animate-float-blob" style="animation-delay: -6s; animation-duration: 10s;"></div>
     </div>
 
-    <!-- Main Content Area -->
     <main class="grow relative z-10 max-w-5xl mx-auto w-full px-4 sm:px-6 py-8">
 
         @if(session('success'))
@@ -111,27 +106,25 @@
             </div>
         @endif
 
-        <!-- Profile Card & Facebook-Style Header Layout -->
+        <!-- Profile Card -->
         <section class="mb-10 animate-fade-in-up" style="animation-delay: 50ms;">
             <div class="bg-white rounded-3xl border border-slate-200/60 overflow-hidden shadow-[0_4px_20px_-4px_rgba(0,0,0,0.03)]">
                 
-                <!-- 1. Cover Photo Area -->
+                <!-- 1. foto Cover -->
                 <div class="h-48 sm:h-64 md:h-72 w-full relative overflow-hidden bg-slate-900 group">
                     @if($user->cover_photo)
                         <img id="cover-photo-img" src="{{ $user->cover_photo }}" alt="Cover Background" class="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-102">
                     @else
-                        <!-- Default high-quality abstract cover background -->
                         <img id="cover-photo-img" src="https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=1200&auto=format&fit=crop&q=80" alt="Default Cover" class="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-102">
                     @endif
                     <div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent"></div>
                 </div>
 
-                <!-- 2. Avatar, Meta & Action Layout (Strictly in the white box below the cover photo) -->
+                <!-- 2. Avatar -->
                 <div class="px-6 sm:px-8 pb-6 relative flex flex-col md:flex-row items-center md:items-start justify-between gap-6">
                     
-                    <!-- Left Section: Avatar (overlapping cover) + Identity (strictly below cover) -->
                     <div class="flex flex-col md:flex-row items-center md:items-start gap-6 w-full md:w-auto text-center md:text-left">
-                        <!-- Profile Image Frame -->
+                        <!-- Frame -->
                         <div class="w-32 h-32 sm:w-36 sm:h-36 rounded-full overflow-hidden border-4 border-white bg-slate-100 shadow-xl shrink-0 -mt-16 sm:-mt-20 md:-mt-24 relative z-20 cursor-pointer">
                             @if($user->profile_photo)
                                 <img id="profile-avatar-img" src="{{ $user->profile_photo }}" alt="Avatar" class="w-full h-full object-cover">
@@ -142,7 +135,7 @@
                             @endif
                         </div>
 
-                        <!-- Name and Role Title Info (Strictly below the cover photo) -->
+                        <!-- Nama dan Role title -->
                         <div class="pt-4 flex-grow">
                             <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 title-font tracking-tight">
                                 {{ $user->name }}
@@ -172,7 +165,7 @@
                         </div>
                     </div>
 
-                    <!-- Right Section: Edit Profile Button -->
+                    <!-- edit profile button -->
                     <div class="pt-4 flex-shrink-0 mt-4 md:mt-0">
                         <button id="open-edit-btn" class="inline-flex items-center gap-2 px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold shadow-md shadow-blue-500/10 hover:shadow-lg hover:shadow-blue-500/20 transition-all duration-300 hover:scale-[1.03] cursor-pointer">
                             <svg class="w-4 h-4 text-blue-100" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
@@ -196,7 +189,7 @@
                 <p class="text-xs text-slate-400 mt-1 font-medium">Rekapitulasi progres belajar Anda di semua pathway secara real-time.</p>
             </div>
 
-            <!-- Pathway Progress Grid -->
+            <!-- Pathway Progress -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 
                 @foreach($pathDetails as $path)
@@ -204,7 +197,6 @@
                     <div class="group wobble-card bg-white border border-slate-200/80 rounded-2xl p-6 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.03)] hover:shadow-[0_16px_36px_-8px_rgba(0,0,0,0.06)] transition-all duration-300">
                         <div class="inner-lift flex flex-col justify-between h-full gap-4">
                             
-                            <!-- Header: Title & Badge -->
                             <div class="flex items-start justify-between gap-3">
                                 <div>
                                     <h3 class="text-base font-extrabold text-slate-900 group-hover:text-blue-600 transition-colors duration-300">
@@ -215,7 +207,6 @@
                                     </span>
                                 </div>
                                 
-                                <!-- Status Badge -->
                                 @if($path['completed'])
                                     <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-lg text-[10px] font-bold bg-emerald-50 border border-emerald-100 text-emerald-600 font-mono">
                                         Selesai 🎉
@@ -231,7 +222,6 @@
                                 @endif
                             </div>
 
-                            <!-- Progress Bar -->
                             <div>
                                 <div class="flex justify-between items-center mb-1.5">
                                     <span class="text-[11px] font-bold text-slate-400">Progres Pembelajaran</span>
@@ -251,27 +241,23 @@
 
     </main>
 
-    <!-- Footer -->
     <footer class="border-t border-slate-200 bg-slate-50 py-8 mt-auto relative z-20">
         <div class="max-w-5xl mx-auto px-4 text-center">
             <p class="text-sm text-slate-500 font-medium">&copy; 2026 Path Deck</p>
         </div>
     </footer>
 
-    <!-- Edit Profile Modal -->
+    <!-- Edit Profile -->
     <div id="edit-modal" class="fixed inset-0 z-[100] hidden items-center justify-center p-4 sm:p-6 bg-slate-950/60 backdrop-blur-sm opacity-0">
         
-        <!-- Modal Card Container -->
         <div id="modal-container" class="bg-white rounded-[28px] max-w-xl w-full overflow-hidden flex flex-col shadow-[0_24px_60px_-15px_rgba(0,0,0,0.3)] relative transform scale-90 translate-y-8 transition-all duration-500 max-h-[90vh] overflow-y-auto">
             
-            <!-- Close Button (Absolute) -->
             <button id="close-modal-btn" class="absolute top-4 right-4 z-50 w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-500 hover:text-slate-800 transition-colors shadow-sm cursor-pointer border border-slate-200/20">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
                 </svg>
             </button>
 
-            <!-- Modal Header -->
             <div class="px-6 pt-6 pb-4 border-b border-slate-100">
                 <h2 class="text-xl font-extrabold text-slate-900 tracking-tight title-font flex items-center gap-2">
                     Edit Profil Anda
@@ -279,12 +265,11 @@
                 <p class="text-xs text-slate-400 mt-1 font-medium">Perbarui username, foto profil, email, dan password Anda secara real-time.</p>
             </div>
 
-            <!-- Modal Form Content -->
             <form action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data" class="flex flex-col grow">
                 @csrf
                 <div class="px-6 py-4 space-y-5 grow">
                     
-                    <!-- 1. Username Field (Neatly Styled Input Group to prevent overlapping) -->
+                    <!-- 1. Username -->
                     <div>
                         <label for="username" class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Username</label>
                         <div class="flex rounded-xl overflow-hidden border border-slate-200 focus-within:border-blue-500 transition-all bg-slate-50/50 focus-within:bg-white">
@@ -293,31 +278,31 @@
                         </div>
                     </div>
 
-                    <!-- 2. Name Field -->
+                    <!-- 2. Nama -->
                     <div>
                         <label for="name" class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Nama Lengkap</label>
                         <input type="text" name="name" id="name" value="{{ old('name', $user->name) }}" required class="block w-full px-4 py-2.5 text-sm rounded-xl border border-slate-200 focus:outline-none focus:border-blue-500 bg-slate-50/50 focus:bg-white transition-all font-semibold" placeholder="Nama Lengkap">
                     </div>
 
-                    <!-- 3. Email Field -->
+                    <!-- 3. Email -->
                     <div>
                         <label for="email" class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Alamat Email</label>
                         <input type="email" name="email" id="email" value="{{ old('email', $user->email) }}" required class="block w-full px-4 py-2.5 text-sm rounded-xl border border-slate-200 focus:outline-none focus:border-blue-500 bg-slate-50/50 focus:bg-white transition-all font-semibold" placeholder="email@contoh.com">
                     </div>
 
-                    <!-- 4. Profile Photo Field -->
+                    <!-- 4. Profile Photo -->
                     <div>
                         <label for="profile_photo" class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Foto Profil (Avatar)</label>
                         <input type="file" name="profile_photo" id="profile_photo" accept="image/*" class="block w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 transition-all cursor-pointer">
                     </div>
 
-                    <!-- 5. Cover Photo Field -->
+                    <!-- 5. Cover Photo -->
                     <div>
                         <label for="cover_photo" class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Foto Background Cover</label>
                         <input type="file" name="cover_photo" id="cover_photo" accept="image/*" class="block w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 transition-all cursor-pointer">
                     </div>
 
-                    <!-- 6. Password Fields (Optional) -->
+                    <!-- 6. Password (Optional) -->
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2 border-t border-slate-100">
                         <div>
                             <label for="password" class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Password Baru (Opsional)</label>
@@ -331,7 +316,6 @@
 
                 </div>
 
-                <!-- Modal Footer Actions -->
                 <div class="px-6 py-4 bg-slate-50 border-t border-slate-100 flex items-center justify-end gap-3">
                     <button type="button" id="cancel-edit-btn" class="px-4 py-2.5 border border-slate-200 hover:border-slate-300 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-100 transition-all cursor-pointer">
                         Batal
@@ -345,7 +329,7 @@
         </div>
     </div>
 
-    <!-- Interactive JS Scripts -->
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             

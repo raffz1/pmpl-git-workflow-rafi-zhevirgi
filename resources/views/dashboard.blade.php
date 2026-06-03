@@ -18,14 +18,12 @@
             font-family: 'Space Grotesk', sans-serif;
         }
         
-        /* Custom Transition */
         .card-transition {
             transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), 
                         box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1), 
                         border-color 0.4s ease;
         }
 
-        /* 3D Tilt Effect */
         .card-tilt {
             transform-style: preserve-3d;
             perspective: 1000px;
@@ -34,7 +32,6 @@
             transform-style: preserve-3d;
         }
 
-        /* Ambient Blobs Animations */
         @keyframes float-blob {
             0%, 100% { transform: translateY(0px) scale(1) rotate(0deg); }
             33% { transform: translateY(-20px) scale(1.06) rotate(2deg); }
@@ -44,7 +41,6 @@
             animation: float-blob 11s ease-in-out infinite;
         }
 
-        /* Fade In Up */
         @keyframes fadeInUp {
             from {
                 opacity: 0;
@@ -63,25 +59,19 @@
 </head>
 <body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col overflow-x-hidden relative">
 
-    <!-- Top Navigation Bar -->
     @include('layouts.navbar')
 
-    <!-- Main Content Wrapper with Soft Gradients & Blue Theme Accents -->
     <div class="relative flex-grow min-h-screen bg-gradient-to-b from-slate-50 via-blue-50/10 to-slate-50 py-12 px-4 sm:px-6 lg:px-8 overflow-hidden">
         
-        <!-- Faded Geometric Pattern Grid -->
         <div class="absolute inset-0 bg-[linear-gradient(to_right,#3b82f60a_1px,transparent_1px),linear-gradient(to_bottom,#3b82f60a_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_80%,transparent_100%)] pointer-events-none z-0"></div>
 
-        <!-- Ambient Blue Floating Blobs -->
         <div class="absolute top-[15%] left-[-8%] w-[450px] h-[450px] rounded-full bg-blue-300/15 blur-3xl pointer-events-none animate-float-blob" style="animation-duration: 9s;"></div>
         <div class="absolute bottom-[10%] right-[-10%] w-[500px] h-[500px] rounded-full bg-indigo-300/10 blur-3xl pointer-events-none animate-float-blob" style="animation-delay: -4s; animation-duration: 13s;"></div>
 
-        <!-- Drifting Emojis and Symbols Container -->
         <div id="particle-container" class="absolute inset-0 overflow-hidden pointer-events-none z-0"></div>
 
         <main class="max-w-7xl mx-auto w-full relative z-10">
             
-            <!-- Header Section -->
             <header class="mb-10 animate-fade-in-up" style="animation-delay: 50ms;">
                 <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight title-font">
                     Welcome Back, <span class="bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 bg-clip-text text-transparent inline-block hover:scale-[1.02] transition-transform duration-300">{{ $userName }}</span>!
@@ -91,7 +81,6 @@
                 </p>
             </header>
 
-            <!-- Success Alert Notification -->
             @if(session('success'))
                 <div class="mb-6 p-4 rounded-xl bg-blue-50 border border-blue-200 text-blue-800 text-sm font-semibold flex items-center gap-3 animate-fade-in-up">
                     <svg class="w-5 h-5 text-blue-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
@@ -105,10 +94,9 @@
             <div>
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
                     
-                    <!-- Left Column (Span 2) -->
                     <div class="lg:col-span-2 space-y-10">
                         
-                        <!-- Continue Learning Section -->
+                        <!-- continue learning -->
                         <section class="animate-fade-in-up" style="animation-delay: 100ms;">
                             <h2 class="text-xl font-bold text-slate-900 mb-5 title-font flex items-center gap-2">
                                 <span class="w-1.5 h-6 bg-blue-600 rounded-full inline-block"></span>
@@ -117,20 +105,18 @@
                             
                             @if($activePath)
                                 <div class="bg-white border border-slate-200/80 rounded-2xl p-6 sm:p-8 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.04)] flex flex-col sm:flex-row gap-6 relative group hover:border-blue-200 hover:shadow-[0_12px_32px_-8px_rgba(59,130,246,0.12)] transition-all duration-300">
-                                    <!-- Progress Badge in Top Right -->
                                     <div class="absolute top-6 right-6">
                                         <span class="inline-flex items-center px-3.5 py-1 rounded-full text-xs font-bold bg-blue-50 text-blue-600 border border-blue-100">
                                             {{ $activePath['progress'] }}% Complete
                                         </span>
                                     </div>
 
-                                    <!-- Course Image (Cover) -->
                                     <div class="w-full sm:w-48 h-36 rounded-xl overflow-hidden flex-shrink-0 bg-slate-100 border border-slate-200/50 shadow-sm relative">
                                         <img src="{{ $activePath['image'] }}" alt="Course Thumbnail" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
                                         <div class="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent"></div>
                                     </div>
                                     
-                                    <!-- Course Info -->
+                                    <!-- info cousre -->
                                     <div class="flex-grow flex flex-col justify-between pt-2 sm:pt-0">
                                         <div>
                                             <h3 class="text-xl font-extrabold text-slate-900 group-hover:text-blue-600 transition-colors duration-300 pr-24">
@@ -141,7 +127,7 @@
                                             </p>
                                         </div>
                                         
-                                        <!-- Progress Bar -->
+                                        <!-- progress bar -->
                                         <div class="mt-5 mb-5">
                                             <div class="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden">
                                                 <div class="bg-blue-600 h-2.5 rounded-full transition-all duration-1000 ease-out shadow-sm" style="width: {{ $activePath['progress'] }}%"></div>
@@ -153,7 +139,6 @@
                                                 Continue &rarr;
                                             </a>
 
-                                            <!-- Reset Progress Form Link -->
                                             <form action="{{ route('dashboard.reset') }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin membatalkan/reset progres belajar ini?')">
                                                 @csrf
                                                 <button type="submit" class="text-xs font-semibold text-slate-400 hover:text-rose-500 transition-colors py-1 px-2.5 rounded-lg hover:bg-slate-100">
@@ -179,7 +164,6 @@
                             @endif
                         </section>
 
-                        <!-- Quick Access Section -->
                         <section class="animate-fade-in-up" style="animation-delay: 200ms;">
                             <h2 class="text-xl font-bold text-slate-900 mb-5 title-font flex items-center gap-2">
                                 <span class="w-1.5 h-6 bg-blue-600 rounded-full inline-block"></span>
@@ -187,7 +171,6 @@
                             </h2>
                             
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                                <!-- Library Card -->
                                 <a href="{{ url('/explore') }}" class="group bg-white border border-slate-200/80 rounded-2xl p-5 flex items-center gap-4 hover:border-blue-400 hover:shadow-[0_8px_24px_-4px_rgba(59,130,246,0.08)] transition-all duration-300 hover:-translate-y-0.5 cursor-pointer">
                                     <div class="w-12 h-12 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600 flex-shrink-0 group-hover:scale-110 transition-transform duration-300">
                                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
@@ -199,28 +182,14 @@
                                         <p class="text-xs sm:text-sm text-slate-500 mt-0.5">Lihat semua modul yang tersedia</p>
                                     </div>
                                 </a>
-
-                                <!-- Activity Card -->
-                                <div class="group bg-white border border-slate-200/80 rounded-2xl p-5 flex items-center gap-4 hover:border-blue-400 hover:shadow-[0_8px_24px_-4px_rgba(59,130,246,0.08)] transition-all duration-300 hover:-translate-y-0.5 cursor-pointer">
-                                    <div class="w-12 h-12 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600 flex-shrink-0 group-hover:scale-110 transition-transform duration-300">
-                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10a2 2 0 01-2 2h-2a2 2 0 01-2-2zm9-4h2a2 2 0 002-2V9a2 2 0 00-2-2h-2a2 2 0 00-2 2v6a2 2 0 002 2zm-4 4h4a2 2 0 002-2v-6a2 2 0 00-2-2h-4a2 2 0 00-2 2v6a2 2 0 002 2z" />
-                                        </svg>
-                                    </div>
-                                    <div>
-                                        <h4 class="text-base font-extrabold text-slate-900 group-hover:text-blue-600 transition-colors duration-300">Activity</h4>
-                                        <p class="text-xs sm:text-sm text-slate-500 mt-0.5">Lacak riwayat pembelajaran Anda</p>
-                                    </div>
-                                </div>
                             </div>
                         </section>
 
                     </div>
 
-                    <!-- Right Column -->
                     <div class="space-y-6 lg:pt-0">
                         
-                        <!-- Your Progress Card -->
+                        <!-- card your progress -->
                         <div class="bg-white border border-slate-200/80 rounded-2xl p-6 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.04)] hover:shadow-md transition-all duration-300 animate-fade-in-up" style="animation-delay: 250ms;">
                             <h3 class="text-lg font-extrabold text-slate-900 mb-6 title-font flex items-center gap-2">
                                 <span class="w-1.5 h-6 bg-blue-600 rounded-full inline-block"></span>
@@ -249,11 +218,11 @@
                             </div>
                         </div>
 
-                        <!-- Marked Modules Card -->
+                        <!-- card bookmarkss -->
                         <div class="bg-white border border-slate-200/80 rounded-2xl p-6 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.04)] hover:shadow-md transition-all duration-300 animate-fade-in-up" style="animation-delay: 300ms;">
                             <h3 class="text-lg font-extrabold text-slate-900 title-font flex items-center gap-2">
                                 <span class="w-1.5 h-6 bg-blue-600 rounded-full inline-block"></span>
-                                MARKED
+                                BOOKMARKS
                             </h3>
                             <p class="text-xs font-semibold text-slate-400 mt-1 uppercase tracking-wider mb-6">Lanjutkan yang sudah kamu tandai</p>
                             
@@ -300,14 +269,12 @@
         </main>
     </div>
 
-    <!-- Footer -->
     <footer class="border-t border-slate-200 bg-slate-50 py-8 mt-auto relative z-20">
         <div class="max-w-7xl mx-auto px-4 text-center">
             <p class="text-sm text-slate-500 font-medium">&copy; 2026 Path Deck</p>
         </div>
     </footer>
 
-    <!-- Background Drift Script and Emitter -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const particleContainer = document.getElementById('particle-container');
@@ -346,7 +313,6 @@
                 });
             }
 
-            // --- Interactive IT/Code-Themed Emitter Trail ---
             const body = document.body;
             const trailSymbols = ['{}', '</>', '[]', '()', '=>', '10', '01', 'js', 'php', 'py', 'git', 'sql', 'sys'];
             
@@ -379,7 +345,6 @@
                 }, 1550);
             });
 
-            // --- Typing Animation for Tagline ---
             const phrases = [
                 "Pantau progres belajar dan asah terus keahlian IT kamu di Path Deck.",
                 "Tingkatkan skill kamu dan gapai karir impian sekarang juga.",

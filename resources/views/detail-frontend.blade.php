@@ -314,24 +314,18 @@
 </head>
 <body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col overflow-x-hidden relative is-learning-page">
 
-    <!-- Top Navigation Bar -->
     @include('layouts.navbar')
 
-    <!-- Interactive Background & Effects -->
     <div class="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-        <!-- Faded Blue Grid Overlay (More Defined) -->
         <div class="absolute inset-0 bg-[linear-gradient(to_right,#3b82f612_1px,transparent_1px),linear-gradient(to_bottom,#3b82f612_1px,transparent_1px)] bg-[size:5rem_5rem] [mask-image:radial-gradient(ellipse_65%_55%_at_50%_0%,#000_90%,transparent_100%)] opacity-100"></div>
         
-        <!-- Ambient Glowing Blobs (More Prominent) -->
         <div class="absolute top-[10%] left-[-5%] w-[450px] h-[450px] rounded-full bg-blue-400/22 blur-3xl animate-float-blob" style="animation-duration: 9s;"></div>
         <div class="absolute top-[45%] right-[-10%] w-[500px] h-[500px] rounded-full bg-indigo-400/18 blur-3xl animate-float-blob" style="animation-delay: -3s; animation-duration: 12s;"></div>
         <div class="absolute bottom-[15%] left-[10%] w-[400px] h-[400px] rounded-full bg-cyan-300/20 blur-3xl animate-float-blob" style="animation-delay: -6s; animation-duration: 10s;"></div>
 
-        <!-- Drifting Particles Container -->
         <div id="particle-container" class="absolute inset-0 z-0"></div>
     </div>
 
-    <!-- Main Content Area -->
     <main class="grow relative z-10 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-10">
         
         @if(session('success'))
@@ -340,17 +334,13 @@
                 <span>{{ session('success') }}</span>
             </div>
         @endif
-        <!-- Roadmap View (Timeline Outline) -->
         <div id="roadmap-view" class="transition-all duration-350">
-            <!-- Career Path Header Card (Redesigned with Premium Blue Gradient & Grid Pattern) -->
             <section class="mb-14 animate-fade-in-up" style="animation-delay: 50ms;">
                 <div class="bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-900 rounded-3xl p-8 sm:p-10 shadow-[0_12px_40px_-6px_rgba(37,99,235,0.25)] flex flex-col lg:flex-row items-center gap-10 text-white relative overflow-hidden border-none">
                     
-                    <!-- Graphic overlay grid -->
                     <div class="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:3rem_3rem] pointer-events-none"></div>
                     <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-blue-400/20 via-transparent to-transparent opacity-70 pointer-events-none"></div>
 
-                    <!-- Left: Text Information -->
                     <div class="flex-grow max-w-2xl order-2 lg:order-1 relative z-10">
                         <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-white/15 border border-white/20 text-white mb-4 tracking-wide uppercase">
                             <svg class="w-3.5 h-3.5 text-blue-200 animate-pulse" fill="currentColor" viewBox="0 0 20 20">
@@ -365,7 +355,6 @@
                             Front End Developer adalah profesi yang bertugas membuat tampilan dan antarmuka website atau aplikasi agar menarik, interaktif, dan mudah digunakan pengguna. Pekerjaan ini menggunakan teknologi seperti HTML, CSS, dan JavaScript serta bekerja sama dengan UI/UX Designer dan Back End Developer untuk menciptakan pengalaman pengguna yang optimal.
                         </p>
                         
-                        <!-- Information Trigger Button -->
                         <button id="open-info-btn" class="inline-flex items-center gap-2 px-4 py-2 border border-white/20 hover:border-white/40 rounded-xl text-xs font-bold text-white bg-white/10 hover:bg-white/20 transition-all duration-300 shadow-sm cursor-pointer hover:scale-[1.03]">
                             Informasi Umum
                             <svg class="w-4 h-4 text-blue-200" fill="currentColor" viewBox="0 0 20 20">
@@ -374,7 +363,6 @@
                         </button>
                     </div>
 
-                    <!-- Right: Mockup Image inside rounded frame with shadow/glow -->
                     <div class="w-full lg:w-[380px] h-60 sm:h-72 rounded-2xl overflow-hidden shadow-2xl border-4 border-white/10 group relative cursor-pointer order-1 lg:order-2 flex-shrink-0 z-10">
                         <img src="https://images.unsplash.com/photo-1547082299-de196ea013d6?w=600&auto=format&fit=crop&q=80" alt="Path Wireframe Mockup" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
                         <div class="absolute inset-0 bg-gradient-to-t from-indigo-950/40 to-transparent"></div>
@@ -383,7 +371,6 @@
                 </div>
             </section>
 
-            <!-- Curriculum Section Header & Progress Bar -->
             <section class="mb-14 animate-fade-in-up" style="animation-delay: 100ms;">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-200/60 pb-6 mb-10">
                     <div class="flex items-center gap-4">
@@ -392,7 +379,6 @@
                             Learning Curriculum
                         </h2>
                         
-                        <!-- Reset Progress Form -->
                         <form action="{{ route('path.frontend.reset') }}" method="POST" class="inline">
                             @csrf
                             <button type="submit" class="inline-flex items-center gap-1.5 px-3 py-1 border border-red-200 hover:border-red-400 rounded-xl text-xs font-bold text-red-600 bg-red-50/50 hover:bg-red-50 transition-all duration-300 shadow-sm cursor-pointer hover:scale-[1.03]" title="Reset Detail Progress">
@@ -407,7 +393,6 @@
                     @php
                         $percentVal = min(100, round(($currentStep / 7) * 100));
                     @endphp
-                    <!-- Progress display -->
                     <div class="flex items-center gap-3 w-full sm:w-auto">
                         <span class="text-xs font-bold text-slate-400 whitespace-nowrap">Your Progress</span>
                         <div class="w-full sm:w-44 bg-slate-200/70 rounded-full h-2.5 overflow-hidden">
@@ -417,18 +402,14 @@
                     </div>
                 </div>
 
-                <!-- Vertical Timeline Section -->
                 <div class="relative max-w-5xl mx-auto px-2 py-4">
                     
-                    <!-- Central vertical axis timeline line with animated running blue line path -->
                     <div class="absolute timeline-line top-0 bottom-0 left-1/2 w-1.5 bg-slate-200 -translate-x-1/2 z-0 rounded-full overflow-hidden">
                         <div class="absolute top-0 w-full bg-gradient-to-b from-blue-400 via-blue-600 to-indigo-600 rounded-full shadow-[0_0_12px_rgba(59,130,246,0.8)]" style="height: {{ $percentVal }}%; transition: height 1.2s cubic-bezier(0.25, 1, 0.5, 1);">
-                            <!-- Pulsing running laser dot -->
                             <div class="absolute bottom-0 left-0 right-0 h-4 bg-white animate-pulse rounded-full shadow-[0_0_15px_#fff]"></div>
                         </div>
                     </div>
 
-                    <!-- Curriculum Modules Grid Loop -->
                     <div class="space-y-12 relative z-10">
                         
                         @php
@@ -520,12 +501,9 @@
 
                             <div class="flex flex-col md:flex-row items-center justify-between w-full relative reveal-on-scroll">
                                 
-                                <!-- Left Card (Occupies left on desktop) -->
                                 <div class="w-full md:w-[44%] {{ $module['side'] === 'left' ? 'order-1' : 'order-3 opacity-0 pointer-events-none md:block hidden' }}">
                                     @if($module['side'] === 'left')
-                                        <!-- Curriculum Card Component -->
                                         @if($status !== 'Locked')
-                                            <!-- Active or Completed card: can tilt/wobble and transition to blue on hover -->
                                             <div onclick="openLearningView({{ $index }})" class="group wobble-card bg-white border border-slate-200/80 rounded-2xl p-6 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.03)] hover:bg-blue-600 hover:border-blue-600 hover:shadow-[0_16px_36px_-8px_rgba(37,99,235,0.22)] cursor-pointer transition-all duration-300 {{ $status === 'Active' ? 'card-active-glow' : '' }}">
                                                 <div class="inner-lift flex items-start gap-4">
                                                     <div class="w-12 h-12 rounded-xl bg-blue-50 border border-blue-100/50 flex items-center justify-center font-extrabold text-xs text-blue-600 flex-shrink-0 group-hover:bg-white/20 group-hover:border-white/30 group-hover:text-white transition-colors duration-300">
@@ -558,7 +536,6 @@
                                                 </div>
                                             </div>
                                         @else
-                                            <!-- Locked card: Stays gray, no wobble/tilt, hover does nothing -->
                                             <div class="bg-slate-100/70 border border-slate-200/60 rounded-2xl p-6 opacity-60 cursor-not-allowed select-none transition-none">
                                                 <div class="flex items-start gap-4">
                                                     <div class="w-12 h-12 rounded-xl bg-slate-200/80 border border-slate-300/40 flex items-center justify-center font-extrabold text-xs text-slate-400 flex-shrink-0">
@@ -588,7 +565,6 @@
                                     @endif
                                 </div>
 
-                                <!-- Timeline Center Circle Indicator -->
                                 <div class="timeline-node absolute left-1/2 -translate-x-1/2 w-10 h-10 rounded-full flex items-center justify-center z-10 {{ $nodeColor }} order-2 my-4 md:my-0">
                                     @if($nodeIcon === 'locked')
                                         <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
@@ -599,12 +575,9 @@
                                     @endif
                                 </div>
 
-                                <!-- Right Card (Occupies right on desktop) -->
                                 <div class="w-full md:w-[44%] {{ $module['side'] === 'right' ? 'order-3' : 'order-1 opacity-0 pointer-events-none md:block hidden' }}">
                                     @if($module['side'] === 'right')
-                                        <!-- Curriculum Card Component -->
                                         @if($status !== 'Locked')
-                                            <!-- Active or Completed card: can tilt/wobble and transition to blue on hover -->
                                             <div onclick="openLearningView({{ $index }})" class="group wobble-card bg-white border border-slate-200/80 rounded-2xl p-6 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.03)] hover:bg-blue-600 hover:border-blue-600 hover:shadow-[0_16px_36px_-8px_rgba(37,99,235,0.22)] cursor-pointer transition-all duration-300 {{ $status === 'Active' ? 'card-active-glow' : '' }}">
                                                 <div class="inner-lift flex items-start gap-4">
                                                     <div class="w-12 h-12 rounded-xl bg-blue-50 border border-blue-100/50 flex items-center justify-center font-extrabold text-xs text-blue-600 flex-shrink-0 group-hover:bg-white/20 group-hover:border-white/30 group-hover:text-white transition-colors duration-300">
@@ -637,7 +610,6 @@
                                                 </div>
                                             </div>
                                         @else
-                                            <!-- Locked card: Stays gray, no wobble/tilt, hover does nothing -->
                                             <div class="bg-slate-100/70 border border-slate-200/60 rounded-2xl p-6 opacity-60 cursor-not-allowed select-none transition-none">
                                                 <div class="flex items-start gap-4">
                                                     <div class="w-12 h-12 rounded-xl bg-slate-200/80 border border-slate-300/40 flex items-center justify-center font-extrabold text-xs text-slate-400 flex-shrink-0">
@@ -677,12 +649,9 @@
 
     </main>
 
-    <!-- Learning View Workspace (Redesigned Split Pane Layout matching user's image exactly) -->
         <div id="learning-view" class="hidden opacity-0 fixed inset-0 bg-white z-[60] flex flex-col overflow-hidden font-sans transition-all duration-350">
             
-            <!-- 100% Width Custom Top Navbar -->
             <header class="h-16 border-b border-slate-200 bg-white px-8 flex justify-between items-center shrink-0">
-                <!-- Left: Logo -->
                 <div class="flex items-center">
                     <a href="{{ route('dashboard') }}" class="text-xl sm:text-2xl font-bold tracking-tight text-[#0050d2] flex items-center gap-2">
                         <svg class="h-6 w-6 text-[#0050d2]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
@@ -692,7 +661,6 @@
                     </a>
                 </div>
                 
-                <!-- Right: Nav Links -->
                 <div class="flex items-center space-x-6">
                     <a href="{{ route('dashboard') }}" class="text-sm font-semibold text-slate-500 hover:text-[#0050d2] transition-colors">Dashboard</a>
                     <a href="{{ route('explore.path') }}" class="relative text-sm font-semibold text-[#0050d2] py-5">
@@ -701,14 +669,12 @@
                     </a>
                     <span class="h-6 w-px bg-slate-200"></span>
                     
-                    <!-- Bell Icon (Blue) -->
                     <button class="text-[#0050d2] hover:opacity-85 transition-opacity cursor-pointer">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
                         </svg>
                     </button>
                     
-                    <!-- Profile Icon (Blue Outline) -->
                     <button class="text-[#0050d2] hover:opacity-85 transition-opacity cursor-pointer">
                         <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -717,13 +683,10 @@
                 </div>
             </header>
 
-            <!-- Main Workspace split container -->
             <div class="grow flex overflow-hidden">
                 
-                <!-- Left Pane: Toolbar, Content Area, and Footer -->
                 <div class="flex-grow flex flex-col overflow-hidden bg-white">
                     
-                    <!-- Sub-header Toolbar -->
                     <div class="h-20 border-b border-slate-200 px-12 flex justify-between items-center bg-white shrink-0">
                         <div>
                             <span class="text-[10px] font-extrabold text-[#0050d2] uppercase tracking-wider block">CURRENT LESSON</span>
@@ -748,23 +711,19 @@
                         </div>
                     </div>
 
-                    <!-- Content Area (Scrollable) -->
                     <div id="workspace-scroll-container" class="grow overflow-y-auto px-12 py-10 bg-white">
                         <div class="max-w-4xl mx-auto">
                             
-                            <!-- Content Box -->
                             <div id="workspace-content-container" class="mb-10">
                                 <h1 id="workspace-content-title" class="text-4xl font-extrabold text-slate-950 leading-tight mb-6">
                                     Apa itu Frontend Developer?
                                 </h1>
                                 <div id="workspace-content-body" class="text-[15px] leading-relaxed text-slate-600 space-y-6">
-                                    <!-- Injected dynamically -->
                                 </div>
                             </div>
 
-                            <!-- Checkpoint Quiz Card -->
+                            <!-- Quiz Card -->
                             <div id="workspace-quiz-card" class="bg-white border border-slate-200 rounded-3xl p-8 shadow-[0_4px_24px_-4px_rgba(0,0,0,0.03)] relative overflow-hidden transition-all duration-350 hover:shadow-md cursor-pointer" onclick="launchInteractiveQuiz()">
-                                <!-- Left border accent -->
                                 <div class="absolute left-0 top-0 bottom-0 w-1.5 bg-[#0050d2]"></div>
                                 
                                 <div class="flex flex-col gap-4">
@@ -788,7 +747,7 @@
                                 </div>
                             </div>
 
-                            <!-- Checkpoint Completed Card -->
+                            <!-- Completed Card -->
                             <div id="workspace-quiz-completed-card" class="hidden bg-white border border-slate-200 rounded-3xl p-8 shadow-sm relative overflow-hidden">
                                 <div class="absolute left-0 top-0 bottom-0 w-1.5 bg-emerald-500"></div>
                                 <div class="flex items-start gap-4">
@@ -808,10 +767,9 @@
 
                 </div>
                 
-                <!-- Right Pane: Sidebar -->
+                <!-- Right Pane: sidebar untuk list learning path detail -->
                 <aside class="w-[320px] border-l border-slate-200 bg-[#F2F7FF] flex flex-col shrink-0 overflow-y-auto">
                     
-                    <!-- Dark Blue Banner -->
                     <div class="bg-[#0050d2] p-6 text-white shrink-0">
                         <span class="text-[9px] font-extrabold tracking-widest text-blue-200/80 uppercase block mb-1">LEARNING PATH</span>
                         <h3 class="text-lg font-black tracking-tight mb-6">Front-End Developer</h3>
@@ -823,11 +781,9 @@
                         <span id="sidebar-progress-text" class="text-[11px] font-bold text-blue-100/90 block">0 of 7 lessons completed</span>
                     </div>
                     
-                    <!-- Library modules list -->
                     <div class="p-6">
                         <h3 class="text-base font-extrabold text-slate-800 mb-4 tracking-tight">Library</h3>
                         <div id="sidebar-library-list" class="divide-y divide-slate-200/60 border-t border-b border-slate-200/60">
-                            <!-- Injected dynamically -->
                         </div>
                     </div>
 
@@ -836,19 +792,16 @@
             </div>
         </div>
 
-        <!-- Interactive Quiz Modal (Fullscreen Sub-page) -->
+        <!-- quiz interaktif (page) -->
         <div id="quiz-modal" class="fixed inset-0 z-[110] hidden flex-col bg-[#F3F7FF] transition-all duration-300 opacity-0 transform scale-95 overflow-y-auto">
             
-            <!-- Ambient Glowing Blobs inside Quiz Modal -->
             <div class="absolute inset-0 z-0 overflow-hidden pointer-events-none">
                 <div class="absolute top-[10%] left-[-10%] w-[350px] h-[350px] rounded-full bg-blue-300/25 blur-3xl animate-float-blob" style="animation-duration: 10s;"></div>
                 <div class="absolute bottom-[10%] right-[-10%] w-[350px] h-[350px] rounded-full bg-indigo-300/20 blur-3xl animate-float-blob" style="animation-delay: -4s; animation-duration: 12s;"></div>
             </div>
 
-            <!-- Quiz Modal Container -->
             <div id="quiz-modal-container" class="w-full max-w-4xl mx-auto px-6 py-8 flex flex-col justify-between grow relative z-10">
                 
-                <!-- Sub-page Header -->
                 <div class="flex justify-between items-center shrink-0 mb-6">
                     <div>
                         <span class="text-xs font-black uppercase tracking-wider text-blue-600 block">KUIS CHECKPOINT</span>
@@ -866,22 +819,18 @@
                     </div>
                 </div>
 
-                <!-- Sleek progress bar -->
                 <div class="w-full mb-8 shrink-0">
                     <div class="w-full bg-slate-200/60 rounded-full h-2 overflow-hidden">
                         <div id="quiz-progress-bar-main" class="bg-blue-600 h-2 rounded-full transition-all duration-500" style="width: 20%"></div>
                     </div>
                 </div>
 
-                <!-- Quiz Card Stack Area -->
                 <div class="grow flex items-center justify-center p-2 relative min-h-[460px] mb-6">
-                    <!-- 3D Stack Container -->
                     <div id="quiz-card-stack" class="relative w-full max-w-[460px] h-[440px] mx-auto select-none" style="perspective: 1200px;">
-                        <!-- Cards will be dynamically loaded here by JS -->
                     </div>
                 </div>
 
-                <!-- Result Overlay Screen -->
+                <!-- hasil quiz -->
                 <div id="quiz-result-screen" class="hidden absolute inset-0 bg-[#F3F7FF] z-50 flex flex-col items-center justify-center text-center p-6 animate-fade-in-up">
                     <div class="bg-white rounded-[32px] p-8 sm:p-10 max-w-md w-full shadow-2xl border border-slate-100/50 flex flex-col items-center">
                         <div id="result-badge-container" class="w-20 h-20 rounded-[24px] bg-emerald-50 text-emerald-500 flex items-center justify-center text-4xl shadow-sm mb-6 animate-bounce">
@@ -921,7 +870,7 @@
         </div>
     </section>
 
-    <!-- Quiz Exit Confirmation Modal -->
+    <!-- Quiz Exit Confirmationn -->
     <div id="quiz-exit-confirm-modal" class="fixed inset-0 z-[150] hidden items-center justify-center p-4 sm:p-6 bg-slate-950/60 backdrop-blur-sm opacity-0">
         <div class="bg-white rounded-[28px] max-w-md w-full p-8 shadow-[0_24px_60px_-15px_rgba(0,0,0,0.3)] border border-slate-100 flex flex-col items-center text-center transform scale-95 transition-all duration-300">
             <div class="w-16 h-16 rounded-[20px] bg-amber-50 text-amber-500 border border-amber-100 flex items-center justify-center text-3xl mb-5 shadow-sm">
@@ -940,35 +889,27 @@
         </div>
     </div>
 
-    <!-- Mini Card Modal (Informasi Umum) -->
     <div id="info-modal" class="fixed inset-0 z-[100] hidden items-center justify-center p-4 sm:p-6 bg-slate-950/60 backdrop-blur-sm opacity-0">
-        <!-- Modal Card Container -->
         <div id="modal-container" class="bg-white rounded-[28px] max-w-4xl w-full overflow-hidden flex flex-col md:flex-row shadow-[0_24px_60px_-15px_rgba(0,0,0,0.3)] relative transform scale-90 translate-y-8 transition-all duration-500 max-h-[90vh] md:max-h-none overflow-y-auto md:overflow-y-visible">
             
-            <!-- Close Button (Absolute) -->
             <button id="close-modal-btn" class="absolute top-4 right-4 z-50 w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-500 hover:text-slate-800 transition-colors shadow-sm cursor-pointer border border-slate-200/20">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
                 </svg>
             </button>
 
-            <!-- Left Section: Side info panel -->
             <div class="w-full md:w-[35%] bg-[#f0f4ff] p-6 sm:p-8 flex flex-col justify-between relative overflow-hidden shrink-0">
-                <!-- Decorative Top Grid pattern -->
                 <div class="absolute inset-0 bg-[linear-gradient(to_right,#3b82f605_1px,transparent_1px),linear-gradient(to_bottom,#3b82f605_1px,transparent_1px)] bg-[size:1.5rem_1.5rem] opacity-70"></div>
                 
                 <div class="relative z-10">
-                    <!-- HTML badge -->
                     <div class="w-12 h-12 rounded-xl bg-blue-500 flex items-center justify-center font-extrabold text-xs text-white shadow-md shadow-blue-500/30 mb-6">
                         HTML
                     </div>
                     
-                    <!-- Title -->
                     <h2 class="text-2xl font-black text-slate-900 leading-tight mb-4 title-font">
                         Front-End<br>Developer
                     </h2>
                     
-                    <!-- Tags -->
                     <div class="flex flex-wrap gap-2 mb-6">
                         <span class="px-3 py-1 bg-blue-600 text-white rounded-full text-xs font-bold shadow-sm">
                             Profesional
@@ -979,30 +920,24 @@
                     </div>
                 </div>
 
-                <!-- Bottom Image -->
                 <div class="w-full h-48 md:h-64 rounded-2xl overflow-hidden shadow-md mt-6 relative border border-white z-10">
                     <img src="https://images.unsplash.com/photo-1547082299-de196ea013d6?w=600&auto=format&fit=crop&q=80" alt="Frontend Coding" class="w-full h-full object-cover">
                     <div class="absolute inset-0 bg-gradient-to-t from-blue-950/20 to-transparent"></div>
                 </div>
             </div>
 
-            <!-- Right Section: Details Panel -->
             <div class="w-full md:w-[65%] p-6 sm:p-8 flex flex-col justify-between shrink-0 overflow-y-auto max-h-[60vh] md:max-h-none">
                 <div>
-                    <!-- Deskripsi Karir Header -->
                     <span class="text-xs font-black tracking-wider text-slate-400 uppercase block mb-3 font-mono">
                         DESKRIPSI KARIR
                     </span>
                     
-                    <!-- Deskripsi Karir Body Text -->
                     <p class="text-xs sm:text-sm text-slate-600 leading-relaxed font-medium mb-6">
                         Arsitektur Frontend adalah disiplin ilmu yang merancang dan memelihara integritas struktural aplikasi web yang kompleks. Anda tidak hanya menulis kode, Anda membangun fondasi antarmuka web yang terukur dan berkinerja tinggi. Peran ini melibatkan penetapan standar sistem desain, mengatur pola manajemen status, dan memastikan bahwa kinerja tetap optimal bahkan saat platform berkembang.
                     </p>
 
-                    <!-- Two columns -->
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
                         
-                        <!-- Estimasi Gaji Box -->
                         <div class="bg-blue-50/50 border border-blue-100 rounded-2xl p-4 flex flex-col justify-between">
                             <span class="text-xs font-bold text-slate-400 block mb-1">
                                 Estimasi Gaji
@@ -1020,7 +955,6 @@
                             </div>
                         </div>
 
-                        <!-- Skill Box -->
                         <div class="border border-slate-200/80 rounded-2xl p-4">
                             <span class="text-xs font-bold text-slate-400 block mb-3">
                                 Skill yang harus kamu kuasai
@@ -1043,7 +977,6 @@
 
                     </div>
 
-                    <!-- Cocok buat kamu yang... Checklist -->
                     <div class="bg-blue-50/20 border border-blue-100/30 rounded-2xl p-5">
                         <h4 class="text-xs sm:text-sm font-black text-slate-800 tracking-tight title-font mb-4">
                             Cocok buat kamu yang...
@@ -1075,7 +1008,6 @@
         </div>
     </div>
 
-    <!-- Interactive JS Scripts -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             // --- Global Learning Path Variables ---

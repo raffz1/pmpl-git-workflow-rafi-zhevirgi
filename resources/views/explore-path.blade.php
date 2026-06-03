@@ -6,7 +6,6 @@
         <title>Explore Career Paths - Path Deck</title>
         @vite(['resources/css/app.css', 'resources/js/app.js'])
         
-        <!-- Modern Google Fonts -->
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
@@ -114,23 +113,17 @@
     <body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col overflow-x-hidden">
         @php $isAdmin = auth()->check() && auth()->user()->isAdmin(); @endphp
 
-        <!-- Top Navigation Bar -->
         @include('layouts.navbar')
 
-        <!-- Main Wrapper with Soft Background & Floating Animations -->
         <div class="relative flex-grow min-h-screen bg-gradient-to-b from-white via-blue-50/20 to-white py-16 px-4 overflow-hidden">
-            <!-- Geometric Grid Pattern Overlay -->
             <div class="absolute inset-0 bg-[linear-gradient(to_right,#3b82f60a_1px,transparent_1px),linear-gradient(to_bottom,#3b82f60a_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] pointer-events-none"></div>
 
-            <!-- Soft Floating Ambient Blobs -->
             <div class="absolute top-[10%] left-[-5%] w-96 h-96 rounded-full bg-cyan-200/15 blur-3xl pointer-events-none animate-float-blob"></div>
             <div class="absolute top-[40%] right-[-5%] w-[450px] h-[450px] rounded-full bg-pink-200/15 blur-3xl pointer-events-none animate-float-blob" style="animation-delay: -3s; animation-duration: 12s;"></div>
             <div class="absolute bottom-[10%] left-[10%] w-80 h-80 rounded-full bg-indigo-200/15 blur-3xl pointer-events-none animate-float-blob" style="animation-delay: -6s; animation-duration: 10s;"></div>
 
-            <!-- Drifting Emojis and Symbols Container -->
             <div id="particle-container" class="absolute inset-0 overflow-hidden pointer-events-none z-0"></div>
 
-            <!-- Light Abstract Floating Geometric SVGs -->
             <div class="absolute top-24 left-[15%] pointer-events-none opacity-30 animate-pulse" style="animation-duration: 4s;">
                 <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" class="text-blue-500" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
             </div>
@@ -141,10 +134,8 @@
                 <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" class="text-pink-400" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="4"/></svg>
             </div>
 
-            <!-- Content Container -->
             <div class="max-w-7xl mx-auto relative z-10">
                 
-                <!-- Hero Section -->
                 <div class="max-w-7xl mb-12 sm:mb-16 animate-fade-in-up flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6" style="animation-delay: 50ms;">
                     <div class="max-w-4xl">
                         <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 leading-tight tracking-tight mb-4">
@@ -156,7 +147,6 @@
                     </div>
                     @if($isAdmin)
                     <div class="shrink-0 self-start sm:self-center flex items-center gap-3">
-                        <!-- Add Path Button -->
                         <button id="admin-add-path-btn" onclick="openAddPathModal()" class="hidden flex items-center gap-1.5 text-xs font-bold text-slate-600 hover:text-blue-600 hover:bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 bg-white transition-all duration-200 cursor-pointer shadow-sm active:scale-95">
                             ➕ Tambah Path Baru
                         </button>
@@ -169,7 +159,6 @@
                     @endif
                 </div>
 
-                <!-- Career Cards Grid Section -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20 items-stretch">
                     @foreach($paths as $index => $path)
                         @php
@@ -205,24 +194,18 @@
                             }
                         @endphp
 
-                        <!-- Interactive Career Card (Wrapped in click link) -->
                         <a href="{{ auth()->check() ? route('path.detail.dynamic', $path['slug']) : route('login') }}" class="group relative rounded-2xl border border-slate-200 bg-white overflow-hidden flex flex-col card-transition card-tilt shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] {{ $glowClass }} animate-fade-in-up cursor-pointer hover:no-underline hover:border-transparent z-10" style="animation-delay: {{ ($index + 1) * 100 }}ms;">
-                            <!-- Hover Gradient Background Overlay -->
                             <div class="absolute inset-0 bg-gradient-to-br {{ $gradientClasses }} opacity-0 group-hover:opacity-100 transition-all duration-500 z-0"></div>
 
-                            <!-- Dynamic Glass Glare Overlay -->
                             <div class="card-glare absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20" style="background: radial-gradient(circle 250px at var(--x, 50%) var(--y, 50%), rgba(255,255,255,0.2) 0%, transparent 80%);"></div>
 
-                            <!-- Card Image Header -->
                             <div class="card-image-container relative h-44 w-full overflow-hidden bg-slate-100 border-b border-slate-100 flex-shrink-0 z-10">
                                 <img src="{{ $path['image'] }}" alt="{{ $path['title'] }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
                                 <div class="absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-transparent opacity-50"></div>
                                 
-                                <!-- A subtle colored accent bar on top of card -->
                                 <div class="absolute top-0 inset-x-0 h-1.5 transition-all duration-300 {{ $accentBarColor }}"></div>
 
                                 @if($isAdmin)
-                                    <!-- Edit Path Button Overlay -->
                                     <button type="button" onclick="event.preventDefault(); event.stopPropagation(); openEditPathModal({{ json_encode($path) }})" class="admin-edit-path-btn hidden absolute top-4 right-4 z-30 w-10 h-10 rounded-xl bg-white/90 hover:bg-white text-slate-800 flex items-center justify-center shadow-lg transition-transform hover:scale-105 border border-slate-200 cursor-pointer" title="Edit Path Card">
                                         <svg class="w-5 h-5 text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
@@ -234,7 +217,6 @@
                             <!-- Card Body -->
                             <div class="p-6 sm:p-8 flex-grow flex flex-col justify-between relative z-10">
                                 <div>
-                                    <!-- Tech Icon Box -->
                                     <div class="mb-5">
                                         <div class="card-icon-container w-12 h-12 rounded-xl bg-blue-50 border border-blue-100/50 flex items-center justify-center text-blue-600 font-extrabold text-[13px] tracking-wider shadow-sm transition-all duration-300 group-hover:bg-white/20 group-hover:text-white group-hover:border-white/30">
                                             @if($path['icon'] === 'frontend')
@@ -269,7 +251,7 @@
                                     </p>
                                 </div>
                                 
-                                <!-- Click Indicator at Bottom Right -->
+                                <!-- Click Indicator di pojok kanan bawah -->
                                 <div class="card-cta-container mt-6 flex items-center justify-end text-blue-600 font-semibold text-sm opacity-0 group-hover:opacity-100 group-hover:text-white transition-all duration-300">
                                     <span>Mulai Belajar</span>
                                     <svg class="w-4 h-4 ml-1.5 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -285,7 +267,6 @@
 
         </div>
 
-        <!-- Footer -->
         <footer class="border-t border-slate-200 bg-slate-50 py-8 mt-auto relative z-20">
             <div class="max-w-7xl mx-auto px-4 text-center">
                 <p class="text-sm text-slate-500 font-medium">
@@ -294,7 +275,6 @@
             </div>
         </footer>
 
-        <!-- Javascript for 3D Interactive Tilt Effect -->
         <script>
             document.addEventListener('DOMContentLoaded', () => {
                 const cards = document.querySelectorAll('.card-tilt');
@@ -500,10 +480,9 @@
         </script>
 
         @if($isAdmin)
-        <!-- Edit Path Modal -->
+        <!-- Edit Path admin -->
         <div id="edit-path-modal" class="fixed inset-0 z-[100] hidden items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm transition-opacity duration-300 opacity-0">
             <div class="bg-white rounded-3xl w-full max-w-2xl overflow-hidden shadow-2xl border border-slate-100 transition-transform duration-300 scale-95 flex flex-col max-h-[90vh]">
-                <!-- Modal Header -->
                 <div class="px-8 py-5 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
                     <h3 class="text-xl font-bold text-slate-900 title-font flex items-center gap-2">
                         <span class="w-2.5 h-6 bg-blue-600 rounded-full inline-block"></span>
@@ -514,38 +493,31 @@
                     </button>
                 </div>
 
-                <!-- Modal Body (Scrollable) -->
                 <form id="edit-path-form" onsubmit="submitEditPath(event)" class="flex-grow overflow-y-auto p-8 space-y-6">
                     @csrf
                     <input type="hidden" id="edit-path-id" name="id">
 
-                    <!-- Title -->
                     <div>
                         <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Nama Path</label>
                         <input type="text" id="edit-path-title" name="title" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-blue-500 font-medium text-slate-800 text-sm">
                     </div>
 
-                    <!-- Image URL -->
                     <div>
                         <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Image URL</label>
                         <input type="text" id="edit-path-image" name="image" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-blue-500 font-medium text-slate-800 text-sm">
                     </div>
 
-                    <!-- Description -->
                     <div>
                         <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Short Description</label>
                         <textarea id="edit-path-description" name="description" rows="3" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-blue-500 font-medium text-slate-800 text-sm"></textarea>
                     </div>
 
-                    <!-- Career Description -->
                     <div>
                         <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Detailed Career Description</label>
                         <textarea id="edit-path-career_description" name="career_description" rows="4" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-blue-500 font-medium text-slate-800 text-sm"></textarea>
                     </div>
 
-                    <!-- Two columns: theme & salary -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <!-- Theme -->
                         <div>
                             <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Tema Warna</label>
                             <select id="edit-path-theme" name="theme" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-blue-500 font-medium text-slate-800 text-sm bg-white">
@@ -557,26 +529,22 @@
                             </select>
                         </div>
 
-                        <!-- Salary Range -->
                         <div>
                             <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Salary Range</label>
                             <input type="text" id="edit-path-salary" name="salary_range" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-blue-500 font-medium text-slate-800 text-sm">
                         </div>
                     </div>
 
-                    <!-- Skills -->
                     <div>
                         <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Skills (Comma-separated)</label>
                         <input type="text" id="edit-path-skills" placeholder="e.g. HTML, CSS, React" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-blue-500 font-medium text-slate-800 text-sm">
                     </div>
 
-                    <!-- Suitability criteria -->
                     <div>
                         <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Kriteria Kecocokan (Enter-separated)</label>
                         <textarea id="edit-path-suitability" rows="3" placeholder="Satu baris untuk satu kriteria..." class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-blue-500 font-medium text-slate-800 text-sm"></textarea>
                     </div>
 
-                    <!-- Action Buttons -->
                     <div class="flex justify-between items-center pt-4 border-t border-slate-100">
                         <button type="button" onclick="deleteCurrentPath()" class="px-6 py-3 bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200 font-bold rounded-2xl text-sm transition-all cursor-pointer">
                             🗑️ Hapus Path
@@ -594,10 +562,9 @@
             </div>
         </div>
 
-        <!-- Add Path Modal -->
+        <!-- Add Path Modal admin mode -->
         <div id="add-path-modal" class="fixed inset-0 z-[100] hidden items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm transition-opacity duration-300 opacity-0">
             <div class="bg-white rounded-3xl w-full max-w-2xl overflow-hidden shadow-2xl border border-slate-100 transition-transform duration-300 scale-95 flex flex-col max-h-[90vh]">
-                <!-- Modal Header -->
                 <div class="px-8 py-5 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
                     <h3 class="text-xl font-bold text-slate-900 title-font flex items-center gap-2">
                         <span class="w-2.5 h-6 bg-blue-600 rounded-full inline-block"></span>
@@ -608,45 +575,37 @@
                     </button>
                 </div>
 
-                <!-- Modal Body (Scrollable) -->
                 <form id="add-path-form" onsubmit="submitAddPath(event)" class="flex-grow overflow-y-auto p-8 space-y-6">
                     @csrf
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <!-- Title -->
                         <div>
                             <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Nama Path</label>
                             <input type="text" id="add-path-title" name="title" required class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-blue-500 font-medium text-slate-800 text-sm" placeholder="e.g. DevOps Engineer">
                         </div>
 
-                        <!-- Slug -->
                         <div>
                             <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Slug URL (Unique)</label>
                             <input type="text" id="add-path-slug" name="slug" required class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-blue-500 font-medium text-slate-800 text-sm" placeholder="e.g. devops">
                         </div>
                     </div>
 
-                    <!-- Image URL -->
                     <div>
                         <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Image URL</label>
                         <input type="text" id="add-path-image" name="image" required class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-blue-500 font-medium text-slate-800 text-sm" placeholder="e.g. https://images.unsplash.com/photo-...">
                     </div>
 
-                    <!-- Description -->
                     <div>
                         <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Short Description</label>
                         <textarea id="add-path-description" name="description" required rows="2" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-blue-500 font-medium text-slate-800 text-sm" placeholder="Kuasai cara mengotomatisasi pipeline integrasi..."></textarea>
                     </div>
 
-                    <!-- Career Description -->
                     <div>
                         <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Detailed Career Description</label>
                         <textarea id="add-path-career_description" name="career_description" required rows="3" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-blue-500 font-medium text-slate-800 text-sm" placeholder="DevOps Engineer bertanggung jawab untuk..."></textarea>
                     </div>
 
-                    <!-- Two columns: theme & salary -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <!-- Theme -->
                         <div>
                             <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Tema Warna</label>
                             <select id="add-path-theme" name="theme" required class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-blue-500 font-medium text-slate-800 text-sm bg-white">
@@ -658,26 +617,22 @@
                             </select>
                         </div>
 
-                        <!-- Salary Range -->
                         <div>
                             <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Salary Range</label>
                             <input type="text" id="add-path-salary" name="salary_range" required class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-blue-500 font-medium text-slate-800 text-sm" placeholder="e.g. Rp 8.000.000 - Rp 20.000.000">
                         </div>
                     </div>
 
-                    <!-- Skills -->
                     <div>
                         <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Skills (Comma-separated)</label>
                         <input type="text" id="add-path-skills" required placeholder="e.g. Docker, Kubernetes, CI/CD" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-blue-500 font-medium text-slate-800 text-sm">
                     </div>
 
-                    <!-- Suitability criteria -->
                     <div>
                         <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Kriteria Kecocokan (Enter-separated)</label>
                         <textarea id="add-path-suitability" required rows="3" placeholder="Satu baris untuk satu kriteria..." class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-blue-500 font-medium text-slate-800 text-sm"></textarea>
                     </div>
 
-                    <!-- Action Buttons -->
                     <div class="flex justify-end gap-3 pt-4 border-t border-slate-100">
                         <button type="button" onclick="closeAddPathModal()" class="px-6 py-3 border border-slate-200 bg-transparent hover:bg-slate-50 text-slate-500 font-bold rounded-2xl text-sm transition-colors cursor-pointer">
                             Batal

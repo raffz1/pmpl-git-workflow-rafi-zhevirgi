@@ -19,15 +19,11 @@
     </head>
     <body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col">
 
-        <!-- Navigation Bar -->
         @include('layouts.navbar')
 
-        <!-- Main Content -->
         <main class="grow">
-            <!-- Hero Section -->
             <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-20">
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                    <!-- Left: Text content -->
                     <div class="max-w-xl">
                         <p class="text-xs sm:text-sm font-bold tracking-widest text-blue-600 uppercase mb-4">Start Your Career</p>
                         <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 leading-tight mb-6 tracking-tight">
@@ -56,16 +52,13 @@
                         </div>
                     </div>
                     
-                    <!-- Right: Image -->
                     <div class="relative w-full h-72 sm:h-96 lg:h-[480px] rounded-2xl overflow-hidden shadow-2xl group">
-                        <!-- Unsplash placeholder related to PC / gaming / tech setup -->
                         <img src="https://images.unsplash.com/photo-1598550476439-6847785fcea6?q=80&w=2070&auto=format&fit=crop" alt="PC Gaming Setup" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
                         <div class="absolute inset-0 bg-linear-to-t from-slate-900/30 to-transparent"></div>
                     </div>
                 </div>
             </section>
 
-            <!-- Features Section -->
             <section class="bg-white py-16 lg:py-24 border-t border-slate-100">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="text-center max-w-3xl mx-auto mb-16">
@@ -118,10 +111,8 @@
                 </div>
             </section>
 
-            <!-- CTA Banner -->
             <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
                 <div class="bg-linear-to-br from-blue-500 to-blue-700 rounded-3xl shadow-xl overflow-hidden relative">
-                    <!-- Decorative subtle elements -->
                     <div class="absolute top-0 right-0 -mr-12 -mt-12 w-80 h-80 rounded-full bg-white opacity-5 blur-3xl pointer-events-none"></div>
                     <div class="absolute bottom-0 left-0 -ml-12 -mb-12 w-80 h-80 rounded-full bg-white opacity-10 blur-3xl pointer-events-none"></div>
                     

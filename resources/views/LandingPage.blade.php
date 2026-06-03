@@ -6,7 +6,7 @@
     <title>Path Deck - Start Your Career</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     
-    <!-- Modern Google Fonts -->
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
@@ -91,22 +91,17 @@
 </head>
 <body class="bg-gradient-to-b from-white via-blue-50/15 to-white text-slate-800 antialiased min-h-screen flex flex-col overflow-x-hidden relative">
 
-    <!-- Moving Background Animations & Faded Blue Grid -->
     <div class="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-        <!-- Floating Faded Blobs -->
         <div class="absolute top-[8%] left-[-8%] w-[500px] h-[500px] rounded-full bg-blue-300/10 blur-3xl animate-float-blob" style="animation-duration: 9s;"></div>
         <div class="absolute top-[35%] right-[-12%] w-[550px] h-[550px] rounded-full bg-indigo-300/10 blur-3xl animate-float-blob" style="animation-delay: -3s; animation-duration: 12s;"></div>
         <div class="absolute bottom-[20%] left-[-5%] w-[450px] h-[450px] rounded-full bg-cyan-300/10 blur-3xl animate-float-blob" style="animation-delay: -6s; animation-duration: 8s;"></div>
         <div class="absolute bottom-[5%] right-[5%] w-[400px] h-[400px] rounded-full bg-blue-200/10 blur-3xl animate-float-blob" style="animation-delay: -9s; animation-duration: 10s;"></div>
 
-        <!-- Faded Geometric Pattern Grid in Soft Blue Color -->
         <div class="absolute inset-0 bg-[linear-gradient(to_right,#3b82f6_1px,transparent_1px),linear-gradient(to_bottom,#3b82f6_1px,transparent_1px)] bg-[size:5rem_5rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_80%,transparent_100%)] opacity-[0.06]"></div>
 
-        <!-- Drifting Tech Particles (Spawned by JS) -->
         <div id="particle-container" class="absolute inset-0"></div>
     </div>
 
-    <!-- Reusable Smart Sticky Glassmorphism Navbar -->
     @include('layouts.navbar')
 
     <!-- Main Content -->
@@ -114,7 +109,6 @@
         <!-- Hero Section -->
         <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
-                <!-- Left: Text content -->
                 <div class="max-w-xl reveal active">
                     <p class="text-xs sm:text-sm font-bold tracking-widest text-blue-600 uppercase mb-4 title-font">Start Your Career</p>
                     <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 leading-tight mb-6 tracking-tight title-font">
@@ -143,7 +137,7 @@
                     </div>
                 </div>
                 
-                <!-- Right: Interactive 3D Image Card -->
+                <!-- Interactive 3D Image Card -->
                 <div class="relative w-full h-80 sm:h-96 lg:h-[450px] rounded-2xl overflow-hidden shadow-2xl card-tilt reveal active cursor-pointer" style="transition-delay: 200ms;">
                     <img src="{{ asset('images/fotodashboard.png') }}" alt="PC Gaming Setup" class="absolute inset-0 w-full h-full object-cover card-image-lift transition-transform duration-500">
                     <div class="absolute inset-0 bg-gradient-to-t from-slate-950/40 via-transparent to-transparent z-10"></div>
@@ -198,10 +192,8 @@
             </div>
         </section>
 
-        <!-- CTA Banner -->
         <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-20 reveal">
             <div class="bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-700 rounded-3xl shadow-xl shadow-blue-500/10 overflow-hidden relative border border-blue-400/20">
-                <!-- Glowing Ambient Gradients Inside Banner -->
                 <div class="absolute top-0 right-0 -mr-12 -mt-12 w-80 h-80 rounded-full bg-white opacity-5 blur-3xl pointer-events-none animate-pulse" style="animation-duration: 6s;"></div>
                 <div class="absolute bottom-0 left-0 -ml-12 -mb-12 w-80 h-80 rounded-full bg-white opacity-10 blur-3xl pointer-events-none animate-pulse" style="animation-duration: 8s;"></div>
                 
@@ -225,7 +217,6 @@
         </section>
     </main>
 
-    <!-- Footer -->
     <footer class="bg-slate-50 border-t border-slate-200 mt-auto relative z-10">
         <div class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8 flex items-center justify-center">
             <p class="text-sm text-slate-500 font-medium">
@@ -234,10 +225,8 @@
         </div>
     </footer>
 
-    <!-- Interactive Javascript for 3D Tilt, Particle Spawning, and Scroll Reveal -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // --- 3D Tilt Effect for Hero Image ---
             const heroTilts = document.querySelectorAll('.card-tilt');
             heroTilts.forEach(card => {
                 let current = { rotateX: 0, rotateY: 0, scale: 1 };
