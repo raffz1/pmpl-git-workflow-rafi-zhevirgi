@@ -17,7 +17,14 @@ class Module extends Model
         'icon',
         'content_title',
         'content_body',
+        'quiz_selection_type',
+        'quiz_custom_questions',
     ];
+
+    protected $casts = [
+        'quiz_custom_questions' => 'array',
+    ];
+
 
     public function path(): BelongsTo
     {

@@ -58,6 +58,20 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
     
     <style>
+        /* Mobile Sidebar Drawer transition classes */
+        @media (max-width: 767px) {
+            #learning-sidebar {
+                transform: translateX(100%) !important;
+                transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            }
+            #learning-sidebar.translate-x-0 {
+                transform: translateX(0) !important;
+            }
+            #learning-sidebar.translate-x-full {
+                transform: translateX(100%) !important;
+            }
+        }
+
         /* Quill output overrides to fit nicely inside the workspace content body */
         #workspace-content-body.ql-editor {
             padding: 0 !important;
@@ -751,71 +765,78 @@
     <div id="learning-view" class="hidden opacity-0 fixed inset-0 bg-white z-[60] flex flex-col overflow-hidden font-sans transition-all duration-350">
         
         <!-- Navbar -->
-        <header class="h-16 border-b border-slate-200 bg-white px-8 flex justify-between items-center shrink-0">
+        <header class="h-14 sm:h-16 border-b border-slate-200 bg-white px-3 sm:px-8 flex justify-between items-center shrink-0">
             <div class="flex items-center">
-                <a href="{{ route('dashboard') }}" class="text-xl sm:text-2xl font-bold tracking-tight text-[#0050d2] flex items-center gap-2">
-                    <svg class="h-6 w-6 text-[#0050d2]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                <a href="{{ route('dashboard') }}" class="flex items-center gap-1 sm:gap-2 text-[#0050d2]">
+                    <svg class="h-4.5 w-4.5 sm:h-6 sm:w-6 text-[#0050d2] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M14 10l-2 1m0 0l-2-1m2 1v2.5M20 7l-8-4-8 4v10l8 4 8-4V7z" />
                     </svg>
-                    <span class="title-font font-black">Path Deck</span>
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:gap-1 text-xs sm:text-base md:text-lg font-black tracking-tight leading-none whitespace-nowrap">
+                        <span>Path</span>
+                        <span>Deck</span>
+                    </div>
                 </a>
             </div>
             
-            <div class="flex items-center space-x-6">
-                <a href="{{ route('dashboard') }}" class="text-sm font-semibold text-slate-500 hover:text-[#0050d2] transition-colors">Dashboard</a>
-                <a href="{{ route('explore.path') }}" class="relative text-sm font-semibold text-[#0050d2] py-5">
+            <div class="flex items-center gap-2 sm:gap-6 h-full">
+                <a href="{{ route('dashboard') }}" class="text-[10px] sm:text-sm font-semibold text-slate-500 hover:text-[#0050d2] transition-colors whitespace-nowrap">Dashboard</a>
+                <a href="{{ route('explore.path') }}" class="relative text-[10px] sm:text-sm font-semibold text-[#0050d2] py-4 sm:py-5 whitespace-nowrap">
                     Explore path
                     <span class="absolute bottom-0 left-0 w-full h-0.5 bg-[#0050d2]"></span>
                 </a>
-                <span class="h-6 w-px bg-slate-200"></span>
+                <span class="h-4 sm:h-6 w-px bg-slate-200"></span>
                 
-                <button class="text-[#0050d2] hover:opacity-85 transition-opacity cursor-pointer border-0 bg-transparent">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                <button class="text-[#0050d2] hover:opacity-85 transition-opacity cursor-pointer border-0 bg-transparent shrink-0">
+                    <svg class="w-4 h-4 sm:w-5 sm:w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
                     </svg>
                 </button>
                 
-                <button class="text-[#0050d2] hover:opacity-85 transition-opacity cursor-pointer border-0 bg-transparent">
-                    <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                <button class="text-[#0050d2] hover:opacity-85 transition-opacity cursor-pointer border-0 bg-transparent shrink-0">
+                    <svg class="w-4.5 h-4.5 sm:w-6 sm:w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                 </button>
             </div>
         </header>
 
+        <!-- Sidebar Backdrop for Mobile -->
+        <div id="sidebar-backdrop" onclick="toggleSidebar()" class="hidden fixed inset-0 bg-slate-900/40 backdrop-blur-xs z-40 md:hidden transition-opacity duration-300 opacity-0"></div>
+
         <!-- Main split container -->
         <div class="grow flex overflow-hidden">
             
             <!-- Left Pane -->
-            <div class="flex-grow flex flex-col overflow-hidden bg-white">
+            <div class="flex-grow min-w-0 flex flex-col overflow-hidden bg-white">
                 
                 <!-- Sub-header Toolbar -->
-                <div class="h-20 border-b border-slate-200 px-12 flex justify-between items-center bg-white shrink-0">
+                <div class="h-20 border-b border-slate-200 px-4 sm:px-12 flex justify-between items-center bg-white shrink-0">
                     <div>
                         <span class="text-[10px] font-extrabold text-[#0050d2] uppercase tracking-wider block">CURRENT LESSON</span>
-                        <h2 id="workspace-lesson-title" class="text-xl font-extrabold text-slate-900 mt-1">Pengenalan</h2>
+                        <h2 id="workspace-lesson-title" class="text-base sm:text-xl font-extrabold text-slate-900 mt-1">Pengenalan</h2>
                     </div>
-                    <div class="flex items-center space-x-4">
-                        <span id="workspace-progress-fraction" class="text-sm font-extrabold text-slate-800 font-mono">1/{{ $totalModules }}</span>
+                    <div class="flex items-center gap-2 sm:gap-4 shrink-0">
+                        <span id="workspace-progress-fraction" class="text-xs sm:text-sm font-extrabold text-slate-800 font-mono">1/{{ $totalModules }}</span>
                         <span class="h-6 w-px bg-slate-200"></span>
                         
                         @if($isAdmin)
                         <!-- Edit Mode Toggle -->
-                        <button id="edit-mode-toggle-btn" onclick="toggleEditMode()" class="flex items-center gap-2 text-xs font-bold text-slate-600 border border-slate-200 rounded-xl px-4 py-2 bg-white transition-all duration-200 cursor-pointer shadow-sm hover:bg-slate-50">
+                        <button id="edit-mode-toggle-btn" onclick="toggleEditMode()" class="flex items-center gap-2 text-xs font-bold text-slate-600 border border-slate-200 rounded-xl px-3 py-2 bg-white transition-all duration-200 cursor-pointer shadow-sm hover:bg-slate-50">
                             <span class="w-2 h-2 rounded-full bg-slate-400 transition-colors duration-300" id="edit-mode-indicator"></span>
-                            <span>Edit Mode: <strong id="edit-mode-text">OFF</strong></span>
+                            <span class="hidden sm:inline">Edit Mode: <strong id="edit-mode-text">OFF</strong></span>
+                            <strong class="sm:hidden" id="edit-mode-text-mobile">OFF</strong>
                         </button>
                         <span class="h-6 w-px bg-slate-200"></span>
 
                         <!-- Edit Module Action -->
-                        <button id="admin-edit-module-btn" onclick="openEditModuleModal()" class="hidden flex items-center gap-1.5 text-xs font-bold text-slate-600 hover:text-blue-600 hover:bg-slate-50 border border-slate-200 rounded-xl px-3 py-1.5 bg-white transition-all duration-200 cursor-pointer shadow-sm active:scale-95">
-                            🔧 Edit Modul
+                        <button id="admin-edit-module-btn" onclick="openEditModuleModal()" class="hidden flex items-center gap-1.5 text-xs font-bold text-slate-600 hover:text-blue-600 hover:bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-1.5 bg-white transition-all duration-200 cursor-pointer shadow-sm active:scale-95">
+                            🔧 <span class="hidden sm:inline">Edit Modul</span>
                         </button>
                         <span id="admin-edit-module-separator" class="hidden h-6 w-px bg-slate-200"></span>
 
                         <!-- Add Module Action -->
-                        <button id="admin-add-module-btn" onclick="openAddModuleModal()" class="hidden flex items-center gap-1.5 text-xs font-bold text-slate-600 hover:text-emerald-600 hover:bg-slate-50 border border-slate-200 rounded-xl px-3 py-1.5 bg-white transition-all duration-200 cursor-pointer shadow-sm active:scale-95">
-                            ➕ Tambah Modul
+                        <button id="admin-add-module-btn" onclick="openAddModuleModal()" class="hidden flex items-center gap-1.5 text-xs font-bold text-slate-600 hover:text-emerald-600 hover:bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-1.5 bg-white transition-all duration-200 cursor-pointer shadow-sm active:scale-95">
+                            ➕ <span class="hidden sm:inline">Tambah Modul</span>
                         </button>
                         <span id="admin-add-module-separator" class="hidden h-6 w-px bg-slate-200"></span>
                         @endif
@@ -824,14 +845,23 @@
                             <svg id="marks-icon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0111.186 0z" />
                             </svg>
-                            <span id="marks-text">Marks</span>
+                            <span id="marks-text" class="hidden sm:inline">Marks</span>
                         </button>
                         <span class="h-6 w-px bg-slate-200"></span>
+
+                        <!-- Sidebar toggle button for both mobile and desktop -->
+                        <button id="sidebar-toggle-btn" onclick="toggleSidebar()" class="flex items-center justify-center w-9 h-9 rounded-xl border border-slate-200 bg-slate-50 text-slate-600 hover:text-[#0050d2] transition-all cursor-pointer">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+                            </svg>
+                        </button>
+                        <span class="h-6 w-px bg-slate-200"></span>
+
                         <button onclick="closeLearningView()" class="flex items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-slate-800 hover:bg-slate-100 border border-slate-200 rounded-xl px-3 py-1.5 bg-slate-50 transition-all duration-200 cursor-pointer shadow-sm active:scale-95">
                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
                             </svg>
-                            Keluar
+                            <span class="hidden sm:inline">Keluar</span>
                         </button>
                     </div>
                 </div>
@@ -912,7 +942,7 @@
             </div>
             
             <!-- Right Pane: Sidebar -->
-            <aside class="w-[320px] border-l border-slate-200 bg-[#F2F7FF] flex flex-col shrink-0 overflow-y-auto">
+            <aside id="learning-sidebar" class="fixed md:relative inset-y-0 md:inset-y-auto right-0 md:right-auto z-50 md:z-auto w-[280px] md:w-[320px] transition-all duration-300 transform translate-x-full md:translate-x-0 border-l border-slate-200 bg-[#F2F7FF] flex flex-col shrink-0 overflow-y-auto shadow-2xl md:shadow-none">
                 <div class="bg-[#0050d2] p-6 text-white shrink-0">
                     <span class="text-[9px] font-extrabold tracking-widest text-blue-200/80 uppercase block mb-1">LEARNING PATH</span>
                     <h3 class="text-lg font-black tracking-tight mb-6">{{ $path->title }}</h3>
@@ -1360,6 +1390,7 @@
             let selectedOptions = [null, null, null, null, null];
             let currentQuestionIndex = 0;
             let quizScore = 0;
+            const markedModules = @json($markedModules ?? []);
 
             const pathSlug = @json($path->slug);
             const loadTime = Math.floor(Date.now() / 1000);
@@ -1402,6 +1433,9 @@
                 }
             }
 
+            // --- Modules Data ---
+            const modulesData = @json($modulesData);
+
             // Check session for auto-open redirect logic
             const autoOpenIndex = sessionStorage.getItem('autoOpenModuleIndex');
             if (autoOpenIndex !== null) {
@@ -1410,10 +1444,19 @@
                 setTimeout(() => {
                     openLearningView(idx);
                 }, 400);
+            } else {
+                // Check URL parameters for auto-open redirect logic
+                const urlParams = new URLSearchParams(window.location.search);
+                const openModuleId = urlParams.get('open_module_id');
+                if (openModuleId) {
+                    const modIdx = modulesData.findIndex(m => m.id == openModuleId);
+                    if (modIdx !== -1) {
+                        setTimeout(() => {
+                            openLearningView(modIdx);
+                        }, 400);
+                    }
+                }
             }
-
-            // --- Modules Data ---
-            const modulesData = @json($modulesData);
 
             // --- Custom Confetti Generator ---
             function triggerConfetti() {
@@ -1510,6 +1553,23 @@
                 activeModuleIndex = index;
                 const data = modulesData[index];
 
+                // Auto close sidebar on mobile if it is open
+                if (window.innerWidth < 768) {
+                    const sidebar = document.getElementById('learning-sidebar');
+                    const backdrop = document.getElementById('sidebar-backdrop');
+                    if (sidebar && sidebar.classList.contains('translate-x-0')) {
+                        sidebar.classList.remove('translate-x-0');
+                        sidebar.classList.add('translate-x-full');
+                        if (backdrop) {
+                            backdrop.classList.remove('opacity-100');
+                            backdrop.classList.add('opacity-0');
+                            setTimeout(() => {
+                                backdrop.classList.add('hidden');
+                            }, 300);
+                        }
+                    }
+                }
+
                 document.getElementById('workspace-lesson-title').innerText = data.title;
                 document.getElementById('workspace-progress-fraction').innerText = `${index + 1}/${totalLessons}`;
 
@@ -1536,12 +1596,19 @@
                 }, 100);
 
                 const marksIcon = document.getElementById('marks-icon');
+                const marksText = document.getElementById('marks-text');
+                if (markedModules.includes(data.id)) {
+                    marksIcon.setAttribute('fill', '#0050d2');
+                    if (marksText) marksText.innerText = 'Marked';
+                } else {
+                    marksIcon.setAttribute('fill', 'none');
+                    if (marksText) marksText.innerText = 'Marks';
+                }
+
                 if (index < currentStep) {
-                    marksIcon.setAttribute('fill', '{{ $accentColor }}');
                     document.getElementById('workspace-quiz-card').classList.add('hidden');
                     document.getElementById('workspace-quiz-completed-card').classList.remove('hidden');
                 } else {
-                    marksIcon.setAttribute('fill', 'none');
                     document.getElementById('workspace-quiz-card').classList.remove('hidden');
                     document.getElementById('workspace-quiz-completed-card').classList.add('hidden');
                 }
@@ -1642,13 +1709,42 @@
                 const isAdmin = @json($isAdmin);
                 if (isAdmin) return; // Admins don't write progress
 
-                if (activeModuleIndex < currentStep) {
-                    return;
-                }
+                const data = modulesData[activeModuleIndex];
+                const csrfToken = document.querySelector('input[name="_token"]').value;
 
-                if (activeModuleIndex === currentStep) {
-                    completeActiveModuleRealtime();
-                }
+                fetch(`/path/module/${data.id}/toggle-mark`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken,
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({})
+                })
+                .then(res => res.json())
+                .then(resData => {
+                    if (resData.success) {
+                        if (resData.is_marked) {
+                            if (!markedModules.includes(data.id)) {
+                                markedModules.push(data.id);
+                            }
+                            document.getElementById('marks-icon').setAttribute('fill', '#0050d2');
+                            const marksText = document.getElementById('marks-text');
+                            if (marksText) marksText.innerText = 'Marked';
+                        } else {
+                            const idx = markedModules.indexOf(data.id);
+                            if (idx !== -1) {
+                                markedModules.splice(idx, 1);
+                            }
+                            document.getElementById('marks-icon').setAttribute('fill', 'none');
+                            const marksText = document.getElementById('marks-text');
+                            if (marksText) marksText.innerText = 'Marks';
+                        }
+                    }
+                })
+                .catch(err => {
+                    console.error("Error toggling bookmark:", err);
+                });
             };
 
             // --- Complete Active Step via AJAX ---
@@ -2192,6 +2288,7 @@
                 const toggleBtn = document.getElementById('edit-mode-toggle-btn');
                 const indicator = document.getElementById('edit-mode-indicator');
                 const text = document.getElementById('edit-mode-text');
+                const textMobile = document.getElementById('edit-mode-text-mobile');
                 const editModBtn = document.getElementById('admin-edit-module-btn');
                 const editModSep = document.getElementById('admin-edit-module-separator');
                 const editQuizBtn = document.getElementById('admin-edit-quiz-btn');
@@ -2206,6 +2303,7 @@
                         indicator.classList.add('bg-emerald-500', 'animate-pulse');
                     }
                     if (text) text.innerText = 'ON';
+                    if (textMobile) textMobile.innerText = 'ON';
 
                     if (editModBtn) editModBtn.classList.remove('hidden');
                     if (editModSep) editModSep.classList.remove('hidden');
@@ -2224,6 +2322,7 @@
                         indicator.classList.add('bg-slate-400');
                     }
                     if (text) text.innerText = 'OFF';
+                    if (textMobile) textMobile.innerText = 'OFF';
 
                     if (editModBtn) editModBtn.classList.add('hidden');
                     if (editModSep) editModSep.classList.add('hidden');
@@ -2564,6 +2663,50 @@
                 toast.classList.add('translate-y-0', 'opacity-100');
             }
             @endif
+
+            // --- Toggle Sidebar Drawer on Mobile & Desktop ---
+            window.toggleSidebar = function() {
+                const sidebar = document.getElementById('learning-sidebar');
+                const backdrop = document.getElementById('sidebar-backdrop');
+                if (!sidebar) return;
+
+                const isDesktop = window.innerWidth >= 768; // md breakpoint
+
+                if (isDesktop) {
+                    // Desktop behavior: toggle collapse width and visibility
+                    if (sidebar.classList.contains('md:w-[320px]')) {
+                        // Collapse
+                        sidebar.classList.remove('md:w-[320px]', 'md:translate-x-0');
+                        sidebar.classList.add('md:w-0', 'md:translate-x-full', 'overflow-hidden', 'opacity-0', 'border-l-0');
+                    } else {
+                        // Expand
+                        sidebar.classList.remove('md:w-0', 'md:translate-x-full', 'overflow-hidden', 'opacity-0', 'border-l-0');
+                        sidebar.classList.add('md:w-[320px]', 'md:translate-x-0');
+                    }
+                } else {
+                    // Mobile behavior: slide drawer
+                    if (sidebar.classList.contains('translate-x-full')) {
+                        sidebar.classList.remove('translate-x-full');
+                        sidebar.classList.add('translate-x-0');
+                        if (backdrop) {
+                            backdrop.classList.remove('hidden');
+                            void backdrop.offsetWidth;
+                            backdrop.classList.remove('opacity-0');
+                            backdrop.classList.add('opacity-100');
+                        }
+                    } else {
+                        sidebar.classList.remove('translate-x-0');
+                        sidebar.classList.add('translate-x-full');
+                        if (backdrop) {
+                            backdrop.classList.remove('opacity-100');
+                            backdrop.classList.add('opacity-0');
+                            setTimeout(() => {
+                                backdrop.classList.add('hidden');
+                            }, 300);
+                        }
+                    }
+                }
+            };
 
         });
     </script>

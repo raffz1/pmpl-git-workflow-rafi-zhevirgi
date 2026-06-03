@@ -120,8 +120,19 @@ class DashboardController extends Controller
         }
         
         $progressCount = $activePath ? 1 : 0;
+
+        $markedModules = [];
+        if (auth()->check()) {
+            $user = auth()->user();
+            $markedIds = $user->marked_modules ?? [];
+            if (!empty($markedIds)) {
+                $markedModules = \App\Models\Module::whereIn('id', $markedIds)
+                    ->with('path')
+                    ->get();
+            }
+        }
   
-        return view('dashboard', compact('progressCount', 'activePath', 'userName', 'isAdmin'));
+        return view('dashboard', compact('progressCount', 'activePath', 'userName', 'isAdmin', 'markedModules'));
     }
   
     public function resetProgress()

@@ -113,7 +113,7 @@
     <main class="grow relative z-10">
         <!-- Hero Section -->
         <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
                 <!-- Left: Text content -->
                 <div class="max-w-xl reveal active">
                     <p class="text-xs sm:text-sm font-bold tracking-widest text-blue-600 uppercase mb-4 title-font">Start Your Career</p>

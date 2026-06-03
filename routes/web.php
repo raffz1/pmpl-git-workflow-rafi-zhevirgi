@@ -77,7 +77,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/path/detail/{slug}', [ExplorePathController::class, 'detailBySlug'])->name('path.detail.dynamic');
     Route::post('/path/detail/{slug}/complete', [ExplorePathController::class, 'completeStepDynamic'])->name('path.detail.complete.dynamic');
     Route::post('/path/detail/{slug}/reset', [ExplorePathController::class, 'resetStepDynamic'])->name('path.detail.reset.dynamic');
+    Route::post('/path/module/{id}/toggle-mark', [ExplorePathController::class, 'toggleModuleMark'])->name('path.module.toggle-mark');
 
     // Real-time updates polling
     Route::get('/api/path/{slug}/check-updates', [ExplorePathController::class, 'checkUpdates'])->name('api.path.check-updates');
+    Route::get('/api/check-global-updates', [ExplorePathController::class, 'checkGlobalUpdates'])->name('api.check-global-updates');
 });

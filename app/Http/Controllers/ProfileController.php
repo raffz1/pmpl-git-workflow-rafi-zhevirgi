@@ -15,81 +15,88 @@ class ProfileController extends Controller
             return redirect()->route('login');
         }
 
-        // Calculate progress percentages
-        $frontendProgress = round(($user->frontend_current_step / 7) * 100);
-        $backendProgress = round(($user->backend_current_step / 8) * 100);
-        $uiuxProgress = round(($user->uiux_current_step / 10) * 100);
-        $fullstackProgress = round(($user->fullstack_current_step / 10) * 100);
-        $pmProgress = round(($user->pm_current_step / 10) * 100);
-
-        $progresses = [
-            'Front End Developer' => $frontendProgress,
-            'Back End Developer' => $backendProgress,
-            'UI/UX Designer' => $uiuxProgress,
-            'Full Stack Developer' => $fullstackProgress,
-            'Project Manager' => $pmProgress,
-        ];
-
-        // Count completed paths
+        $dbPaths = \App\Models\Path::with('modules')->get();
+        $progresses = [];
+        $pathDetails = [];
         $completedPathsCount = 0;
-        if ($user->frontend_current_step >= 7) $completedPathsCount++;
-        if ($user->backend_current_step >= 8) $completedPathsCount++;
-        if ($user->uiux_current_step >= 10) $completedPathsCount++;
-        if ($user->fullstack_current_step >= 10) $completedPathsCount++;
-        if ($user->pm_current_step >= 10) $completedPathsCount++;
+
+        foreach ($dbPaths as $path) {
+            $slug = $path->slug;
+            $step = 0;
+            switch ($slug) {
+                case 'frontend':
+                    $step = $user->frontend_current_step;
+                    break;
+                case 'backend':
+                    $step = $user->backend_current_step;
+                    break;
+                case 'uiux':
+                    $step = $user->uiux_current_step;
+                    break;
+                case 'fullstack':
+                    $step = $user->fullstack_current_step;
+                    break;
+                case 'project-manager':
+                    $step = $user->pm_current_step;
+                    break;
+                default:
+                    $customProgress = $user->custom_paths_progress ?? [];
+                    $step = isset($customProgress[$slug]) ? (int)$customProgress[$slug] : 0;
+                    break;
+            }
+
+            $total = $path->modules->count();
+            if ($total == 0) {
+                $total = 7;
+            }
+
+            $progress = round(($step / $total) * 100);
+            if ($progress > 100) {
+                $progress = 100;
+            }
+            $completed = $step >= $total;
+            if ($completed) {
+                $completedPathsCount++;
+            }
+
+            $color = 'from-blue-500 to-indigo-600';
+            switch ($path->theme) {
+                case 'cyan':
+                    $color = 'from-cyan-500 to-blue-600';
+                    break;
+                case 'green':
+                    $color = 'from-emerald-500 to-teal-600';
+                    break;
+                case 'pink':
+                    $color = 'from-pink-500 to-rose-600';
+                    break;
+                case 'orange':
+                    $color = 'from-orange-500 to-amber-600';
+                    break;
+                case 'yellow':
+                    $color = 'from-yellow-500 to-orange-600';
+                    break;
+            }
+
+            $progresses[$path->title] = $progress;
+            $pathDetails[] = [
+                'name' => $path->title,
+                'progress' => $progress,
+                'completed' => $completed,
+                'step' => $step,
+                'total' => $total,
+                'color' => $color,
+            ];
+        }
 
         // Determine title based on completed paths
-        if ($completedPathsCount == 5) {
+        if ($dbPaths->count() > 0 && $completedPathsCount == $dbPaths->count()) {
             $dominantTitle = 'Expert';
         } elseif ($completedPathsCount >= 3) {
             $dominantTitle = 'Pro';
         } else {
             $dominantTitle = 'Beginner';
         }
-
-        // Paths detailed structure for view
-        $pathDetails = [
-            [
-                'name' => 'Front End Developer',
-                'progress' => $frontendProgress,
-                'completed' => $user->frontend_current_step >= 7,
-                'step' => $user->frontend_current_step,
-                'total' => 7,
-                'color' => 'from-cyan-500 to-blue-600',
-            ],
-            [
-                'name' => 'Back End Developer',
-                'progress' => $backendProgress,
-                'completed' => $user->backend_current_step >= 8,
-                'step' => $user->backend_current_step,
-                'total' => 8,
-                'color' => 'from-emerald-500 to-teal-600',
-            ],
-            [
-                'name' => 'UI/UX Designer',
-                'progress' => $uiuxProgress,
-                'completed' => $user->uiux_current_step >= 10,
-                'step' => $user->uiux_current_step,
-                'total' => 10,
-                'color' => 'from-pink-500 to-rose-600',
-            ],
-            [
-                'name' => 'Full Stack Developer',
-                'progress' => $fullstackProgress,
-                'completed' => $user->fullstack_current_step >= 10,
-                'step' => $user->fullstack_current_step,
-                'total' => 10,
-                'color' => 'from-orange-500 to-amber-600',
-            ],
-            [
-                'name' => 'Project Manager',
-                'progress' => $pmProgress,
-                'completed' => $user->pm_current_step >= 10,
-                'step' => $user->pm_current_step,
-                'total' => 10,
-                'color' => 'from-yellow-500 to-orange-600',
-            ],
-        ];
 
         return view('profile', compact('user', 'dominantTitle', 'pathDetails', 'progresses'));
     }

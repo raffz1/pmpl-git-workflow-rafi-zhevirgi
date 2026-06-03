@@ -66,25 +66,53 @@ class ExplorePathController extends Controller
         }
 
         // Map modules for frontend consumption
-        $modulesData = $modules->map(function ($mod) {
+        $modulesData = $modules->map(function ($mod) use ($isAdmin) {
+            $quizzesCollection = $mod->quizzes;
+
+            if (!$isAdmin) {
+                if ($mod->quiz_selection_type === 'custom' && is_array($mod->quiz_custom_questions) && count($mod->quiz_custom_questions) > 0) {
+                    $customIds = $mod->quiz_custom_questions;
+                    $filteredQuizzes = $quizzesCollection->filter(function ($q) use ($customIds) {
+                        return in_array($q->id, $customIds);
+                    });
+                    
+                    // Sort in the order of the customIds array
+                    $sortedQuizzes = collect();
+                    foreach ($customIds as $id) {
+                        $match = $filteredQuizzes->firstWhere('id', $id);
+                        if ($match) {
+                            $sortedQuizzes->push($match);
+                        }
+                    }
+                    
+                    $quizzesCollection = $sortedQuizzes->take(5);
+                } else {
+                    $quizzesCollection = $quizzesCollection->shuffle()->take(5);
+                }
+            }
+
             return [
                 'id' => $mod->id,
                 'title' => $mod->title,
                 'fullTitle' => $mod->content_title,
                 'content' => $mod->content_body,
                 'desc' => $mod->desc,
-                'quiz' => $mod->quizzes->map(function ($q) {
+                'quiz_selection_type' => $mod->quiz_selection_type ?? 'random',
+                'quiz_custom_questions' => $mod->quiz_custom_questions ?? [],
+                'quiz' => $quizzesCollection->map(function ($q) {
                     return [
                         'id' => $q->id,
                         'question' => $q->question,
                         'options' => $q->options,
                         'correct' => $q->correct,
                     ];
-                })->toArray()
+                })->values()->toArray()
             ];
         })->toArray();
 
-        return view('detail-path', compact('path', 'modules', 'modulesData', 'currentStep', 'userName', 'isAdmin'));
+        $markedModules = auth()->check() ? (auth()->user()->marked_modules ?? []) : [];
+
+        return view('detail-path', compact('path', 'modules', 'modulesData', 'currentStep', 'userName', 'isAdmin', 'markedModules'));
     }
 
     public function frontendDetail()
@@ -569,6 +597,63 @@ class ExplorePathController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Modul berhasil dihapus dan urutan kurikulum telah diperbarui!'
+        ]);
+    }
+
+    public function checkGlobalUpdates(Request $request)
+    {
+        $lastChecked = $request->query('last_updated');
+        if (!$lastChecked) {
+            return response()->json(['has_updates' => false]);
+        }
+
+        $latestPath = Path::max('updated_at');
+        $latestModule = Module::max('updated_at');
+        $latestQuiz = Quiz::max('updated_at');
+
+        $latestDb = max(
+            $latestPath ? strtotime($latestPath) : 0,
+            $latestModule ? strtotime($latestModule) : 0,
+            $latestQuiz ? strtotime($latestQuiz) : 0
+        );
+
+        $hasUpdates = $latestDb > (int)$lastChecked;
+
+        return response()->json([
+            'has_updates' => $hasUpdates,
+            'last_updated' => $latestDb
+        ]);
+    }
+
+    public function toggleModuleMark(Request $request, $id)
+    {
+        if (!auth()->check()) {
+            return response()->json(['success' => false, 'message' => 'Unauthorized.'], 401);
+        }
+
+        $user = auth()->user();
+        if ($user->isAdmin()) {
+            return response()->json(['success' => false, 'message' => 'Admin cannot mark modules.'], 403);
+        }
+
+        $marked = $user->marked_modules ?? [];
+        $moduleId = (int)$id;
+
+        if (in_array($moduleId, $marked)) {
+            $marked = array_values(array_diff($marked, [$moduleId]));
+            $isMarked = false;
+        } else {
+            $marked[] = $moduleId;
+            $isMarked = true;
+        }
+
+        $user->marked_modules = $marked;
+        $user->save();
+
+        return response()->json([
+            'success' => true,
+            'is_marked' => $isMarked,
+            'message' => $isMarked ? 'Modul berhasil ditandai!' : 'Modul batal ditandai.'
         ]);
     }
 

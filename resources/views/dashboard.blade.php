@@ -249,24 +249,47 @@
                             </div>
                         </div>
 
-                        <!-- Upcoming Event Card -->
+                        <!-- Marked Modules Card -->
                         <div class="bg-white border border-slate-200/80 rounded-2xl p-6 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.04)] hover:shadow-md transition-all duration-300 animate-fade-in-up" style="animation-delay: 300ms;">
                             <h3 class="text-lg font-extrabold text-slate-900 title-font flex items-center gap-2">
                                 <span class="w-1.5 h-6 bg-blue-600 rounded-full inline-block"></span>
-                                UPCOMING EVENT
+                                MARKED
                             </h3>
-                            <p class="text-xs font-semibold text-slate-400 mt-1 uppercase tracking-wider mb-6">COMPLETED LESSONS</p>
+                            <p class="text-xs font-semibold text-slate-400 mt-1 uppercase tracking-wider mb-6">Lanjutkan yang sudah kamu tandai</p>
                             
-                            <div class="flex items-center gap-4 p-3 bg-blue-50/40 border border-blue-100/50 rounded-xl hover:bg-blue-50 transition-colors duration-300">
-                                <div class="w-12 h-12 rounded-xl bg-blue-600 flex items-center justify-center text-white flex-shrink-0 shadow-md shadow-blue-600/20">
-                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                    </svg>
-                                </div>
-                                <div>
-                                    <h4 class="text-sm font-extrabold text-slate-900">Live Coding</h4>
-                                    <p class="text-xs text-slate-500 mt-0.5">14:00 PM &bull; Zoom Meeting</p>
-                                </div>
+                            <div class="space-y-4 max-h-[350px] overflow-y-auto pr-1">
+                                @forelse($markedModules as $mod)
+                                    @php
+                                        $url = '#';
+                                        if ($mod->path) {
+                                            switch($mod->path->slug) {
+                                                case 'frontend': $url = route('path.detail.frontend'); break;
+                                                case 'backend': $url = route('path.detail.backend'); break;
+                                                case 'uiux': $url = route('path.detail.uiux'); break;
+                                                case 'fullstack': $url = route('path.detail.fullstack'); break;
+                                                case 'project-manager': $url = route('path.detail.pm'); break;
+                                                default: $url = route('path.detail.dynamic', $mod->path->slug); break;
+                                            }
+                                            $url .= '?open_module_id=' . $mod->id;
+                                        }
+                                    @endphp
+                                    <a href="{{ $url }}" class="flex items-center gap-4 p-3 bg-blue-50/20 border border-slate-100 hover:border-blue-200 rounded-xl hover:bg-blue-50 transition-all duration-300 group block">
+                                        <div class="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center text-white flex-shrink-0 shadow-md group-hover:scale-105 transition-transform">
+                                            <span class="text-xs font-black font-mono">{{ $mod->icon }}</span>
+                                        </div>
+                                        <div class="min-w-0 flex-1">
+                                            <h4 class="text-sm font-extrabold text-slate-900 truncate group-hover:text-blue-600 transition-colors">{{ $mod->title }}</h4>
+                                            <p class="text-xs text-slate-400 mt-0.5 truncate">{{ $mod->path->title ?? 'Learning Path' }}</p>
+                                        </div>
+                                        <div class="text-[#0050d2] opacity-0 group-hover:opacity-100 transition-opacity">
+                                            &rarr;
+                                        </div>
+                                    </a>
+                                @empty
+                                    <div class="border border-dashed border-slate-200 rounded-2xl py-8 px-4 text-center">
+                                        <p class="text-xs font-semibold text-slate-400">Belum ada modul yang ditandai</p>
+                                    </div>
+                                @endforelse
                             </div>
                         </div>
 
