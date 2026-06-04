@@ -96,7 +96,12 @@
                     
                     <div class="lg:col-span-2 space-y-10">
                         
-                        <!-- continue learning -->
+                        <!-- 
+                            logika menyimpan histori dan disimpan pada continue learning
+                            - menampilkan learning path aktif yang sedang diikuti pengguna (berdasarkan active_path_id).
+                            - menampilkan modul aktif saat ini, persentase kelulusan progres belajar, serta progress bar.
+                            - pengguna dapat mereset riwayat belajarnya kembali ke awal lewat tombol "reset path".
+                        -->
                         <section class="animate-fade-in-up" style="animation-delay: 100ms;">
                             <h2 class="text-xl font-bold text-slate-900 mb-5 title-font flex items-center gap-2">
                                 <span class="w-1.5 h-6 bg-blue-600 rounded-full inline-block"></span>
@@ -189,7 +194,11 @@
 
                     <div class="space-y-6 lg:pt-0">
                         
-                        <!-- card your progress -->
+                        <!-- 
+                            logika your progress, quiz averages, completed lesson pada dashboard utama
+                            - completed lessons: menampilkan jumlah modul yang diselesaikan dibagi total seluruh modul (contoh: 2/7).
+                            - quiz average: menampilkan rata-rata nilai kelulusan kuis checkpoint pada modul aktif.
+                        -->
                         <div class="bg-white border border-slate-200/80 rounded-2xl p-6 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.04)] hover:shadow-md transition-all duration-300 animate-fade-in-up" style="animation-delay: 250ms;">
                             <h3 class="text-lg font-extrabold text-slate-900 mb-6 title-font flex items-center gap-2">
                                 <span class="w-1.5 h-6 bg-blue-600 rounded-full inline-block"></span>
@@ -218,7 +227,11 @@
                             </div>
                         </div>
 
-                        <!-- card bookmarkss -->
+                        <!-- 
+                            logika bookmarks / mark modul (dashboard widget)
+                            - menampilkan modul-modul materi yang ditandai dengan bookmark/bintang (marked_modules) oleh pengguna.
+                            - menyediakan tautan cepat dengan parameter query `?open_module_id=x` agar ketika diklik, halaman detail langsung membukakan modul tersebut.
+                        -->
                         <div class="bg-white border border-slate-200/80 rounded-2xl p-6 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.04)] hover:shadow-md transition-all duration-300 animate-fade-in-up" style="animation-delay: 300ms;">
                             <h3 class="text-lg font-extrabold text-slate-900 title-font flex items-center gap-2">
                                 <span class="w-1.5 h-6 bg-blue-600 rounded-full inline-block"></span>

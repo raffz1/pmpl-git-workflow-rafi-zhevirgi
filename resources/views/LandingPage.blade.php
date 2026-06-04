@@ -111,6 +111,12 @@
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
                 <div class="max-w-xl reveal active">
                     <p class="text-xs sm:text-sm font-bold tracking-widest text-blue-600 uppercase mb-4 title-font">Start Your Career</p>
+                    <!-- 
+                        WELCOME PAGE & KETERBATASAN AKSES GUEST:
+                        - ketika belum login (guest), halaman ini menampilkan heading utama "Path Deck" dan tombol "Register Now".
+                        - tombol "view Paths" mengarah ke list explore path yang sifatnya publik.
+                        - jika pengguna mencoba mem-bypass URL ke halaman pembelajaran detail, middleware Laravel akan mengarahkan ke halaman login.
+                    -->
                     <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 leading-tight mb-6 tracking-tight title-font">
                         @auth
                             Welcome, {{ auth()->user()->name }}!
@@ -123,14 +129,17 @@
                     </p>
                     <div class="flex flex-wrap gap-4">
                         @auth
+                            <!-- jika pengguna sudah login tapi berada di landing page, diarahkan ke Dashboard -->
                             <a href="{{ url('/dashboard') }}" class="inline-flex justify-center items-center px-6 py-3.5 border border-transparent text-sm sm:text-base font-bold rounded-xl text-white bg-blue-600 hover:bg-blue-700 shadow-lg shadow-blue-500/20 hover:shadow-xl hover:shadow-blue-500/30 transition-all duration-300 hover:scale-[1.03]">
                                 Go to Dashboard
                             </a>
                         @else
+                            <!-- tombol pendaftaran akun baru bagi guest -->
                             <a href="{{ url('/register') }}" class="inline-flex justify-center items-center px-6 py-3.5 border border-transparent text-sm sm:text-base font-bold rounded-xl text-white bg-blue-600 hover:bg-blue-700 shadow-lg shadow-blue-500/20 hover:shadow-xl hover:shadow-blue-500/30 transition-all duration-300 hover:scale-[1.03]">
                                 Register Now
                             </a>
                         @endauth
+                        <!-- akses publik untuk melihat daftar Learning Path yang tersedia -->
                         <a href="{{ route('explore.path') }}" class="inline-flex justify-center items-center px-6 py-3.5 border border-slate-200 text-sm sm:text-base font-bold rounded-xl text-blue-600 bg-white hover:bg-slate-50 shadow-sm transition-all duration-300 hover:scale-[1.03]">
                             View Paths &rarr;
                         </a>

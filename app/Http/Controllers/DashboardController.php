@@ -7,8 +7,17 @@ use App\Models\Path;
 
 class DashboardController extends Controller
 {
+    /*
+     * DASHBOARD UTAMA
+     * memuat seluruh data statistik untuk pengguna (Guest maupun Terautentikasi):
+     * 1. mengambil progres pengerjaan (step) untuk setiap Learning Path
+     * 2. menghitung persentase penyelesaian modul (Your Progress & Completed Lessons)
+     * 3. menyimpan/mengatur path yang sedang aktif dipelajari ke dalam session/database (Continue Learning)
+     * 4. memuat daftar modul yang diberi tanda bookmark (Marked Modules)
+     */
     public function index()
     {
+        // CONTINUE LEARNING
         $activePathId = session('active_path_id');
         if (auth()->check()) {
             $user = auth()->user();
@@ -18,7 +27,8 @@ class DashboardController extends Controller
             $fullstackStep = $user->fullstack_current_step;
             $pmStep = $user->pm_current_step;
             $uiuxStep = $user->uiux_current_step;
-            // Sync to session
+            
+            // sinkronisasi data progres user ke dalam session
             session(['active_path_id' => $activePathId]);
             session(['frontend_current_step' => $frontendStep]);
             session(['backend_current_step' => $backendStep]);
@@ -26,6 +36,7 @@ class DashboardController extends Controller
             session(['pm_current_step' => $pmStep]);
             session(['uiux_current_step' => $uiuxStep]);
         } else {
+            // untuk guest, ambil progres dari session saja
             $frontendStep = session('frontend_current_step', 0);
             $backendStep = session('backend_current_step', 0);
             $fullstackStep = session('fullstack_current_step', 0);
@@ -36,12 +47,13 @@ class DashboardController extends Controller
         $userName = auth()->check() ? (auth()->user()->name ?? 'Student') : 'Guest';
         $isAdmin = auth()->check() && auth()->user()->isAdmin();
 
-        // Fetch paths from database
+        // mengambil semua data Learning Path beserta relasi modulnya dari database
         $dbPaths = Path::with('modules')->get();
         
         $paths = [];
         foreach ($dbPaths as $path) {
             $step = 0;
+            // menentukan step saat ini berdasarkan slug path masing-masing
             switch ($path->slug) {
                 case 'frontend':
                     $step = $frontendStep;
@@ -65,6 +77,7 @@ class DashboardController extends Controller
                     break;
                 default:
                     if (auth()->check()) {
+                        // untuk custom path dinamis, ambil dari JSON custom_paths_progress
                         $customProgress = auth()->user()->custom_paths_progress ?? [];
                         $step = isset($customProgress[$path->slug]) ? (int)$customProgress[$path->slug] : 0;
                     } else {
@@ -76,9 +89,11 @@ class DashboardController extends Controller
 
             $totalModules = $path->modules->count();
             if ($totalModules == 0) {
-                $totalModules = 7; // Fallback
+                $totalModules = 7; // fallback jika belum ada modul yang terisi
             }
 
+            // YOUR PROGRESS DAN COMPLETED LESSONS
+            // progres dihitung berdasarkan rasio (step aktif / total modul) * 100%.
             $currentModuleModel = $path->modules->where('step_number', $step)->first();
             if ($step >= $totalModules) {
                 $moduleTitle = 'Kurikulum Selesai! 🎉';
@@ -92,19 +107,21 @@ class DashboardController extends Controller
                 'id' => $path->id,
                 'title' => $path->title,
                 'module' => $moduleTitle,
-                'progress' => $progress,
-                'lessons' => $step . '/' . $totalModules,
-                'quiz' => '90%', // Static placeholder
+                'progress' => $progress, // persentase progres (your progress)
+                'lessons' => $step . '/' . $totalModules, // completed lessons (modul terselesaikan)
+                'quiz' => '90%', // rata-rata nilai quiz (data placeholder/static)
                 'image' => $path->image,
                 'url' => $url,
                 'slug' => $path->slug,
             ];
         }
         
+        // LANJUTKAN BELAJAR (mencari path dengan progres aktif)
         $activePath = null;
         if ($activePathId && isset($paths[$activePathId])) {
             $activePath = $paths[$activePathId];
         } else {
+            // jika tidak ada active_path_id, cari path pertama yang progresnya sudah berjalan (> 0)
             foreach ($paths as $p) {
                 if ($p['progress'] > 0) {
                     $activePath = $p;
@@ -121,6 +138,8 @@ class DashboardController extends Controller
         
         $progressCount = $activePath ? 1 : 0;
 
+        // BOOKMARKS / MARKED MODULES (mengambil modul yang ditandai/marks)
+        // mengambil daftar ID modul yang ditandai dari kolom JSON marked_modules milik user di database, lalu memuat objek model modul beserta path-nya.
         $markedModules = [];
         if (auth()->check()) {
             $user = auth()->user();
@@ -135,6 +154,8 @@ class DashboardController extends Controller
         return view('dashboard', compact('progressCount', 'activePath', 'userName', 'isAdmin', 'markedModules'));
     }
   
+    //reset progress
+    // menghapus semua riwayat belajar, baik yang ada di session maupun yang tersimpan di profil database pengguna.
     public function resetProgress()
     {
         session()->forget('active_path_id');

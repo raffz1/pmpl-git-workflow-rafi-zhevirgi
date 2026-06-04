@@ -1,8 +1,17 @@
-<!-- Floating Glassmorphic Navbar -->
+<!-- 
+    integrasi tailwind css dengan logika tampilan
+    - navbar didesain melayang (floating style) menggunakan utility kelas Tailwind CSS.
+    - menggunakan border modern, sudut bulat (`rounded-[14px]`), efek bayangan (`shadow`), dan transisi halus (`transition-all`).
+    - desain responsif secara bawaan (`hidden md:flex` untuk desktop, `md:hidden` untuk hamburger mobile menu).
+-->
 <nav id="main-navbar" class="sticky top-4 z-50 mx-auto w-full max-w-7xl px-4 transition-all duration-500 ease-out" style="transform: translateY(0); opacity: 1;">
     <div id="navbar-container" class="bg-white border border-slate-200 rounded-[14px] shadow-[0_4px_20px_-4px_rgba(0,0,0,0.02)] transition-all duration-500 ease-out relative">
         <div id="navbar-inner" class="flex justify-between items-center h-14 sm:h-16 px-4 sm:px-6 transition-all duration-500 ease-out">
-            <!-- Left: Logo -->
+            <!-- 
+                LOGIKA WELCOME PAGE & KETERBATASAN AKSES
+                - tautan logo: mengarahkan pengguna yang sudah login ke dashboard utama (`route('dashboard')`).
+                - jika belum login (guest), logo akan mengarahkannya kembali ke welcome page (`url('/')`).
+            -->
             <div class="shrink-0 flex items-center">
                 <a href="{{ auth()->check() ? route('dashboard') : url('/') }}" class="group text-xl sm:text-2xl font-bold tracking-tight bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent flex items-center gap-2 transition-transform duration-300 hover:scale-105">
                     <svg class="h-6 w-6 text-blue-600 group-hover:rotate-12 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
@@ -29,10 +38,11 @@
                 </a>
                 @endauth
             </div>
-
+ 
             <!-- Right: Actions (Visible on desktop, hidden on mobile) -->
             <div class="hidden md:flex items-center space-x-4">
                 @auth
+                    <!-- tampilan navigasi saat pengguna sudah terautentikasi (Menu logout dan profil) -->
                     <div class="h-6 w-px bg-slate-200"></div>
                     <a href="{{ route('profile.show') }}" class="flex items-center gap-2.5 group">
                         @if(auth()->user()->profile_photo)
@@ -53,6 +63,7 @@
                         </button>
                     </form>
                 @else
+                    <!-- tampilan navigasi saat pengguna belum login (tombol login & register) -->
                     <div class="h-6 w-px bg-slate-200"></div>
                     <a href="{{ url('/login') }}" class="text-sm font-semibold text-slate-600 hover:text-blue-600 transition-colors py-2">Login</a>
                     <a href="{{ url('/register') }}" class="inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-xl shadow-md shadow-blue-500/10 text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-blue-500/20">

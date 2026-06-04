@@ -1486,6 +1486,9 @@
             }
 
             // --- Workspace View Transitions ---
+            // --- LOGIKA SEQUENTIAL UNLOCK CARD / ALUR PATH ---
+            // - pengguna reguler tidak bisa membuka modul dengan indeks yang lebih besar dari `currentStep`.
+            // - jika mencoba membuka modul terkunci, sistem memunculkan peringatan.
             window.openLearningView = function(index) {
                 const isAdmin = @json($isAdmin);
                 if (!isAdmin && index > currentStep) {
@@ -1527,7 +1530,7 @@
                 }, 350);
             };
 
-            // Execute script contents injected via innerHTML
+            // menjalankan script kustom di dalam tag script yang diinjeksi via innerHTML
             function executeScriptsInElement(element) {
                 const scripts = element.querySelectorAll('script');
                 scripts.forEach(oldScript => {
@@ -1630,6 +1633,10 @@
                 document.getElementById('sidebar-progress-text').innerText = `${completedCount} of ${totalLessons} lessons completed`;
             }
 
+            // logika tampilan lock & unlock kartu di sidebar jalur belajar (roadmap)
+            // - jika modul memiliki indeks lebih kecil dari `currentStep`, modul ditandai selesai (tanda centang hijau).
+            // - jika modul aktif saat ini, ditandai lingkaran biru.
+            // - modul setelah modul aktif ditandai terkunci (ikon gembok abu-abu) dan tidak dapat diklik.
             function renderSidebarLibrary() {
                 const listEl = document.getElementById('sidebar-library-list');
                 listEl.innerHTML = '';
@@ -1685,7 +1692,9 @@
                 });
             }
 
-            // --- Next Module Action ---
+            // --- logika tombol next yang tidak bisa dilanjutkan ---
+            // - jika modul aktif saat ini belum diselesaikan (tidak kurang dari `currentStep`), tombol next memunculkan alert agar user menyelesaikan kuis checkpoint terlebih dahulu.
+            // - admin atau modul yang sudah dilewati dapat langsung diarahkan ke modul berikutnya tanpa batasan.
             window.goToNextModule = function() {
                 const isAdmin = @json($isAdmin);
                 if (activeModuleIndex === totalLessons - 1) {
@@ -1700,10 +1709,12 @@
                 }
             };
 
-            // --- Toggle Checkpoint Mark ---
+            // --- LOGIKA BOOKMARKS / FAVORIT MODUL ---
+            // - mengirim ajax post ke `/path/module/{id}/toggle-mark` untuk menambahkan/menghapus modul dari daftar bintang/bookmark.
+            // - ikon bookmark (marks) berubah warna secara interaktif di halaman belajar saat ditekan.
             window.toggleCurrentModuleMark = function() {
                 const isAdmin = @json($isAdmin);
-                if (isAdmin) return; // Admins don't write progress
+                if (isAdmin) return; 
 
                 const data = modulesData[activeModuleIndex];
                 const csrfToken = document.querySelector('input[name="_token"]').value;
@@ -1743,7 +1754,10 @@
                 });
             };
 
-            // --- Complete Active Step via AJAX ---
+            // --- LOGIKA MENYIMPAN PROGRES SECARA REALTIME (AJAX COMPLETE STEP) ---
+            // - ketika user berhasil lulus kuis checkpoint minimal 80%, fungsi ini dipanggil.
+            // - mengirim request ajax post ke url completion sesuai slug path untuk menyimpan progres saat itu juga di database.
+            // - setelah sukses disimpan, state `currentStep` diupdate secara lokal, memicu trigger confetti dan rendering ulang status modul.
             function completeActiveModuleRealtime() {
                 const csrfToken = document.querySelector('input[name="_token"]').value;
 
@@ -2008,6 +2022,9 @@
                 }
             };
 
+            // --- LOGIKA VERIFIKASI JAWABAN KUIS ---
+            // - mengevaluasi apakah opsi yang dipilih pengguna cocok dengan jawaban benar (`q.correct`).
+            // - jika benar, nilai kuis bertambah. Status jawaban divisualisasikan dengan warna hijau (benar) atau merah (salah).
             window.verifyQuizCardAnswer = function(qIdx) {
                 const data = modulesData[activeModuleIndex];
                 const q = data.quiz[qIdx];
@@ -2082,6 +2099,10 @@
                 }, 600);
             };
 
+            // --- LOGIKA KEBERHASILAN QUIZ (MINIMAL 80% UNTUK LULUS/MELANJUTKAN) ---
+            // - menghitung batas kelulusan: minimal 80% dari total soal (`Math.ceil(totalQuiz * 0.8)`).
+            // - jika nilai benar pengguna mencapai batas ini, sistem menampilkan status lulus, tombol lanjut terlihat, dan progress disimpan secara realtime.
+            // - jika gagal, tombol lanjut disembunyikan dan pengguna dipaksa mengulang kuis untuk melanjutkan ke modul berikutnya.
             function showQuizResults() {
                 const data = modulesData[activeModuleIndex];
                 const totalQuiz = data.quiz ? data.quiz.length : 0;
@@ -2311,7 +2332,9 @@
             };
 
             @if($isAdmin)
-            // --- Admin Modals Logic ---
+            // --- LOGIKA ROLE USER DAN ADMIN (ADMIN EDIT MODE) ---
+            // - tombol edit mode memungkinkan admin mengaktifkan / menonaktifkan fitur modifikasi konten.
+            // - ketika aktif, elemen-elemen admin seperti tombol edit modul, hapus kuis, dan tambah modul akan muncul secara interaktif.
             window.toggleEditMode = function() {
                 window.editModeActive = !window.editModeActive;
                 const toggleBtn = document.getElementById('edit-mode-toggle-btn');
@@ -2374,6 +2397,8 @@
             const editQuizModal = document.getElementById('edit-quiz-modal');
             let editingQuizIndex = 0;
 
+            // --- PENYESUAIAN FORMAT EDIT ADMIN (QUILL EDITOR INTEGRATION) ---
+            // - menampilkan modal edit modul dan memuat data materi ke dalam editor kaya teks (Quill) untuk memudahkan perubahan pemformatan konten.
             window.openEditModuleModal = function() {
                 const data = modulesData[activeModuleIndex];
                 document.getElementById('edit-module-id').value = data.id;
@@ -2381,7 +2406,7 @@
                 document.getElementById('edit-module-desc').value = data.desc;
                 document.getElementById('edit-module-content-title').value = data.fullTitle;
                 
-                // Set Quill Editor content
+                // tempel konten html materi ke dalam editor quill
                 if (window.quill) {
                     window.quill.clipboard.dangerouslyPasteHTML(data.content || '');
                 } else {
@@ -2882,7 +2907,9 @@
             @endif
 
             @if(!$isAdmin)
-            // Real-time update check for regular users
+            // LOGIKA NOTIFIKASI PERUBAHAN & REAL-TIME UPDATE CHECK FOR REGULAR USERS
+            // - melakukan polling berkala setiap 8 detik ke API `/api/path/{slug}/check-updates`
+            // - jika server merespons bahwa terdapat update terbaru (has_updates == true), sistem menampilkan toast notifikasi di pojok kanan bawah.
             let lastUpdatedTime = {{ time() }};
             setInterval(() => {
                 fetch(`/api/path/{{ $path->slug }}/check-updates?last_updated=${lastUpdatedTime}`)
@@ -2896,6 +2923,7 @@
                     .catch(err => console.error('Error checking updates:', err));
             }, 8000);
 
+            // menampilkan toast notifikasi kustom yang meminta pengguna untuk melakukan refresh halaman
             function showUpdateNotification() {
                 if (document.getElementById('update-notification-toast')) return;
 
@@ -2926,7 +2954,9 @@
             }
             @endif
 
-            // --- Toggle Sidebar Drawer on Mobile & Desktop ---
+            // LOGIKA SHOW AND HIDE LEARNING PATH DETAIL (TOGGLE SIDEBAR) & OPTIMALISASI MOBILE & DESKTOP
+            // - desktop: menyembunyikan sidebar dengan menyusutkan lebar ke 0 (md:w-0) dan menyembunyikannya (opacity-0).
+            // - mobile: menampilkan sidebar dalam bentuk slide drawer dari kanan (translate-x-full menjadi translate-x-0) serta memunculkan backdrop hitam transparan.
             window.toggleSidebar = function() {
                 const sidebar = document.getElementById('learning-sidebar');
                 const backdrop = document.getElementById('sidebar-backdrop');
@@ -2935,18 +2965,18 @@
                 const isDesktop = window.innerWidth >= 768; // md breakpoint
 
                 if (isDesktop) {
-                    // Desktop behavior: toggle collapse width and visibility
+                    // desktop: toggle lebar collapse dan visibilitas
                     if (sidebar.classList.contains('md:w-[320px]')) {
-                        // Collapse
+                        // collapse
                         sidebar.classList.remove('md:w-[320px]', 'md:translate-x-0');
                         sidebar.classList.add('md:w-0', 'md:translate-x-full', 'overflow-hidden', 'opacity-0', 'border-l-0');
                     } else {
-                        // Expand
+                        // expand
                         sidebar.classList.remove('md:w-0', 'md:translate-x-full', 'overflow-hidden', 'opacity-0', 'border-l-0');
                         sidebar.classList.add('md:w-[320px]', 'md:translate-x-0');
                     }
                 } else {
-                    // Mobile behavior: slide drawer
+                    // mobile: toggle slide drawer dan backdrop
                     if (sidebar.classList.contains('translate-x-full')) {
                         sidebar.classList.remove('translate-x-full');
                         sidebar.classList.add('translate-x-0');

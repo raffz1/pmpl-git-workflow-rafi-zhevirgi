@@ -10,6 +10,10 @@ use Illuminate\Support\Facades\Validator;
 
 class ExplorePathController extends Controller
 {
+    /*
+     * EXPLORE PATHS
+     * menampilkan semua learning path ke user
+    */
     public function index()
     {
         $paths = Path::all();
@@ -17,13 +21,18 @@ class ExplorePathController extends Controller
         return view('explore-path', compact('paths', 'userName'));
     }
 
+    /*
+     * memilih path belajar
+     * mengatur path aktif user dan menyimpannya di database dan session
+     */
     public function enroll($id)
     {
         session(['active_path_id' => $id]);
         if (auth()->check()) {
             $user = auth()->user();
+            // ROLE USER DAN ADMIN: Admin tidak bisa mendaftar/enroll path belajar
             if ($user->isAdmin()) {
-                return redirect()->route('dashboard')->with('error', 'Admin tidak diperbolehkan enroll path belajar.');
+                return redirect()->route('dashboard')->with('error', 'Admin tidak bisa enroll path belajar.');
             }
             $user->active_path_id = $id;
             $user->save();
@@ -31,8 +40,14 @@ class ExplorePathController extends Controller
         return redirect()->route('dashboard')->with('success', 'Berhasil memilih jalur pembelajaran!');
     }
 
-    /**
-     * Unified detail helper
+    /*
+     * DETAIL LEARNING PATH
+     * mengatur pembatasan akses modul belajar agar berurutan
+     * ROLE USER DAN ADMIN:
+     * - Admin: membuka semua kunci modul agar bisa memeriksa dan mengedit konten kapan saja
+     * - Student: membatasi akses modul, hanya modul <= currentStep yang bisa dibuka
+     * PENYESUAIAN FORMAT EDIT ADMIN (QUIZ CUSTOM SELECTION):
+     * - Admin bisa memilih menampilkan soal kuis secara acak (random) atau pilihan manual (custom selection)
      */
     protected function showPathDetail(string $slug)
     {
@@ -42,8 +57,9 @@ class ExplorePathController extends Controller
         $userName = auth()->check() ? (auth()->user()->name ?? 'Student') : 'Guest';
         $isAdmin = auth()->check() && auth()->user()->isAdmin();
 
+        // ROLE USER & ADMIN - BYPASS KUNCI UNTUK ADMIN
         if ($isAdmin) {
-            // Bypass logic locks for admin so they can click/edit anything
+            // admin mem-bypass limitasi sehingga step diset maksimal (membuka seluruh modul)
             $currentStep = $modules->count();
         } else if (auth()->check()) {
             $user = auth()->user();
@@ -53,6 +69,7 @@ class ExplorePathController extends Controller
             }
             session(['active_path_id' => $path->id]);
 
+            // mengambil step aktif user berdasarkan slug path
             if ($this->isCustomPath($slug)) {
                 $progress = $user->custom_paths_progress ?? [];
                 $currentStep = isset($progress[$slug]) ? (int)$progress[$slug] : 0;
@@ -62,21 +79,24 @@ class ExplorePathController extends Controller
             }
             session([$slug . '_current_step' => $currentStep]);
         } else {
+            // guest menggunakan session saja
             $currentStep = session($slug . '_current_step', 0);
         }
 
-        // Map modules for frontend consumption
+        // memetakan data modul ke struktur JSON yang akan dibaca oleh JavaScript di frontend
         $modulesData = $modules->map(function ($mod) use ($isAdmin) {
             $quizzesCollection = $mod->quizzes;
 
+            // penyesuaian format edit oleh admin (custom selection vs shuffled quiz)
             if (!$isAdmin) {
+                // jika admin memilih opsi 'custom' dan telah menentukan pertanyaan tertentu, tampilkan pertanyaan tersebut
                 if ($mod->quiz_selection_type === 'custom' && is_array($mod->quiz_custom_questions) && count($mod->quiz_custom_questions) > 0) {
                     $customIds = $mod->quiz_custom_questions;
                     $filteredQuizzes = $quizzesCollection->filter(function ($q) use ($customIds) {
                         return in_array($q->id, $customIds);
                     });
                     
-                    // Sort in the order of the customIds array
+                    // urutkan soal sesuai dengan urutan ID yang ditentukan admin
                     $sortedQuizzes = collect();
                     foreach ($customIds as $id) {
                         $match = $filteredQuizzes->firstWhere('id', $id);
@@ -85,8 +105,10 @@ class ExplorePathController extends Controller
                         }
                     }
                     
+                    // ambil maksimal 5 soal saja
                     $quizzesCollection = $sortedQuizzes->take(5);
                 } else {
+                    // opsi default: acak 5 soal dari semua kumpulan soal yang tersedia di modul
                     $quizzesCollection = $quizzesCollection->shuffle()->take(5);
                 }
             }
@@ -110,6 +132,7 @@ class ExplorePathController extends Controller
             ];
         })->toArray();
 
+        // LOGIKA BOOKMARKS: ambil modul-modul yang ditandai (marked) oleh user
         $markedModules = auth()->check() ? (auth()->user()->marked_modules ?? []) : [];
 
         return view('detail-path', compact('path', 'modules', 'modulesData', 'currentStep', 'userName', 'isAdmin', 'markedModules'));
@@ -141,7 +164,9 @@ class ExplorePathController extends Controller
     }
 
     /**
-     * Unified complete step logic
+     * menyimpan progres secara realtime (AJAX complete step)
+     * mengunci/membuka (sequential unlock) modul berikutnya setelah user menyelesaikan checkpoint quiz saat ini.
+     * dipanggil secara realtime dari workspace quiz setelah user lulus (minimal 80% jawaban benar).
      */
     protected function handleCompleteStep(Request $request, string $slug, int $pathId)
     {
@@ -155,9 +180,11 @@ class ExplorePathController extends Controller
         
         if (auth()->check()) {
             $user = auth()->user();
-            // Admins don't write progress
+            // admin tidak menulis / mengubah progres belajarnya
             if (!$user->isAdmin()) {
                 $user->active_path_id = $pathId;
+                
+                // menambahkan 1 step progress jika belum mencapai akhir modul
                 if ($this->isCustomPath($slug)) {
                     $progress = $user->custom_paths_progress ?? [];
                     $currentStep = isset($progress[$slug]) ? (int)$progress[$slug] : 0;
@@ -180,6 +207,7 @@ class ExplorePathController extends Controller
             }
             session([$slug . '_current_step' => $currentStep]);
         } else {
+            // guest menyimpan progres realtime di session saja
             $currentStep = session($slug . '_current_step', 0);
             if ($currentStep < $totalModules) {
                 $currentStep++;
@@ -229,7 +257,8 @@ class ExplorePathController extends Controller
     }
 
     /**
-     * Reset Progress
+     * reset detail progress
+     * mereset progres khusus untuk satu learning path tertentu kembali ke 0.
      */
     protected function handleResetProgress(string $slug)
     {
@@ -284,7 +313,8 @@ class ExplorePathController extends Controller
     }
 
     /**
-     * Admin APIs
+     * edit admin & realtime live update (update path card)
+     * mengedit informasi path karir dan memperbarui data database
      */
     public function updatePath(Request $request, $id)
     {
@@ -316,6 +346,12 @@ class ExplorePathController extends Controller
         ]);
     }
 
+    /**
+     * edit admin & realtime live update (update modul konten)
+     * mengubah materi pembelajaran modul menggunakan quill editor
+     * menggunakan method `touch()` pada model path agar timestamp `updated_at` diperbarui
+     * sehingga memicu notifikasi refresh pada akun pengguna lain yang sedang membukanya
+     */
     public function updateModule(Request $request, $id)
     {
         if (!auth()->check() || !auth()->user()->isAdmin()) {
@@ -336,7 +372,7 @@ class ExplorePathController extends Controller
         $module = Module::findOrFail($id);
         $module->update($request->all());
 
-        // Update parent path's timestamp too
+        // touch parent path agar updated_at di-update
         $module->path->touch();
 
         return response()->json([
@@ -345,6 +381,10 @@ class ExplorePathController extends Controller
         ]);
     }
 
+    /**
+     * edit admin & realtime live update (update soal kuis)
+     * mengubah detail pertanyaan dan opsi kuis
+     */
     public function updateQuiz(Request $request, $id)
     {
         if (!auth()->check() || !auth()->user()->isAdmin()) {
@@ -364,7 +404,7 @@ class ExplorePathController extends Controller
         $quiz = Quiz::findOrFail($id);
         $quiz->update($request->all());
 
-        // Touch parent module and path
+        // perbarui timestamp agar live update notifikasi terpicu
         $quiz->module->touch();
         $quiz->module->path->touch();
 
@@ -374,6 +414,10 @@ class ExplorePathController extends Controller
         ]);
     }
 
+    /**
+     * edit admin (store baru quiz)
+     * menambahkan soal baru ke dalam kuis modul
+     */
     public function storeQuiz(Request $request, $module_id)
     {
         if (!auth()->check() || !auth()->user()->isAdmin()) {
@@ -397,7 +441,7 @@ class ExplorePathController extends Controller
             'correct' => $request->correct,
         ]);
 
-        // Touch parent module and path
+        // perbarui timestamp
         $module->touch();
         $module->path->touch();
 
@@ -413,6 +457,10 @@ class ExplorePathController extends Controller
         ]);
     }
 
+    /**
+     * edit admin (delete quiz)
+     * menghapus soal kuis dari database dan membersihkan id dari data custom selection modul
+     */
     public function deleteQuiz(Request $request, $id)
     {
         if (!auth()->check() || !auth()->user()->isAdmin()) {
@@ -422,7 +470,7 @@ class ExplorePathController extends Controller
         $quiz = Quiz::findOrFail($id);
         $module = $quiz->module;
         
-        // Remove from custom list if present
+        // bersihkan dari daftar custom selection modul
         if ($module->quiz_custom_questions && is_array($module->quiz_custom_questions)) {
             $custom = $module->quiz_custom_questions;
             if (($key = array_search($quiz->id, $custom)) !== false) {
@@ -434,7 +482,7 @@ class ExplorePathController extends Controller
 
         $quiz->delete();
 
-        // Touch parent module and path
+        // sentuh timestamp path untuk live update
         $module->touch();
         $module->path->touch();
 
@@ -444,6 +492,10 @@ class ExplorePathController extends Controller
         ]);
     }
 
+    /**
+     * format edit admin (update quiz settings)
+     * menyimpan pilihan format kuis modul (apakah diacak atau memilih manual 5 pertanyaan spesifik)
+     */
     public function updateQuizSettings(Request $request, $id)
     {
         if (!auth()->check() || !auth()->user()->isAdmin()) {
@@ -474,7 +526,11 @@ class ExplorePathController extends Controller
         ]);
     }
 
-
+    /**
+     * polling deteksi perubahan oleh user lain (check updates)
+     * mengambil timestamp edit terakhir di database (path, module, atau quiz)
+     * dan membandingkannya dengan timestamp `last_updated` milik client untuk memicu notifikasi reload page
+     */
     public function checkUpdates(Request $request, $slug)
     {
         $path = Path::where('slug', $slug)->first();
@@ -487,7 +543,7 @@ class ExplorePathController extends Controller
             return response()->json(['has_updates' => false]);
         }
 
-        // Get latest updated_at from path, its modules, or quizzes
+        // cari timestamp update terbaru dari path, module, maupun quiz
         $pathUpdated = $path->updated_at ? $path->updated_at->timestamp : 0;
         
         $latestModuleUpdated = Module::where('path_id', $path->id)
@@ -502,6 +558,7 @@ class ExplorePathController extends Controller
 
         $maxTimestamp = max($pathUpdated, $moduleUpdated, $quizUpdated);
 
+        // jika timestamp database lebih baru daripada milik client, kembalikan has_updates = true
         $hasUpdates = $maxTimestamp > intval($lastUpdatedClient);
 
         return response()->json([
@@ -531,6 +588,10 @@ class ExplorePathController extends Controller
         return $this->handleResetProgress($slug);
     }
 
+    /**
+     * store path baru (admin only)
+     * membuat path pembelajaran kustom beserta modul pengenalan default dan 5 kuis placeholder
+     */
     public function storePath(Request $request)
     {
         if (!auth()->check() || !auth()->user()->isAdmin()) {
@@ -569,6 +630,7 @@ class ExplorePathController extends Controller
             'career_description' => $request->career_description,
         ]);
 
+        // buat modul pengenalan
         $module = Module::create([
             'path_id' => $path->id,
             'step_number' => 0,
@@ -580,6 +642,7 @@ class ExplorePathController extends Controller
             'content_body' => '<p>Ini adalah modul pengenalan untuk jalur pembelajaran baru Anda. Selamat belajar!</p>',
         ]);
 
+        // buat 5 kuis default
         for ($i = 1; $i <= 5; $i++) {
             Quiz::create([
                 'module_id' => $module->id,
@@ -596,6 +659,10 @@ class ExplorePathController extends Controller
         ]);
     }
 
+    /**
+     * tambah modul baru (admin only)
+     * menambahkan modul baru ke akhir kurikulum path beserta 5 kuis default di dalamnya
+     */
     public function storeModule(Request $request, $path_id)
     {
         if (!auth()->check() || !auth()->user()->isAdmin()) {
@@ -630,6 +697,7 @@ class ExplorePathController extends Controller
             'content_body' => $request->content_body,
         ]);
 
+        // buat kuis default
         for ($i = 1; $i <= 5; $i++) {
             Quiz::create([
                 'module_id' => $module->id,
@@ -645,6 +713,10 @@ class ExplorePathController extends Controller
         ]);
     }
 
+    /**
+     * delete path (admin only)
+     * menghapus learning path beserta modul dan kuis di dalamnya
+     */
     public function deletePath($id)
     {
         if (!auth()->check() || !auth()->user()->isAdmin()) {
@@ -666,6 +738,10 @@ class ExplorePathController extends Controller
         ]);
     }
 
+    /**
+     * delete modul (admin only)
+     * menghapus modul, kuis di dalamnya, lalu menata ulang (reorder) step_number modul yang tersisa agar sequential
+     */
     public function deleteModule($id)
     {
         if (!auth()->check() || !auth()->user()->isAdmin()) {
@@ -678,7 +754,7 @@ class ExplorePathController extends Controller
         $module->quizzes()->delete();
         $module->delete();
 
-        // Reorder remaining modules
+        // tata ulang nomor urutan step_number modul tersisa agar tetap berurutan (0, 1, 2, dst.)
         $remainingModules = Module::where('path_id', $pathId)
             ->orderBy('step_number', 'asc')
             ->get();
@@ -701,6 +777,10 @@ class ExplorePathController extends Controller
         ]);
     }
 
+    /**
+     * polling deteksi perubahan global (untuk dashboard)
+     * mengecek apakah ada pembaruan path, modul, atau kuis secara keseluruhan
+     */
     public function checkGlobalUpdates(Request $request)
     {
         $lastChecked = $request->query('last_updated');
@@ -726,6 +806,10 @@ class ExplorePathController extends Controller
         ]);
     }
 
+    /**
+     * bookmarks / toggle mark modul
+     * menambahkan/menghapus id modul dari kolom JSON `marked_modules` di model User
+     */
     public function toggleModuleMark(Request $request, $id)
     {
         if (!auth()->check()) {
@@ -740,6 +824,7 @@ class ExplorePathController extends Controller
         $marked = $user->marked_modules ?? [];
         $moduleId = (int)$id;
 
+        // toggle logic: jika ada hapus, jika tidak ada tambahkan
         if (in_array($moduleId, $marked)) {
             $marked = array_values(array_diff($marked, [$moduleId]));
             $isMarked = false;
