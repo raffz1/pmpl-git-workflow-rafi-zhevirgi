@@ -21,6 +21,7 @@ class Path extends Model
     ];
 
     protected $casts = [
+        'id' => 'integer',
         'skills' => 'array',
         'suitability' => 'array',
     ];

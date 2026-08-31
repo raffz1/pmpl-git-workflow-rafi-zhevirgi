@@ -22,6 +22,9 @@ class Module extends Model
     ];
 
     protected $casts = [
+        'id' => 'integer',
+        'path_id' => 'integer',
+        'step_number' => 'integer',
         'quiz_custom_questions' => 'array',
     ];
 

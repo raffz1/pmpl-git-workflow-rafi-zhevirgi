@@ -39,7 +39,7 @@
                 @endauth
             </div>
  
-            <!-- Right: Actions (Visible on desktop, hidden on mobile) -->
+            <!-- Right: Actions (terlihat di desktop, hidden di mobile) -->
             <div class="hidden md:flex items-center space-x-4">
                 @auth
                     <!-- tampilan navigasi saat pengguna sudah terautentikasi (Menu logout dan profil) -->
@@ -159,7 +159,7 @@
             lastScrollTop = scrollTop;
         });
 
-        // Mobile Menu Dropdown Toggle Handler
+        // Mobile Dropdown Menu Logic
         if (toggleBtn && dropdownMenu) {
             toggleBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
@@ -197,7 +197,7 @@
     document.addEventListener('DOMContentLoaded', () => {
         let lastGlobalUpdatedTime = {{ time() }};
         
-        // Poll for updates every 8 seconds
+        // cek pembaruan global setiap 8 detik
         setInterval(() => {
             fetch(`/api/check-global-updates?last_updated=${lastGlobalUpdatedTime}`)
                 .then(res => res.json())

@@ -15,6 +15,9 @@ class Quiz extends Model
     ];
 
     protected $casts = [
+        'id' => 'integer',
+        'module_id' => 'integer',
+        'correct' => 'integer',
         'options' => 'array',
     ];
 

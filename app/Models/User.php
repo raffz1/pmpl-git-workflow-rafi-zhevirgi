@@ -33,6 +33,13 @@ class User extends Authenticatable
     protected function casts(): array
     {
         return [
+            'id' => 'integer',
+            'active_path_id' => 'integer',
+            'frontend_current_step' => 'integer',
+            'backend_current_step' => 'integer',
+            'uiux_current_step' => 'integer',
+            'fullstack_current_step' => 'integer',
+            'pm_current_step' => 'integer',
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'custom_paths_progress' => 'array',
